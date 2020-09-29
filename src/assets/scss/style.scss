@@ -1,0 +1,78 @@
+.left-banner-img {
+  -ms-flex: 0 0 33.333333%;
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+  width: 100%;
+  position: relative;
+  .logo-icon {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 55px;
+  }
+  .logo-text {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    width: 180px;
+  }
+  .left-banner-log {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.img {
+  border-style: none;
+  width: 430px;
+  vertical-align: text-top;
+}
+.card-title {
+  margin-bottom: 0.75rem;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.serDetScr .serDetDes {
+  background: #f3f6f9;
+  border: 1px solid #9b9b9b;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 80px;
+}
+.serDetScr .serDetDes {
+  background: #f3f6f9;
+  border: 1px solid #9b9b9b;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 80px;
+}
+.serDetScr .serDetDes {
+  background: #f3f6f9;
+  border: 1px solid #9b9b9b;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 80px;
+}
+.serDetScr .serDetDes {
+  background: #f3f6f9;
+  border: 1px solid #9b9b9b;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 80px;
+}
+.container-fluid,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
