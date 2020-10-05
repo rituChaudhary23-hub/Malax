@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { history } from "../../store/history";
 import signUp from "../../assets/images/signUp.png";
+import logo from "../../assets/images/logo.png";
 import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
 
 class Login extends Component {
@@ -22,16 +23,14 @@ class Login extends Component {
     ];
     return (
       <section className="log-in">
-        <img src={signUp} alt="" />
         <div className="container">
           <div className="row">
             <div className="col-sm-6">
-              {" "}
               <div className="log-in-inner signUp sign-first">
                 <h3 className="text-center">Log In</h3>
                 <p>
                   Please sign in to continue therapy with Malax. Need to create
-                  a<Link to="/register"> Malax account?</Link>
+                  a <Link to="/register"> Malax account?</Link>
                 </p>
                 <Form>
                   <div className="log-in-form">
@@ -61,23 +60,36 @@ class Login extends Component {
                           margin={"normal"}
                         />
                       </Form.Field>
-
                       <Link className="forgotPass" to="/forgot-password">
                         {" "}
                         Forgot Password
                       </Link>
                     </div>
-
-                    <Dropdown
-                      className="dropNav"
-                      text="Login"
-                      options={options}
-                      onChange={this.handleChanges}
-                      simple
-                      item
-                    />
                   </div>
                 </Form>
+              </div>
+              <div className="text-center sign-up-button sign-first">
+                <Dropdown
+                  className="dropNav"
+                  text="Login"
+                  options={options}
+                  onChange={this.handleChanges}
+                  simple
+                  item
+                />
+              </div>
+            </div>
+            <div className="col-sm-6">
+              <div className="log-in-img">
+                <img src={signUp} />
+                <div className="log-in-img-overlay">
+                  <img src={logo} />
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Ornare eget odio nulla vulputate felis auctor vivamus auctor
+                    congue.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

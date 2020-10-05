@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Label, Button } from "semantic-ui-react";
-
+import logIn from "../../../assets/images/logIn.png";
+import logo from "../../../assets/images/logo.png";
 export class ConfirmEmail extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
   loginClientRoute = () => {
-    window.location.href = "/";
+    window.location.href = "/register";
   };
 
   render() {
@@ -16,7 +17,15 @@ export class ConfirmEmail extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-6">
-              <div className="conEmail d-none">
+              <div className="log-in-img ">
+                <img src={logIn} />
+                <div className="log-in-img-overlay">
+                  <img className="img2" src={logo} />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="conEmail">
                 <h3>Confirm your email address</h3>
                 <p>
                   We sent a confirmation email to:<br></br>email@gmail.com

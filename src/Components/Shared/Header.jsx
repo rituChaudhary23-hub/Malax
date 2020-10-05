@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import logo from "../../assets/images/logo.png";
 
-import profile from "../../assets/images/profile.png";
+import profile1 from "../../assets/images/profile1.png";
 
-export class Header extends Component {
+class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -11,16 +11,16 @@ export class Header extends Component {
 
   render() {
     return (
-      <div class="nav-header">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-              <nav class="navbar navbar-expand-xl">
-                <a class="navbar-brand" href="/">
+      <div className="nav-header">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-12">
+              <nav className="navbar navbar-expand-xl">
+                <a className="navbar-brand" href="/">
                   <img src={logo} alt="logo" />
                 </a>
                 <button
-                  class="navbar-toggler"
+                  className="navbar-toggler"
                   type="button"
                   data-toggle="collapse"
                   data-target="#navbar-list-2"
@@ -28,26 +28,26 @@ export class Header extends Component {
                   aria-expanded="false"
                   aria-label="Toggle navigation"
                 >
-                  <span class="navbar-toggler-icon"></span>
+                  <span className="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbar-list-2">
-                  <ul class="navbar-nav">
-                    <li class="nav-item active notification">
-                      <a class="nav-link" href="#" title="Notification">
+                <div className="collapse navbar-collapse" id="navbar-list-2">
+                  <ul className="navbar-nav">
+                    <li className="nav-item active notification">
+                      <a className="nav-link" href="#" title="Notification">
                         <span>
-                          <i class="fa fa-bell" aria-hidden="true"></i>
+                          <i className="fa fa-bell"></i>
                         </span>
                       </a>
                     </li>
-                    <li class="nav-item profile">
-                      <a class="nav-link" href="#" title="My Account">
-                        <img src={profile} />
+                    <li className="nav-item profile">
+                      <a className="nav-link" href="#" title="My Account">
+                        <img src={profile1} />
                       </a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="index" title="Log in">
+                    <li className="nav-item">
+                      <a className="nav-link" href="index" title="Log in">
                         <span>
-                          <i class="fa fa-sign-out" aria-hidden="true"></i>
+                          <i className="fa fa-sign-out" aria-hidden="true"></i>
                         </span>
                       </a>
                     </li>
@@ -55,7 +55,7 @@ export class Header extends Component {
                 </div>
               </nav>
             </div>
-          </div>{" "}
+          </div>
         </div>
       </div>
     );

@@ -35,79 +35,11 @@ class Massage extends Component {
           </p>
         </div>
         <br></br>
-        {/* <div>
-          <Form> */}
-        {/* <div className="form-check form-check-inline">
-              <h3>Type perferred</h3>
-              <span>
-                <label>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="chk_red"
-                  />
-                  Relaxation
-                </label>
 
-                {""}
-              </span>
-              <span>
-                <label>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="chk_red"
-                  />
-                  Sleep
-                </label>
-              </span>
-              <span>
-                <label>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="chk_red"
-                  />
-                  Senior
-                </label>
-              </span>
-            </div>
-            <div>
-              <h5>Therapist gender preference</h5>
-              <Menu>
-                <Dropdown
-                  options={options}
-                  selection
-                  value={this.state.gender}
-                />
-              </Menu>{" "}
-            </div>
-            <div>
-              <h5>Frequency</h5>
-              <Menu>
-                <Dropdown
-                  options={FrequencyOptions}
-                  selection
-                  value={this.state.frequency}
-                />
-              </Menu>
-            </div>
-
-            <div className="form-check form-check-inline"></div>
-            <div>
-              {" "}
-              <h5>Goals</h5>
-              <TextArea placeholder="" />
-            </div>
-            <div>
-              {" "}
-              <h5>General information for therapist</h5>
-              <TextArea placeholder="" />
-            </div> */}
         <section className="therapistProDes">
           <div className="card">
             <div className="card-body">
-              <div className="tab-pane container-fluid fade" id="preferences">
+              <div className="tab-pane container-fluid" id="preferences">
                 <h5 className="my-3">Type perferred</h5>
                 <div className="thrChkBox graybg">
                   <form>

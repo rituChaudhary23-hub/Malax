@@ -33,7 +33,7 @@ const genderOptions = [
   { key: "u", text: "Male Only", value: "m" },
   { key: "j", text: "Female Only", value: "f" },
 ];
-export class ServiceRequest extends Component {
+class ServiceRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -43,130 +43,247 @@ export class ServiceRequest extends Component {
   };
   render() {
     return (
-      <div>
+      //
+
+      <section className="therapistProDes serviceReq">
         <Header />
-        <div>
-          <h2>Service Request</h2>
-        </div>
-        <br></br>
-        <div>
-          <Form>
-            <Form.Field>
-              <label>Birth Date</label>
-              <Input
-                className="login-form-textfield"
-                id="date"
-                fullWidth={true}
-                name="date"
-                type="date"
-                //   margin={"normal"}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label> Time range</label>
-              <Input
-                className="login-form-textfield"
-                id="time"
-                fullWidth={true}
-                name="time"
-                type="time"
-                //   margin={"normal"}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Time length</label>
-              <Menu>
-                <Dropdown options={options} selection value={this.state.time} />
-              </Menu>
-            </Form.Field>{" "}
-            <Form.Field>
-              <label>Type of massage</label>
-              <Menu>
-                <Dropdown
-                  options={massageOptions}
-                  selection
-                  value={this.state.massage}
-                />
-              </Menu>
-            </Form.Field>{" "}
-            <Form.Field>
-              <label>Therapist gender preference</label>
-              <Menu>
-                <Dropdown
-                  options={genderOptions}
-                  selection
-                  value={this.state.gender}
-                />
-              </Menu>
-            </Form.Field>{" "}
-            <Form.Field>
-              <label>General location</label>
-              <Menu>
-                <Dropdown
-                  options={locationOptions}
-                  selection
-                  value={this.state.location}
-                />
-              </Menu>
-            </Form.Field>
-            <Form.Field>
-              <label>Street Address</label>
-              <TextArea placeholder="" />
-            </Form.Field>
-            <Form.Field>
-              <label>City</label>
-              <Input
-                className="login-form-textfield"
-                id="city"
-                fullWidth={true}
-                name="city"
-                margin={"normal"}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>State</label>
-              <Menu>
-                <Dropdown
-                  options={stateOptions}
-                  selection
-                  value={this.state.states}
-                />
-              </Menu>
-            </Form.Field>
-            <Form.Field>
-              <label>Zip Code</label>
-              <Input
-                className="login-form-textfield"
-                id="zip code"
-                fullWidth={true}
-                name="zip_code"
-                margin={"normal"}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Location Type</label>
-              <Menu>
-                <Dropdown
-                  options={typeOptions}
-                  selection
-                  value={this.state.type}
-                />
-              </Menu>
-            </Form.Field>
-            <div className="form-button log-btns">
-              <Button
-                className="ui green button btn btn-primary btn-md w-40 mr-0"
-                onClick={this.requestAppoint}
-              >
-                Request Appointment
-              </Button>
-              <Button className="ui green button btn btn-primary btn-md w-40 mr-0">
-                Cancel
-              </Button>
+        <div className="card">
+          <div className="card-body">
+            <h2 className="card-title">Service Request</h2>
+            <div className="scheduledServices">
+              <div className="row">
+                <div className="col-sm-12">
+                  <div className="thrprofileDes">
+                    <Form>
+                      <div className="container">
+                        <div className="row">
+                          <div className="col-sm-12">
+                            <div className="form-group">
+                              <Form.Field>
+                                <label for="usr" className="chkBox">
+                                  Date{" "}
+                                </label>
+
+                                <Input
+                                  id="date"
+                                  fullWidth={true}
+                                  name="date"
+                                  type="date"
+                                  //   margin={"normal"}
+                                />
+                              </Form.Field>
+                            </div>
+                          </div>
+                          <div className="col-sm-12">
+                            <div className="form-group mb-0">
+                              <label for="usr" className="chkBox">
+                                Time range{" "}
+                              </label>
+                            </div>
+                          </div>
+                          <div className="col-sm-6">
+                            <div className="form-group">
+                              <Form.Field>
+                                <Input
+                                  className="form-control date"
+                                  value="11:00"
+                                  step="900"
+                                  id="time"
+                                  fullWidth={true}
+                                  name="time"
+                                  type="time"
+                                  //   margin={"normal"}
+                                />
+                              </Form.Field>
+                            </div>
+                          </div>
+
+                          <div className="col-sm-6">
+                            <div className="form-group">
+                              {/* <input type="time" className="form-control date" value="13:00" step="900"> */}
+                            </div>
+                          </div>
+
+                          <div className="col-sm-12">
+                            <div className="form-group">
+                              <Form.Field>
+                                {" "}
+                                <label for="usr" className="chkBox">
+                                  Time length{" "}
+                                </label>
+                                <Dropdown
+                                  options={options}
+                                  selection
+                                  value={this.state.time}
+                                />
+                              </Form.Field>
+                            </div>
+                          </div>
+
+                          <div className="col-sm-12">
+                            <div className="form-group">
+                              <Form.Field>
+                                {" "}
+                                <label for="usr" className="chkBox">
+                                  Type of massage{" "}
+                                </label>
+                                <Dropdown
+                                  options={massageOptions}
+                                  selection
+                                  value={this.state.massage}
+                                />
+                              </Form.Field>
+                            </div>
+                          </div>
+
+                          <div className="col-sm-12">
+                            <div className="form-group">
+                              <Form.Field>
+                                {" "}
+                                <label for="usr" className="chkBox">
+                                  Therapist gender preference{" "}
+                                </label>
+                                <Dropdown
+                                  options={genderOptions}
+                                  selection
+                                  value={this.state.gender}
+                                />
+                              </Form.Field>
+                            </div>
+                          </div>
+
+                          <div className="col-sm-12">
+                            <div className="form-group">
+                              <Form.Field>
+                                <label for="usr" className="chkBox">
+                                  General location{" "}
+                                </label>
+
+                                <Dropdown
+                                  className="form-control"
+                                  options={locationOptions}
+                                  selection
+                                  value={this.state.location}
+                                />
+                              </Form.Field>
+                            </div>
+                          </div>
+
+                          <div className="col-sm-12">
+                            <div className="form-group">
+                              <Form.Field>
+                                <label for="usr" className="chkBox">
+                                  Street Address{" "}
+                                </label>
+                                <textarea
+                                  className="form-control textArea"
+                                  rows="4"
+                                  id="comment"
+                                ></textarea>
+                              </Form.Field>
+                            </div>
+                          </div>
+
+                          <div className="col-sm-4">
+                            <div className="form-group">
+                              <Form.Field>
+                                {" "}
+                                <label for="usr" className="chkBox">
+                                  City{" "}
+                                </label>
+                                <Input
+                                  className="form-control"
+                                  id="city"
+                                  fullWidth={true}
+                                  name="city"
+                                  margin={"normal"}
+                                />{" "}
+                              </Form.Field>
+                            </div>
+                          </div>
+
+                          <div className="col-sm-4">
+                            <div className="form-group">
+                              <Form.Field>
+                                {" "}
+                                <label for="usr" className="chkBox">
+                                  State{" "}
+                                </label>
+                                <Dropdown
+                                  options={stateOptions}
+                                  selection
+                                  value={this.state.states}
+                                />{" "}
+                              </Form.Field>
+                            </div>
+                          </div>
+
+                          <div className="col-sm-4">
+                            <div className="form-group">
+                              <Form.Field>
+                                {" "}
+                                <label for="usr" className="chkBox">
+                                  Zip Code
+                                </label>
+                                <Input
+                                  className="login-form-textfield"
+                                  id="zip code"
+                                  fullWidth={true}
+                                  name="zip_code"
+                                  margin={"normal"}
+                                />{" "}
+                              </Form.Field>
+                            </div>
+                          </div>
+
+                          <div className="col-sm-12">
+                            <div className="form-group">
+                              <Form.Field>
+                                <label for="usr" className="chkBox">
+                                  Location Type{" "}
+                                </label>
+
+                                <Dropdown
+                                  options={typeOptions}
+                                  selection
+                                  value={this.state.type}
+                                />
+                              </Form.Field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="container-fluid">
+                        <div className="row">
+                          <div className="col-sm-12">
+                            <div className="text-right">
+                              <Button
+                                type="button"
+                                className="btn btn-primary mr-4 reqApp"
+                                data-dismiss="modal"
+                                onClick={this.requestAppoint}
+                              >
+                                Request Appointment
+                              </Button>
+                              <Button
+                                type="button"
+                                className="btn btn-cancel"
+                                data-dismiss="modal"
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Form>
+                  </div>
+                </div>
+              </div>
             </div>
-          </Form>
+          </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

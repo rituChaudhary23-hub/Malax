@@ -22,63 +22,11 @@ export class Modalities extends Component {
           </p>
         </div>
         <br></br>
-        {/* <div>
-          <Form>
-            <div class="form-check form-check-inline">
-              <span>
-                <label>
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="chk_red"
-                  />
-                  <span class="form-check-label" for="chk_red">
-                    Relaxation
-                  </span>
-                </label>
-
-                {""}
-              </span>
-              <span>
-                <label>
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="chk_red"
-                  />
-                  <span class="form-check-label" for="chk_red">
-                    Deep Tissue
-                  </span>
-                </label>
-              </span>
-              <span>
-                <label>
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="chk_red"
-                  />
-                  <span class="form-check-label" for="chk_red">
-                    Sports
-                  </span>
-                </label>
-              </span>
-            </div>
-            <div className="form-button log-btns">
-              <Button className="ui green button btn btn-primary btn-md w-40 mr-0">
-                Save
-              </Button>
-              <Button className="ui green button btn btn-primary btn-md w-40 mr-0">
-                Cancel
-              </Button>
-            </div>
-          </Form>
-        </div> */}
 
         <section class="therapistProDes">
           <div class="card">
             <div class="card-body">
-              <div class="tab-pane container-fluid fade" id="Modalities">
+              <div class="tab-pane container-fluid" id="Modalities">
                 <div class="thrChkBox">
                   <form>
                     <div class="form-check form-check-inline">

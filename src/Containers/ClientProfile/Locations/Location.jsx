@@ -21,28 +21,11 @@ export class Location extends Component {
           </p>
         </div>
         <br></br>
-        {/* <div>
-          <h5>Where will you be receiving massages?</h5>
-          <Radio label="In home" />
-          <Radio label="At Work" />
-          <Radio label="Other" />
-        </div>
-        <br></br>
-        <div>
-          <h5>Space available confirmation</h5>
-          <Radio label="Yes" />
-          <Radio label="No" />
-        </div>
-        <br></br>
-        <div>
-          <h5>Presence of pets</h5>
-          <Radio label="Yes" />
-          <Radio label="No" />
-        </div> */}
+   
         <section className="therapistProDes">
           <div className="card">
             <div className="card-body">
-              <div class="tab-pane container-fluid fade" id="Locations">
+              <div class="tab-pane container-fluid" id="Locations">
                 <h5 class="my-3">Where will you be receiving massages?</h5>
                 <div class="thrChkBoxSec">
                   <div class="radiobuttons">

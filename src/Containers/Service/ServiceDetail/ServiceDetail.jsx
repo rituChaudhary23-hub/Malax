@@ -42,50 +42,10 @@ class ServiceDetail extends Component {
                     <p>Male client with therapist male only.</p>
                     <p>At home in the town - Heights area.</p>
                   </div>
-                  {/* <div>
-          <h2>Service Detail Screen</h2>
-        </div> */}
+
                   <br></br>
                   <div>
                     <div>
-                      {/* <div>
-              <Label>
-                30 minutes Relaxation on 10th of september between 10 am - 12
-                am.
-              </Label>
-              <br></br>
-              <Label>Male client with therapist male only.</Label>
-              <br></br>
-              <Label>At home in the town - Heights area.</Label>
-            </div> */}
-                      {/* <br></br>
-                      <div>
-                        <div>
-                          <div>
-                            <div classNameName="">
-                              <h5>This service has not been scheduled yet.</h5>
-                            </div>
-                          </div>
-                          <div>
-                            <Button
-                              color="blue"
-                              type="button"
-                              classNameName="btn btn-sm del-btn"
-                              onClick={() => this.ShowServiceModal()}
-                            >
-                              Schedule Appointment
-                            </Button>
-                            <Button
-                              color="grey"
-                              type="button"
-                              classNameName="btn btn-sm del-btn"
-                              onClick={() => this.ShowCancelModal()}
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        </div>
-                      </div> */}
                       <div className="serDetDes schYet">
                         <div className="row">
                           <div className="col-sm-8">
@@ -116,7 +76,7 @@ class ServiceDetail extends Component {
                             </div>
                             <div className="col-sm-12">
                               <div className="cltThrpone">
-                                <Table celled>
+                                <Table celled className="table ">
                                   <Table.Header>
                                     <Table.Row>
                                       <Table.HeaderCell>
