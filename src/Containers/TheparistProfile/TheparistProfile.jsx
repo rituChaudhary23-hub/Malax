@@ -3,7 +3,6 @@ import Header from "../../Components/Shared/Header";
 import { Tab } from "semantic-ui-react";
 import ScheduleService from "../TheparistProfile/ScheduledServices/ScheduledService";
 import TheparistProfileMain from "./TheparistProfileMain";
-import "../../assets/scss/style.scss";
 const panes = [
   {
     menuItem: "Theparist Profile",

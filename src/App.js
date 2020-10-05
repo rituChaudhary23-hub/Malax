@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
-import "../src/assets/scss/style.scss";
+// import "../src/assets/scss/style.scss";
 import { toast, ToastContainer } from "react-toastify";
 import { PrivateRoute, PublicRoute } from "./Routes";
 import HomePage from "./Components/HomePage";
@@ -23,6 +23,7 @@ import Payment from "./Containers/Service/Payment/Payment";
 import Index from "./Containers/AdminPanel/index";
 import ManageClientProfile from "./Containers/AdminPanel/Client/ClientProfile/ClientProfile";
 import ManageTheparistProfile from "./Containers/AdminPanel/Theparist/TheparistProfile/ManageProfile";
+
 class App extends Component {
   componentDidMount() {}
   render() {
@@ -30,9 +31,9 @@ class App extends Component {
       <div>
         <Router>
           <Switch>
-            <Route exact component={HomePage} path="/" />
+            {/* <Route exact component={HomePage} path="/" /> */}
             <Route component={Register} path="/register" />
-            <Route component={Login} path="/login" />
+            <Route exact component={Login} path="/" />
             <Route component={ForgotPassword} path="/forgot-password" />
 
             <Route

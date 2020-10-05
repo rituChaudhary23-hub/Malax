@@ -1,108 +1,127 @@
 import React, { Component } from "react";
-import main from "../../../assets/images/main.jpeg";
 import { Link } from "react-router-dom";
-import { Button, Form, Input } from "semantic-ui-react";
+import { Button, Form, Input, Tab, Label } from "semantic-ui-react";
 
-export class TheparistRegister extends Component {
+class TheparistRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
-
   emailRoute = () => {
     window.location.href = "/confirm-email";
   };
-
   render() {
     return (
-      <div>
-        <div className="left-banner-img">
-          <img src={main} alt="" className="left-banner-log" />
+      <section className="log-in">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-6">
+              <div className="tab-content">
+                <div className="tab-pane container-fluid fade" id="Therapist">
+                  <div className="log-in-form">
+                    <Form>
+                      <div className="form-group">
+                        {" "}
+                        <label>Email</label>
+                        <br></br>{" "}
+                        <Form.Field>
+                          <Input
+                            className="form-control"
+                            id="email"
+                            fullWidth={true}
+                            name="email"
+                            type="email"
+                            margin={"normal"}
+                          />{" "}
+                        </Form.Field>{" "}
+                      </div>
+
+                      <div className="form-group">
+                        <label>Password</label>
+                        <br></br>
+                        <Form.Field>
+                          <Input
+                            className="form-control"
+                            id="password"
+                            fullWidth={true}
+                            name="password"
+                            type="password"
+                            margin={"normal"}
+                          />
+                        </Form.Field>
+                      </div>
+                      <br></br>
+                      <div className="form-group">
+                        <label>Password Confirmation</label>
+                        <Form.Field>
+                          <Input
+                            className="form-control"
+                            id="password"
+                            name="password"
+                            margin={"normal"}
+                          />
+                        </Form.Field>
+                      </div>
+
+                      <div className="form-group">
+                        <label>First Name</label>
+                        <Form.Field>
+                          <Input
+                            className="form-control"
+                            id="name"
+                            name="name"
+                            margin={"normal"}
+                          />
+                        </Form.Field>
+                      </div>
+
+                      <div className="form-group">
+                        <label>Last Name</label>
+                        <br></br>
+                        <Form.Field>
+                          <Input
+                            className="form-control"
+                            id="name"
+                            fullWidth={true}
+                            name="name"
+                            type="text"
+                            margin={"normal"}
+                          />
+                        </Form.Field>
+                      </div>
+                      <br></br>
+                      <div className="form-group">
+                        <label for="sel1">Market</label>
+                        <select className="form-control" id="sel1">
+                          <option>Billings, MT</option>
+                          <option>Other</option>
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <p>
+                          Malax is not yet available in your area. You can
+                          submit this form, and we will be happy to notify you
+                          when Malax is available in your ZIP code.
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        {" "}
+                        <Button
+                          type="submit"
+                          className="btn btn-primary register"
+                          onClick={this.emailRoute}
+                        >
+                          Register
+                        </Button>
+                      </div>
+                    </Form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>{" "}
         </div>
-        <div>
-          <h2>Welcome to Malax</h2>
-          <p>
-            Already registered click here to
-            <Link to="/login">Login</Link>
-          </p>
-        </div>
-        <Form>
-          <Form.Field>
-            <lable>Email</lable>
-            <Input
-              className="login-form-textfield"
-              id="email"
-              fullWidth={true}
-              name="email"
-              type="email"
-              margin={"normal"}
-            />
-          </Form.Field>
-
-          <Form.Field>
-            <lable>Password</lable>
-            <Input
-              className="login-form-textfield"
-              id="password"
-              name="password"
-              margin={"normal"}
-            />
-          </Form.Field>
-          <Form.Field>
-            <lable>Password Confirmation</lable>
-            <Input
-              className="login-form-textfield"
-              id="password"
-              name="password"
-              margin={"normal"}
-            />
-          </Form.Field>
-          <Form.Field>
-            <lable>First Name</lable>
-            <Input
-              className="login-form-textfield"
-              id="name"
-              name="name"
-              margin={"normal"}
-            />
-          </Form.Field>
-          <Form.Field>
-            <lable>Last Name</lable>
-            <Input
-              className="login-form-textfield"
-              id="name"
-              fullWidth={true}
-              name="name"
-              margin={"normal"}
-            />
-          </Form.Field>
-          <Form.Field>
-            <lable>Market</lable>
-            <Input
-              className="login-form-textfield"
-              id="zip"
-              fullWidth={true}
-              name="zip"
-              margin={"normal"}
-            />
-          </Form.Field>
-
-          <div className="form-button log-btns">
-            <p className="pr-3">
-              Malax is not yet available in your area. You can submit this form,
-              and we will be happy to notify you when Malax is available in your
-              ZIP code
-            </p>
-
-            <Button
-              className="ui green button btn btn-primary btn-md w-40 mr-0"
-              onClick={this.emailRoute}
-            >
-              Register as a Theparist
-            </Button>
-          </div>
-        </Form>
-      </div>
+      </section>
     );
   }
 }

@@ -7,7 +7,7 @@ import {
   Menu,
   TextArea,
 } from "semantic-ui-react";
-
+import Header from "../../../Components/Shared/Header";
 const options = [
   { key: "m", text: "20 minutes", value: "20 minutes" },
   { key: "k", text: "40 minutes", value: "40 minutes" },
@@ -44,6 +44,7 @@ export class ServiceRequest extends Component {
   render() {
     return (
       <div>
+        <Header />
         <div>
           <h2>Service Request</h2>
         </div>

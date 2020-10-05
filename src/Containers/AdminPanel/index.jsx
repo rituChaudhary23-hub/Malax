@@ -4,7 +4,6 @@ import { Tab } from "semantic-ui-react";
 import ManageScheduleService from "./Service/ScheduleList/ScheduleList";
 import ClientList from "./Client/ClientList/ClientList";
 import TheparistList from "./Theparist/TheparistList/TheparistList"
-import "../../assets/scss/style.scss";
 const panes = [
   {
     menuItem: "Clients",

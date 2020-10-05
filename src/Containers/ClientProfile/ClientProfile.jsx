@@ -3,7 +3,6 @@ import Header from "../../Components/Shared/Header";
 import { Tab } from "semantic-ui-react";
 import Service from "./ScheduledServices/Service";
 import ProfileMain from "./ClientProfileMain";
-import "../../assets/scss/style.scss";
 const panes = [
   {
     menuItem: "Client Profile",

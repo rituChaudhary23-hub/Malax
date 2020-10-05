@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import main from "../../../assets/images/main.jpeg";
 import { Label, Button } from "semantic-ui-react";
 
 export class ConfirmEmail extends Component {
@@ -8,40 +7,39 @@ export class ConfirmEmail extends Component {
     this.state = {};
   }
   loginClientRoute = () => {
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   render() {
     return (
-      <div className="mainBlock">
-        <div className="left-banner-img">
-          <img src={main} alt="" className="left-banner-log" />
+      <section className="log-in">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-6">
+              <div className="conEmail d-none">
+                <h3>Confirm your email address</h3>
+                <p>
+                  We sent a confirmation email to:<br></br>email@gmail.com
+                </p>
+                <p>
+                  Check your email and click on the confirmation link to
+                  continue.
+                </p>
+                <Button type="submit" className="btn btn-primary mr-4">
+                  Resend Mail
+                </Button>
+                <Button
+                  type="submit"
+                  className="btn btn-cancel back"
+                  onClick={this.loginClientRoute}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <h2>Confirm your Email address</h2>
-          <br></br>
-          <Label>We sent a Confirmation email to :</Label>
-          <br></br>
-          <label>email@gmail.com</label>
-          <br></br>
-          <Label>
-            Check your email and click on the confirmation to continue
-          </Label>
-          <br></br>
-          <Button
-            className="ui green button btn btn-primary btn-md w-40 mr-0"
-            onClick={this.registerTheparistRoute}
-          >
-            Resend Email
-          </Button>{" "}
-          <Button
-            className="ui green button btn btn-primary btn-md w-40 mr-0"
-            onClick={this.loginClientRoute}
-          >
-            LogIn
-          </Button>{" "}
-        </div>
-      </div>
+      </section>
     );
   }
 }

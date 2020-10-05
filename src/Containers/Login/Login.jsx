@@ -1,83 +1,88 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import main from "../../assets/images/main.jpeg";
-
-import { Button, Form, Input } from "semantic-ui-react";
-import "../../assets/scss/style.scss";
+import { history } from "../../store/history";
+import signUp from "../../assets/images/signUp.png";
+import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
-  theparistRoute = () => {
-    window.location.href = "/theparist-profile";
-  };
-
-  adminRoute = () => {
-    window.location.href = "/dashboard";
+  handleChanges = (e, { value }) => {
+    console.log("values", value);
+    history.push(value);
+    window.location.reload(false);
   };
   render() {
+    const options = [
+      { key: 3, text: "LogIn As Client", value: "/client-profile" },
+      { key: 4, text: "LogIn As Theparist", value: "/theparist-profile" },
+      { key: 5, text: "LogIn As Admin", value: "/dashboard" },
+    ];
     return (
-      <div>
-        <div className="left-banner-img">
-          <img src={main} alt="" className="left-banner-log" />
-        </div>
-        <div></div>
-        <div>
-          <h2>Log in</h2>
-          <p>
-            Please sign in to continue therapy with Malax. Need to create a{""}
-            <Link to="/register"> Malax Account</Link>{" "}
-          </p>
-        </div>
-        <Form>
-          <Form.Field>
-            <label>Email</label>
-            <Input
-              className="login-form-textfield"
-              id="email"
-              fullWidth={true}
-              name="email"
-              type="email"
-              //   margin={"normal"}
-            />
-          </Form.Field>
+      <section className="log-in">
+        <img src={signUp} alt="" />
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-6">
+              {" "}
+              <div className="log-in-inner signUp sign-first">
+                <h3 className="text-center">Log In</h3>
+                <p>
+                  Please sign in to continue therapy with Malax. Need to create
+                  a<Link to="/register"> Malax account?</Link>
+                </p>
+                <Form>
+                  <div className="log-in-form">
+                    <div className="form-group">
+                      <label>Email</label>
+                      <Form.Field>
+                        <Input
+                          className="form-control"
+                          id="email"
+                          fullWidth={true}
+                          name="email"
+                          type="email"
+                          margin={"normal"}
+                        />
+                      </Form.Field>
+                    </div>
+                    <br></br>
+                    <div className="form-group">
+                      <label>Password</label>
 
-          <Form.Field>
-            <label>Password</label>
-            <Input
-              className="login-form-textfield"
-              id="password"
-              fullWidth={true}
-              name="password"
-              margin={"normal"}
-            />
-          </Form.Field>
+                      <Form.Field>
+                        <Input
+                          className="form-control"
+                          id="password"
+                          fullWidth={true}
+                          name="password"
+                          margin={"normal"}
+                        />
+                      </Form.Field>
 
-          <div className="form-button log-btns">
-            <p className="pr-3">
-              <Link to="/forgot-password"> Forgot Password</Link>
-            </p>
+                      <Link className="forgotPass" to="/forgot-password">
+                        {" "}
+                        Forgot Password
+                      </Link>
+                    </div>
 
-            <span className="ui green button btn btn-primary btn-md w-40 mr-0">
-              <Link to="/client-profile">Log In As Client</Link>
-            </span>
-            <Button
-              className="ui green button btn btn-primary btn-md w-40 mr-0"
-              onClick={this.theparistRoute}
-            >
-              Log In As Theparist
-            </Button>
-            <Button
-              className="ui green button btn btn-primary btn-md w-40 mr-0"
-              onClick={this.adminRoute}
-            >
-              Log In As Admin
-            </Button>
+                    <Dropdown
+                      className="dropNav"
+                      text="Login"
+                      options={options}
+                      onChange={this.handleChanges}
+                      simple
+                      item
+                    />
+                  </div>
+                </Form>
+              </div>
+            </div>
           </div>
-        </Form>
-      </div>
+        </div>
+      </section>
     );
   }
 }

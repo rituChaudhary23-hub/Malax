@@ -1,60 +1,45 @@
 import React, { Component } from "react";
-import { Button } from "semantic-ui-react";
+import { Dropdown, Menu } from "semantic-ui-react";
+import { history } from "../../src/store/history";
 
+const options = [
+  { key: 1, text: "Register as a Client", value: "/register" },
+  { key: 2, text: "Register as a Theparist", value: "/theparist-register" },
+  { key: 3, text: "LogIn As Client", value: "/login" },
+  { key: 4, text: "LogIn As Theparist", value: "/login" },
+  { key: 5, text: "LogIn As Admin", value: "/login" },
+];
 class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
-  registerClientRoute = () => {
-    window.location.href = "/register";
+
+  handleChanges = (e, { value }) => {
+    console.log("values", value);
+    history.push(value);
+    window.location.reload(false);
   };
 
-  registerTheparistRoute = () => {
-    window.location.href = "/theparist-register";
-  };
-  loginClientRoute = () => {
-    window.location.href = "/login";
-  };
-  loginTheparistRoute = () => {
-    window.location.href = "/login";
-  };
-  loginRoute = () => {
-    window.location.href = "/login";
-  };
   render() {
     return (
       <div>
-        <Button
-          className="ui green button btn btn-primary btn-md w-40 mr-0"
-          onClick={this.registerClientRoute}
-        >
-          Register as a Client
-        </Button>{" "}
-        <Button
-          className="ui green button btn btn-primary btn-md w-40 mr-0"
-          onClick={this.registerTheparistRoute}
-        >
-          Register as a Theparist
-        </Button>{" "}
-        <Button
-          className="ui green button btn btn-primary btn-md w-40 mr-0"
-          onClick={this.loginClientRoute}
-        >
-          LogIn As Client
-        </Button>{" "}
-        <Button
-          className="ui green button btn btn-primary btn-md w-40 mr-0"
-          onClick={this.loginTheparistRoute}
-        >
-          LogIn As Theparist
-        </Button>{" "}
-        <Button
-          className="ui green button btn btn-primary btn-md w-40 mr-0"
-          onClick={this.loginRoute}
-        >
-          LogIn As Admin
-        </Button>
+        <div className="left-banner-img">
+          {/* <img src={main} alt="" className="left-banner-log" /> */}
+        </div>
+        <h2> Welcome to Malax Services</h2>
+        <div>
+          <Menu>
+            <Dropdown
+              className="dropNav"
+              text="SignUp/SignIn"
+              options={options}
+              onChange={this.handleChanges}
+              simple
+              item
+            />
+          </Menu>
+        </div>
       </div>
     );
   }
