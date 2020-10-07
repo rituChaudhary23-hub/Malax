@@ -30,11 +30,21 @@ class Profile extends Component {
 
   render() {
     return (
-      <div className="mainBlock">
+      <div>
         <Header />
-        <div>
-          <Tab menu={{ secondary: true }} panes={panes} />
-        </div>
+        <section className="therapistPro">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-sm-12">
+                <div className="therapistProInner">
+                  <ul className="nav nav-pills">
+                    <Tab menu={{ secondary: true }} panes={panes} />
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }

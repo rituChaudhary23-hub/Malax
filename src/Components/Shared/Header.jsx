@@ -11,53 +11,58 @@ class Header extends Component {
 
   render() {
     return (
-      <div className="nav-header">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-12">
-              <nav className="navbar navbar-expand-xl">
-                <a className="navbar-brand" href="/">
-                  <img src={logo} alt="logo" />
-                </a>
-                <button
-                  className="navbar-toggler"
-                  type="button"
-                  data-toggle="collapse"
-                  data-target="#navbar-list-2"
-                  aria-controls="navbarNav"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation"
-                >
-                  <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbar-list-2">
-                  <ul className="navbar-nav">
-                    <li className="nav-item active notification">
-                      <a className="nav-link" href="#" title="Notification">
-                        <span>
-                          <i className="fa fa-bell"></i>
-                        </span>
-                      </a>
-                    </li>
-                    <li className="nav-item profile">
-                      <a className="nav-link" href="#" title="My Account">
-                        <img src={profile1} />
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="index" title="Log in">
-                        <span>
-                          <i className="fa fa-sign-out" aria-hidden="true"></i>
-                        </span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </nav>
+      <header>
+        <div className="nav-header">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-12">
+                <nav className="navbar navbar-expand-xl">
+                  <a className="navbar-brand" href="/">
+                    <img src={logo} alt="logo" />
+                  </a>
+                  <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbar-list-2"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                  >
+                    <span className="navbar-toggler-icon"></span>
+                  </button>
+                  <div className="collapse navbar-collapse" id="navbar-list-2">
+                    <ul className="navbar-nav">
+                      <li className="nav-item active notification">
+                        <a className="nav-link" href="/" title="Notification">
+                          <span>
+                            <i className="fa fa-bell"></i>
+                          </span>
+                        </a>
+                      </li>
+                      <li className="nav-item profile">
+                        <a className="nav-link" href="/" title="My Account">
+                          <img src={profile1} />
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a className="nav-link" href="/" title="Log in">
+                          <span>
+                            <i
+                              className="fa fa-sign-out"
+                              aria-hidden="true"
+                            ></i>
+                          </span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </nav>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </header>
     );
   }
 }

@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { history } from "../../store/history";
 import signUp from "../../assets/images/signUp.png";
 import logo from "../../assets/images/logo.png";
+import { reduxForm, Field } from "redux-form";
+import { FormField } from "../../Components/Shared/FormField";
+import { required, email } from "redux-form-validators";
+
 import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
 
 class Login extends Component {
@@ -11,7 +15,6 @@ class Login extends Component {
     this.state = {};
   }
   handleChanges = (e, { value }) => {
-    console.log("values", value);
     history.push(value);
     window.location.reload(false);
   };
@@ -21,6 +24,8 @@ class Login extends Component {
       { key: 4, text: "LogIn As Theparist", value: "/theparist-profile" },
       { key: 5, text: "LogIn As Admin", value: "/dashboard" },
     ];
+    const { handleSubmit } = this.props;
+    console.log("props", this.props);
     return (
       <section className="log-in">
         <div className="container">
@@ -32,20 +37,30 @@ class Login extends Component {
                   Please sign in to continue therapy with Malax. Need to create
                   a <Link to="/register"> Malax account?</Link>
                 </p>
-                <Form>
+                <Form onSubmit={handleSubmit}>
                   <div className="log-in-form">
                     <div className="form-group">
                       <label>Email</label>
+
                       <Form.Field>
                         <Input
                           className="form-control"
-                          id="email"
-                          fullWidth={true}
                           name="email"
-                          type="email"
-                          margin={"normal"}
+                          // component={FormField}
+                          type="text"
+                          placeholder="email address"
+                          validate={[email, required]}
                         />
                       </Form.Field>
+                      {/* <Field
+                        name="email"
+                        className="form-control"
+                        component={FormField}
+                        type="email"
+                        placeholder="Enter email"
+                        validate={[required(), email()]}
+                        autoFocus
+                      /> */}
                     </div>
                     <br></br>
                     <div className="form-group">
@@ -76,6 +91,7 @@ class Login extends Component {
                   onChange={this.handleChanges}
                   simple
                   item
+                  type="submit"
                 />
               </div>
             </div>
@@ -99,4 +115,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default reduxForm({ form: "LoginForm" })(Login);

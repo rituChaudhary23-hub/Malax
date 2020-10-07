@@ -30,11 +30,21 @@ class ClientProfile extends Component {
 
   render() {
     return (
-      <div className="mainBlock">
+      <div>
         <Header />
-        <div>
-          <Tab menu={{ secondary: true }} panes={panes} />
-        </div>
+        <section class="therapistPro">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="therapistProInner">
+                  <ul class="nav nav-pills">
+                    <Tab menu={{ secondary: true }} panes={panes} />
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }

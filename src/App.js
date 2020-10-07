@@ -31,7 +31,6 @@ class App extends Component {
       <div>
         <Router>
           <Switch>
-            {/* <Route exact component={HomePage} path="/" /> */}
             <Route component={Register} path="/register" />
             <Route exact component={Login} path="/" />
             <Route component={ForgotPassword} path="/forgot-password" />

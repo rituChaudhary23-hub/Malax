@@ -59,126 +59,186 @@ class ProfileMain extends Component {
   }
   render() {
     return (
-      <div>
-        <div>
-          <h2>Client Profile</h2>
+      <div className="tab-content pistPro">
+        <div id="TherapistProfile1" className="tab-pane active">
+          <br />
+          <section className="therapistProDes">
+            <div className="card">
+              <div className="card-body">
+                <div className="row pb-3">
+                  <div className="col-sm-6">
+                    <h2 className="card-title pb-0">Client Profile</h2>
+                  </div>
+                  <div className="col-sm-6 text-md-right">
+                    <Button
+                      className="btn btn-primary"
+                      onClick={this.serviceRequest}
+                    >
+                      Schedule A New Service
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="therapistProDesInner">
+                  <div className="row">
+                    <div className="col-sm-12">
+                      <ul className="first-sec">
+                        <li>
+                          <div className="thr-img">
+                            <img src="assets/images/icon1.png" />
+                          </div>
+                          <div className="thr-des">
+                            <h5>Email Address Confirmation</h5>
+                            <p>Setup your email details</p>
+                          </div>
+                        </li>
+                        <li>
+                          <p>therapist@aol.com</p>
+                        </li>
+                        <li>
+                          <Button
+                            type="button"
+                            className="btn btn-sm"
+                            onClick={() => this.showModal()}
+                          >
+                            Update email address
+                          </Button>
+                        </li>
+                        <li>
+                          <div className="thr-img">
+                            <img src="assets/images/icon2.png" />
+                          </div>
+                          <div className="thr-des">
+                            <h5>Telephone Number Confirmation</h5>
+                            <p>Confirm your phone number</p>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Not yet confirmed</p>
+                        </li>
+                        <li>
+                          <Button
+                            type="button"
+                            className="btn btn-sm"
+                            onClick={() => this.showPhoneModal()}
+                          >
+                            Update phone number
+                          </Button>
+                        </li>
+                        <li>
+                          <div className="thr-img">
+                            <img src="assets/images/icon3.png" />
+                          </div>
+                          <div className="thr-des">
+                            <h5>Therapist Profile</h5>
+                            <p>Setup your profile </p>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Not yet completed</p>
+                        </li>
+                        <li>
+                          <Button
+                            type="button"
+                            className="btn btn-sm"
+                            onClick={this.routeChange}
+                          >
+                            Update profile
+                          </Button>
+                        </li>
+                        <li>
+                          <div className="thr-img">
+                            <img src="assets/images/icon4.png" />
+                          </div>
+                          <div className="thr-des">
+                            <h5>Identity Verification</h5>
+                            <p>Verify your identity</p>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Not yet uploaded</p>
+                        </li>
+                        <li>
+                          <Button
+                            type="button"
+                            className="btn btn-sm"
+                            onClick={() => this.ShowImageModal()}
+                          >
+                            Upload current photo
+                          </Button>
+                          <br />
+                          <Button
+                            type="button"
+                            className="btn btn-sm"
+                            onClick={() => this.ShowImageModal()}
+                          >
+                            Upload ID photo
+                          </Button>
+                        </li>
+                        <li>
+                          <div className="thr-img">
+                            <img src="assets/images/icon5.png" />
+                          </div>
+                          <div className="thr-des">
+                            <h5>Consent Forms</h5>
+                            <p>Setup your consent details</p>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Not yet reviewed</p>
+                        </li>
+                        <li>
+                          <Button
+                            type="button"
+                            className="btn btn-sm"
+                            onClick={() => this.ShowconsentModal()}
+                          >
+                            Malax Consent Form
+                          </Button>
+                          <br />
+                          <Button
+                            type="button"
+                            className="btn btn-sm"
+                            onClick={() => this.ShowagreeModal()}
+                          >
+                            Malax Therapist Agreement Form
+                          </Button>
+                        </li>
+
+                        <li>
+                          <div className="thr-img">
+                            <img src="assets/images/icon4.png" />
+                          </div>
+                          <div className="thr-des">
+                            <h5>Profile Approval</h5>
+                            <p>Awaiting approval</p>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <UpdateEmail modal={this.state.modal1} toggle={this.closeModal} />
+          <Verification
+            Verifymodal={this.state.phoneModal}
+            toggle={this.closePhoneModal}
+          />
+          <Consent
+            consentmodal={this.state.consentFormModal}
+            toggle={this.closeConsentModal}
+          />
+          <Agreement
+            agreemodal={this.state.agreementModal}
+            toggle={this.closeagreeModal}
+          />
+          <Image
+            imagemodal={this.state.imageModal}
+            toggle={this.closeImageModal}
+          />
         </div>
-        <div className="col-sm-6 text-sm-right">
-          <Button
-            className="ui green button btn btn-primary btn-md w-40 mr-0"
-            onClick={this.serviceRequest}
-          >
-            Schedule A New Service
-          </Button>
-        </div>
-        <div>
-          <Table celled>
-            <Table.Header></Table.Header>
-            <Table.Body>
-              <Table.Row>
-                <Table.Cell>Email Address Confirmation</Table.Cell>
-                <Table.Cell>therapist@aol.com</Table.Cell>
-                <Table.Cell>
-                  <Button
-                    type="button"
-                    className="btn btn-sm"
-                    onClick={() => this.showModal()}
-                  >
-                    Update email address
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-              <Table.Row>
-                <Table.Cell>Telephone Number Confirmation</Table.Cell>
-                <Table.Cell>Not yet confirmed</Table.Cell>
-                <Table.Cell>
-                  <Button
-                    type="button"
-                    className="btn btn-sm"
-                    onClick={() => this.showPhoneModal()}
-                  >
-                    Update phone number
-                  </Button>
-                </Table.Cell>
-              </Table.Row>{" "}
-              <Table.Row>
-                <Table.Cell>Therapist Profile</Table.Cell>
-                <Table.Cell>Not yet completed</Table.Cell>
-                <Table.Cell>
-                  <Button
-                    type="button"
-                    className="btn btn-sm"
-                    onClick={this.routeChange}
-                  >
-                    Update profile
-                  </Button>
-                </Table.Cell>
-              </Table.Row>{" "}
-              <Table.Row>
-                <Table.Cell>Identity Verification</Table.Cell>
-                <Table.Cell>Not yet uploaded</Table.Cell>
-                <Table.Cell>
-                  <Button
-                    type="button"
-                    className="btn btn-sm"
-                    onClick={() => this.ShowImageModal()}
-                  >
-                    Upload current photo
-                  </Button>
-                  <br></br>
-                  <Button
-                    type="button"
-                    className="btn btn-sm"
-                    onClick={() => this.ShowImageModal()}
-                  >
-                    Upload ID photo
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-              <Table.Row>
-                <Table.Cell>Consent Forms</Table.Cell>
-                <Table.Cell>Not yet reviewed</Table.Cell>
-                <Table.Cell>
-                  <Button
-                    type="button"
-                    className="btn btn-sm"
-                    onClick={() => this.ShowconsentModal()}
-                  >
-                    Malax Consent Form
-                  </Button>
-                  <br></br>
-                  <Button
-                    type="button"
-                    className="btn btn-sm"
-                    onClick={() => this.ShowagreeModal()}
-                  >
-                    Malax Therapist Agreement Form
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-              <Table.Row>
-                <Table.Cell>Profile Approval</Table.Cell>
-              </Table.Row>
-            </Table.Body>
-          </Table>
-        </div>
-        <UpdateEmail modal={this.state.modal1} toggle={this.closeModal} />
-        <Verification
-          Verifymodal={this.state.phoneModal}
-          toggle={this.closePhoneModal}
-        />
-        <Consent
-          consentmodal={this.state.consentFormModal}
-          toggle={this.closeConsentModal}
-        />
-        <Agreement
-          agreemodal={this.state.agreementModal}
-          toggle={this.closeagreeModal}
-        />
-        <Image
-          imagemodal={this.state.imageModal}
-          toggle={this.closeImageModal}
-        />
       </div>
     );
   }

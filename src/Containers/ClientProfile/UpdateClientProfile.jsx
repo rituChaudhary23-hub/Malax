@@ -62,20 +62,36 @@ class UpdateClientProfile extends Component {
   }
   render() {
     return (
-      <div className="mainBlock">
+
+      <div>
         <Header />
-        <h2> Client Profile</h2>
-        <div className="col-sm-6 text-sm-right">
-          <Button
-            className="ui green button btn btn-primary btn-md w-40 mr-0"
-            onClick={this.routeChange}
-          >
-            Schedule A New Service
-          </Button>
-        </div>
-        <div>
-          <Tab menu={{ secondary: true }} panes={panes} />
-        </div>
+        <section className="therapistProDes TheraPro ">
+          <div className="card">
+            <div className="card-body">
+              <div className="row pb-3">
+                <div className="col-sm-6">
+                  <h2 className="card-title pb-0">Client Profile</h2>
+                </div>
+                <div className="col-sm-6 text-sm-right">
+                  <Button className="btn btn-primary" onClick={this.routeChange}>
+                    Schedule A New Service
+                  </Button>
+                </div>
+              </div>
+              <div className="scheduledServices">
+                <div className="row">
+                  <div className="col-sm-12">
+                    <div className="thrprofile">
+                      <ul className="nav nav-pills">
+                        <Tab menu={{ secondary: true }} panes={panes} />
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
