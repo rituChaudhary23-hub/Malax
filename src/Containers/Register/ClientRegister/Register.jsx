@@ -45,6 +45,7 @@ class Register extends Component {
               </div>
             </div>
             <div className="col-md-6">
+            <div className="login-div">
               <div className="log-in-inner">
                 <h3>Welcome to Malax</h3>
                 <p>
@@ -54,6 +55,7 @@ class Register extends Component {
                 <Tab menu={{ secondary: true }} panes={panes} />
               </div>
             </div>
+          </div>
           </div>
         </div>
       </section>

@@ -19,6 +19,7 @@ class ForgotPassword extends Component {
         <div className="container">
           <div className="row">
             <div className="col-sm-6">
+            <div className="login-div">
               <div className="log-in-inner signUp sign-first">
                 <h3 class="text-center">Forgot Password</h3>
                 <p>
@@ -50,12 +51,13 @@ class ForgotPassword extends Component {
                 </Button>
                 <Button
                   type="submit"
-                  className="btn btn-cancel back"
+                  className="btn btn-white back"
                   onClick={this.routeChange}
                 >
                   Cancel
                 </Button>
               </div>
+            </div>
             </div>
             <div className="col-sm-6">
               <div className="log-in-img">

@@ -31,6 +31,7 @@ class Login extends Component {
         <div className="container">
           <div className="row">
             <div className="col-sm-6">
+            <div className="login-div">
               <div className="log-in-inner signUp sign-first">
                 <h3 className="text-center">Log In</h3>
                 <p>
@@ -62,10 +63,8 @@ class Login extends Component {
                         autoFocus
                       /> */}
                     </div>
-                    <br></br>
                     <div className="form-group">
                       <label>Password</label>
-
                       <Form.Field>
                         <Input
                           className="form-control"
@@ -83,9 +82,9 @@ class Login extends Component {
                   </div>
                 </Form>
               </div>
-              <div className="text-center sign-up-button sign-first">
+              <div className="sign-up-button sign-first">
                 <Dropdown
-                  className="dropNav"
+                  className="dropNav btn-primary"
                   text="Login"
                   options={options}
                   onChange={this.handleChanges}
@@ -94,6 +93,7 @@ class Login extends Component {
                   type="submit"
                 />
               </div>
+            </div>
             </div>
             <div className="col-sm-6">
               <div className="log-in-img">
