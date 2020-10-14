@@ -4,7 +4,6 @@ import { history } from "../../store/history";
 import signUp from "../../assets/images/signUp.png";
 import logo from "../../assets/images/logo.png";
 import { reduxForm, Field } from "redux-form";
-import { FormField } from "../../Components/Shared/FormField";
 import { required, email } from "redux-form-validators";
 
 import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
@@ -12,88 +11,184 @@ import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      fields: {
+        email: "",
+        password: "",
+      },
+      errors: {
+        email: "",
+        password: "",
+      },
+      loading: false,
+    };
   }
   handleChanges = (e, { value }) => {
-    history.push(value);
-    window.location.reload(false);
+    e.preventDefault();
+    if (this.handleValidation()) {
+      history.push(value);
+      window.location.reload(false);
+    }
   };
+  handleValidation = () => {
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    //Password
+    if (!fields["password"]) {
+      formIsValid = false;
+      errors["password"] = "Password is required.";
+    }
+
+    if (
+      typeof fields["password"] !== "undefined" &&
+      fields["password"] !== ""
+    ) {
+      if (
+        !fields["password"].match(
+          /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,64}$/
+        )
+      ) {
+        formIsValid = false;
+        errors["password"] =
+          "Password should have one number and one special character,minimum 8 characters";
+      }
+    }
+    //Email
+    if (!fields["email"]) {
+      formIsValid = false;
+      errors["email"] = "Email is required";
+    }
+
+    if (typeof fields["email"] !== "undefined" && fields["email"] !== "") {
+      let lastAtPos = fields["email"].lastIndexOf("@");
+      let lastDotPos = fields["email"].lastIndexOf(".");
+
+      if (
+        !(
+          lastAtPos < lastDotPos &&
+          lastAtPos > 0 &&
+          fields["email"].indexOf("@@") === -1 &&
+          lastDotPos > 2 &&
+          fields["email"].length - lastDotPos > 2
+        )
+      ) {
+        formIsValid = false;
+        errors["email"] = "Email is not valid";
+      }
+    }
+
+    if (!formIsValid) {
+      this.setState({ loading: false });
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  };
+  setFormValue(field, e) {
+    console.log("field", field);
+    let fields = this.state.fields;
+    fields[field] = e.target.value;
+    this.setState({ fields });
+  }
+
+  handleSignupKeyup(field, e) {
+    this.setState((prevState) => {
+      let errors = Object.assign({}, prevState.errors);
+      errors[field] = "";
+      return { errors };
+    });
+  }
+
   render() {
     const options = [
       { key: 3, text: "LogIn As Client", value: "/client-profile" },
       { key: 4, text: "LogIn As Theparist", value: "/theparist-profile" },
       { key: 5, text: "LogIn As Admin", value: "/dashboard" },
     ];
-    const { handleSubmit } = this.props;
+    const { handleSubmit, submitting } = this.props;
+
     console.log("props", this.props);
     return (
       <section className="log-in">
         <div className="container">
           <div className="row">
             <div className="col-sm-6">
-            <div className="login-div">
-              <div className="log-in-inner signUp sign-first">
-                <h3 className="text-center">Log In</h3>
-                <p>
-                  Please sign in to continue therapy with Malax. Need to create
-                  a <Link to="/register"> Malax account?</Link>
-                </p>
-                <Form onSubmit={handleSubmit}>
-                  <div className="log-in-form">
-                    <div className="form-group">
-                      <label>Email</label>
+              <div className="login-div">
+                <Form autoComplete="off">
+                  <div className="log-in-inner signUp sign-first">
+                    <h3 className="text-center">Log In</h3>
+                    <p>
+                      Please sign in to continue therapy with Malax. Need to
+                      create a <Link to="/register"> Malax account?</Link>
+                    </p>
 
-                      <Form.Field>
-                        <Input
-                          className="form-control"
-                          name="email"
-                          // component={FormField}
-                          type="text"
-                          placeholder="email address"
-                          validate={[email, required]}
-                        />
-                      </Form.Field>
-                      {/* <Field
-                        name="email"
-                        className="form-control"
-                        component={FormField}
-                        type="email"
-                        placeholder="Enter email"
-                        validate={[required(), email()]}
-                        autoFocus
-                      /> */}
+                    <div className="log-in-form">
+                      <div className="form-group">
+                        <label>Email</label>
+
+                        <Form.Field>
+                          <Input
+                            className="form-control"
+                            name="email"
+                            type="text"
+                            onChange={this.setFormValue.bind(this, "email")}
+                            onKeyUp={this.handleSignupKeyup.bind(this, "email")}
+                            placeholder="Email"
+                            validate={email}
+                            value={this.state.fields.email}
+                          />
+                          <span style={{ color: "red" }}>
+                            {this.state.errors["email"]}
+                          </span>
+                        </Form.Field>
+                      </div>
+                      <div className="form-group">
+                        <label>Password</label>
+                        <Form.Field>
+                          <Input
+                            className="form-control"
+                            id="password"
+                            type="password"
+                            onChange={this.setFormValue.bind(this, "password")}
+                            onKeyUp={this.handleSignupKeyup.bind(
+                              this,
+                              "password"
+                            )}
+                            fullWidth={true}
+                            placeholder="Password"
+                            value={this.state.fields.password}
+                            name="password"
+                            margin={"normal"}
+                          />
+                          <span style={{ color: "red" }}>
+                            {this.state.errors["password"]}
+                          </span>
+                        </Form.Field>
+                        <Link className="forgotPass" to="/forgot-password">
+                          {" "}
+                          Forgot Password
+                        </Link>
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <label>Password</label>
-                      <Form.Field>
-                        <Input
-                          className="form-control"
-                          id="password"
-                          fullWidth={true}
-                          name="password"
-                          margin={"normal"}
-                        />
-                      </Form.Field>
-                      <Link className="forgotPass" to="/forgot-password">
-                        {" "}
-                        Forgot Password
-                      </Link>
-                    </div>
+                  </div>
+                  <div className="sign-up-button sign-first">
+                    <Dropdown
+                      name="login"
+                      type="submit"
+                      // disabled={this.state.fields.email.length <= 5}
+                      disabled={submitting}
+                      className="dropNav btn-primary"
+                      text="Login"
+                      options={options}
+                      onChange={this.handleChanges}
+                      simple
+                      item
+                    />
                   </div>
                 </Form>
               </div>
-              <div className="sign-up-button sign-first">
-                <Dropdown
-                  className="dropNav btn-primary"
-                  text="Login"
-                  options={options}
-                  onChange={this.handleChanges}
-                  simple
-                  item
-                  type="submit"
-                />
-              </div>
-            </div>
             </div>
             <div className="col-sm-6">
               <div className="log-in-img">
@@ -115,4 +210,6 @@ class Login extends Component {
   }
 }
 
-export default reduxForm({ form: "LoginForm" })(Login);
+export default reduxForm({
+  form: "LoginForm",
+})(Login);

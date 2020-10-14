@@ -1,105 +1,127 @@
-import React, { Component } from "react";
-import { Button, Modal, Form, Input, Label, TextArea } from "semantic-ui-react";
+import React, { Component, Fragment } from "react";
+import { Modal } from "react-bootstrap";
+// import { Button, Modal, Form, Input, Label, TextArea } from "semantic-ui-react";
 
 export class Payment extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      fields: {
+        city: "",
+        address: "",
+        date: "",
+        card_name: "",
+        zip_code: "",
+        card_no: "",
+        cvv: "",
+      },
+      errors: {
+        date: "",
+        city: "",
+        address: "",
+        card_name: "",
+        zip_code: "",
+        card_no: "",
+        cvv: "",
+      },
+      loading: false,
+    };
   }
 
   render() {
     return (
-      <div>
+      <Fragment>
         <Modal
-          size={"small"}
-          open={this.props.paymodal}
-          closeIcon
-          onClose={this.props.toggle}
+          show={this.props.paymodal}
+          onHide={this.props.toggle}
+          size="lg"
+          className="custom-modal"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
         >
-          <Modal.Header>
-            <h3>Payment information</h3>
+          <Modal.Header closeButton>
+            <Modal.Title>Payment information</Modal.Title>
           </Modal.Header>
-          <Modal.Content>
-            <Modal.Description>
-              <Form>
-                <Form.Field>
-                  <Label>Card Holder's name</Label>
-                  <Input
-                    className="login-form-textfield"
-                    id="name"
-                    fullWidth={true}
-                    name="name"
-                    type="name"
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <Label>Card number</Label>
-                  <Input
-                    className="login-form-textfield"
-                    id="name"
-                    fullWidth={true}
-                    name="name"
-                    type="name"
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <Label>CVV Number</Label>
-                  <Input
-                    className="login-form-textfield"
-                    id="name"
-                    fullWidth={true}
-                    name="name"
-                    type="name"
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <Label> Card Expiration</Label>
-                  <Input
-                    className="login-form-textfield"
-                    id="date"
-                    fullWidth={true}
-                    name="date"
-                    type="date"
-                  />
-                </Form.Field>
-
-                <Form.Field>
-                  <Label>Zip Code</Label>
-                  <Input
-                    className="login-form-textfield"
-                    id="name"
-                    fullWidth={true}
-                    name="name"
-                    type="name"
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <Label>Address</Label>
-                  <TextArea placeholder="" />
-                </Form.Field>
-              </Form>
-            </Modal.Description>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button
+          <Modal.Body>
+            <div className="row">
+              <div class="col-sm-6 pb-3 pr-3">
+                <div class="form-group">
+                  <label for="usr" class="chkBox">
+                    Card Holder's name
+                  </label>
+                  <input type="text" class="form-control" />
+                </div>
+              </div>{" "}
+              <div class="col-sm-6 pb-3 pr-3">
+                <div class="form-group">
+                  <label for="usr" class="chkBox">
+                    Card number
+                  </label>
+                  <input type="text" class="form-control" />
+                </div>
+              </div>{" "}
+              <div class="col-sm-6 pb-3 pr-3">
+                <div class="form-group">
+                  <label for="usr" class="chkBox">
+                    CVV Number
+                  </label>
+                  <input type="text" class="form-control" />
+                </div>
+              </div>{" "}
+              <div class="col-sm-6 pb-3 pr-3">
+                <div class="form-group">
+                  <label for="usr" class="chkBox">
+                    Card Expiration
+                  </label>
+                  <input type="date" class="form-control" id="date" />
+                </div>
+              </div>
+              <div class="col-sm-6 pb-3 pr-3">
+                <div class="form-group">
+                  <label for="usr" class="chkBox">
+                    City
+                  </label>
+                  <input type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="col-sm-6 pb-3 pr-3">
+                <div class="form-group">
+                  <label for="usr" class="chkBox">
+                    Zip Code
+                  </label>
+                  <input type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="col-sm-6 pb-3 pr-3">
+                <div class="form-group">
+                  <label for="usr" class="chkBox">
+                    Adress
+                  </label>
+                  <input type="textarea" class="form-control" id="date" />
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
               color="blue"
               type="button"
-              className="btn btn-sm del-btn"
-              onClick={this.deleteUser}
+              className="btn btn-sm btn-primary"
+              disabled={this.state.fields.card_name.length < 5}
             >
               Connect with Stripe
-            </Button>
-            <Button
+            </button>
+            <button
               color="grey"
               type="button"
-              className="btn btn-sm del-btn"
+              className="btn btn-sm btn-white"
               onClick={this.close}
             >
               Cancel
-            </Button>
-          </Modal.Actions>
+            </button>
+          </Modal.Footer>
         </Modal>
-      </div>
+      </Fragment>
     );
   }
 }

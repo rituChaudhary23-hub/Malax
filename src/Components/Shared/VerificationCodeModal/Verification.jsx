@@ -1,62 +1,74 @@
-import React, { Component } from "react";
-
-import { Button, Modal, Form, Input } from "semantic-ui-react";
-
-export class Verification extends Component {
+import React, { Component, Fragment } from "react";
+import { Modal } from "react-bootstrap";
+class Verification extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      fields: {
+        phone: "",
+      },
+    };
   }
 
   render() {
     return (
-      <div>
+      <Fragment>
         <Modal
-          size={"small"}
-          open={this.props.Verifymodal}
-          closeIcon
-          onClose={this.props.toggle}
+          show={this.props.Verifymodal}
+          onHide={this.props.toggle}
+          size="lg"
+          className="custom-modal"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
         >
-          <Modal.Header>
-            <h3>Confirm phone number</h3>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm phone number</Modal.Title>
           </Modal.Header>
-          <Modal.Content>
-            <Modal.Description>
-              <label>
-                A text message containing a verification code will be sent to
-                this phone number for cofirmation.
-              </label>
-              <h4>
-                Phone Number
-                <Form>
-                  <Form.Field>
-                    <Input
-                      className="login-form-textfield"
-                      id="number"
-                      fullWidth={true}
-                      name="number"
-                      type="number"
-                    />
-                  </Form.Field>
-                </Form>
-              </h4>
-            </Modal.Description>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button color="blue" type="button" className="btn btn-sm del-btn">
-              Verify
-            </Button>
-            <Button
+          <Modal.Body>
+            <div className="row">
+              <div className="col-sm-12">
+                <p className="confirmation">
+                  A text message containing a verification code will be sent to
+                  this phone number for cofirmation.
+                </p>
+              </div>
+
+              <div className="col-lg-4 col-md-6 col-6">
+                <div className="modCon">
+                  <h6> Phone Number</h6>
+                </div>
+              </div>
+              <div className="col-lg-8 col-md-6 col-6">
+                <input
+                  className="login-form-textfield form-control"
+                  id="number"
+                  fullWidth={true}
+                  name="number"
+                  type="number"
+                />
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              color="blue"
+              type="button"
+              className="btn btn-sm btn-primary"
+              disabled={this.state.fields.phone.length <= 7}
+            >
+              Verify{" "}
+            </button>
+            <button
               color="grey"
               type="button"
-              className="btn btn-sm del-btn"
+              className="btn btn-sm btn-white"
               onClick={this.close}
             >
               Cancel
-            </Button>
-          </Modal.Actions>
+            </button>
+          </Modal.Footer>
         </Modal>
-      </div>
+      </Fragment>
     );
   }
 }

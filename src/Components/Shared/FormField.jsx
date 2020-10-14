@@ -1,137 +1,30 @@
-import React from "react";
+import React from 'react'
+import { Field, reduxForm } from 'redux-form'
 
-const TextField = (props) => {
-  const { meta = {} } = props;
+const required = value => value ? undefined : 'Required'
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength15 = maxLength(15)
+const number = value => value && isNaN(Number(value)) ? 'Must be a number' : undefined
+const minValue = min => value =>
+  value && value < min ? `Must be at least ${min}` : undefined
+const minValue18 = minValue(18)
+const email = value =>
+  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
+  'Invalid email address' : undefined
+const tooOld = value =>
+  value && value > 65 ? 'You might be too old for this' : undefined
+const aol = value =>
+  value && /.+@aol\.com/.test(value) ?
+  'Really? You still use AOL for your email?' : undefined
 
-  const inputProps = {
-    type: props.type || "text",
-    className: "form__input",
-    name: props.input.name,
-    id: props.input.name,
-    readOnly: props.readOnly,
-    autoFocus: props.autoFocus,
-    autoComplete: props.autoComplete,
-    placeholder: props.placeholder,
-    maxLength: props.maxLength,
-    value: meta.uncontrolled ? undefined : props.input.value,
-    defaultValue: meta.uncontrolled ? props.defaultValue : undefined,
-    onChange: props.input.onChange,
-    disabled: props.disabled,
-  };
-
-  return (
-    <React.Fragment>
-      {props.label && (
-        <label htmlFor={props.input.name} className="form__label">
-          {props.label}
-          {props.required ? " *" : null}
-        </label>
-      )}
-      <input {...inputProps} />
-      {meta.touched && meta.error ? (
-        <div className="form__field-error">{meta.error}</div>
-      ) : null}
-    </React.Fragment>
-  );
-};
-const TextArea = (props) => {
-  const { meta = {} } = props;
-
-  const inputProps = {
-    type: props.type || "text",
-    className: "form__input",
-    name: props.input.name,
-    id: props.input.name,
-    readOnly: props.readOnly,
-    autoFocus: props.autoFocus,
-    autoComplete: props.autoComplete,
-    placeholder: props.placeholder,
-    maxLength: props.maxLength,
-    value: meta.uncontrolled ? undefined : props.input.value,
-    defaultValue: meta.uncontrolled ? props.defaultValue : undefined,
-    onChange: props.input.onChange,
-    disabled: props.disabled,
-  };
-
-  return (
-    <React.Fragment>
-      {props.label && (
-        <label htmlFor={props.input.name} className="form__label">
-          {props.label}
-          {props.required ? " *" : null}
-        </label>
-      )}
-      <textarea {...inputProps} />
-      {meta.touched && meta.error ? (
-        <div className="form__field-error">{meta.error}</div>
-      ) : null}
-    </React.Fragment>
-  );
-};
-
-const CheckBox = (props) => {
-  const { meta = {} } = props;
-
-  const checboxProps = {
-    type: "checkbox",
-    className: "form__checkbox",
-    name: props.input.name,
-    id: props.input.name,
-    value: props.input.value ? props.input.value : props.input.name,
-    defaultChecked: meta.uncontrolled ? props.defaultChecked : undefined,
-    onChange: props.input.onChange,
-    checked: props.input.checked,
-  };
-
-  return (
-    <React.Fragment>
-      <input {...checboxProps} />
-      <label className="form__checkbox-label" htmlFor={props.input.name}>
-        {props.label}
-      </label>
-      {meta.touched && meta.error ? (
-        <div className="form__field-error">{meta.error}</div>
-      ) : null}
-    </React.Fragment>
-  );
-};
-
-// const SelectField = props => {
-//   const { meta = {} } = props;
-
-//   const selectProps = {
-//     ...props,
-//     className: 'form__select',
-//     name: props.input.name,
-//     id: props.input.name
-//   };
-
-//   return (
-//     <React.Fragment>
-//       {props.label && (
-//         <label htmlFor={props.input.name} className="form__label">
-//           {props.label}
-//           {props.required ? ' *' : null}
-//         </label>
-//       )}
-//       <Select {...selectProps} />
-//       {meta.touched && meta.error ? <div className="form__field-error">{meta.error}</div> : null}
-//     </React.Fragment>
-//   );
-// };
-
-const FormField = (props) => {
-  switch (props.type) {
-    case "checkbox":
-      return <CheckBox {...props} />;
-    // case "select":
-    //   return <SelectField {...props} />;
-    case "textarea":
-      return <TextArea {...props} />;
-
-    default:
-      return <TextField {...props} />;
-  }
-};
-
-export { TextField, CheckBox, FormField };
+const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
+  <div>
+    <label>{label}</label>
+    <div>
+      <input {...input} placeholder={label} type={type}/>
+      {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
+    </div>
+  </div>
+)
+export { renderField };

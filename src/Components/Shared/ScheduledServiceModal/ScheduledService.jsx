@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 
-import { Button, Modal, Label, Input } from "semantic-ui-react";
+import { Modal } from "react-bootstrap";
 
 export class ScheduledService extends Component {
   constructor(props) {
@@ -10,55 +10,56 @@ export class ScheduledService extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <Modal
-          size={"small"}
-          open={this.props.scheduleModal}
-          closeIcon
-          onClose={this.props.toggle}
+          show={this.props.scheduleModal}
+          onHide={this.props.toggle}
+          size="lg"
+          className="custom-modal"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
         >
-          <Modal.Header>
-            <h3>Schedule Service</h3>
+          <Modal.Header closeButton>
+            <Modal.Title>Schedule Service</Modal.Title>
           </Modal.Header>
-          <Modal.Content>
-            <Modal.Description>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
-                tellus nulla volutpat risus id adipiscing leo tristique.
-                Sollicitudin ac rhoncus posuere bibendum aliquet elementum
-                viverra volutpat. Amet libero in eu, ut erat platea laoreet.
-                Augue scelerisque nunc adipiscing ultrices orci, sollicitudin.
-                Sit egestas ultricies ipsum, posuere ut bibendum semper. Non
-                nibh nibh accumsan metus pharetra integer aliquam vitae.
-              </p>
-              <br></br>
-              <Label>
-                Scheduled Service Time :
-                <Input
+          <Modal.Body>
+            <div class="row">
+              <div class="col-lg-4 col-md-6 col-6">
+                <div class="modCon">
+                  <h6>Scheduled Service Time :</h6>
+                </div>
+              </div>
+              <div class="col-lg-8 col-md-6 col-6">
+                <input
+                  className="login-form-textfield form-control"
                   id="time"
                   fullWidth={true}
                   name="time"
                   type="time"
-                  //   margin={"normal"}
                 />
-              </Label>
-            </Modal.Description>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button color="blue" type="button" className="btn btn-sm del-btn">
-              Schedule
-            </Button>
-            <Button
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              color="blue"
+              type="button"
+              className="btn btn-sm btn-primary"
+              onClick={this.deleteUser}
+            >
+              Scheduled
+            </button>
+            <button
               color="grey"
               type="button"
-              className="btn btn-sm del-btn"
+              className="btn btn-sm btn-white"
               onClick={this.close}
             >
               Cancel
-            </Button>
-          </Modal.Actions>
+            </button>
+          </Modal.Footer>
         </Modal>
-      </div>
+      </Fragment>
     );
   }
 }

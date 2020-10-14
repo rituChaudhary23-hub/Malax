@@ -5,6 +5,11 @@ import UpdateEmail from "../../Components/Shared/UpdateEmailModal/UpdateEmail";
 import Consent from "../../Components/Shared/ConsentFormModal/ConsentForm";
 import Agreement from "../../Components/Shared/AgreementModal/Agreement";
 import Image from "../../Components/Shared/ImageModal/Image";
+import icon1 from "../../assets/images/icon1.png";
+import icon2 from "../../assets/images/icon2.png";
+import icon3 from "../../assets/images/icon3.png";
+import icon4 from "../../assets/images/icon4.png";
+import icon5 from "../../assets/images/icon5.png";
 
 class ProfileMain extends Component {
   constructor(props) {
@@ -85,7 +90,7 @@ class ProfileMain extends Component {
                       <ul className="first-sec">
                         <li>
                           <div className="thr-img">
-                            <img src="assets/images/icon1.png" />
+                            <img src={icon1} />
                           </div>
                           <div className="thr-des">
                             <h5>Email Address Confirmation</h5>
@@ -106,7 +111,7 @@ class ProfileMain extends Component {
                         </li>
                         <li>
                           <div className="thr-img">
-                            <img src="assets/images/icon2.png" />
+                            <img src={icon2} />
                           </div>
                           <div className="thr-des">
                             <h5>Telephone Number Confirmation</h5>
@@ -127,7 +132,7 @@ class ProfileMain extends Component {
                         </li>
                         <li>
                           <div className="thr-img">
-                            <img src="assets/images/icon3.png" />
+                            <img src={icon3} />
                           </div>
                           <div className="thr-des">
                             <h5>Therapist Profile</h5>
@@ -148,7 +153,7 @@ class ProfileMain extends Component {
                         </li>
                         <li>
                           <div className="thr-img">
-                            <img src="assets/images/icon4.png" />
+                            <img src={icon4} />
                           </div>
                           <div className="thr-des">
                             <h5>Identity Verification</h5>
@@ -177,7 +182,7 @@ class ProfileMain extends Component {
                         </li>
                         <li>
                           <div className="thr-img">
-                            <img src="assets/images/icon5.png" />
+                            <img src={icon5} />
                           </div>
                           <div className="thr-des">
                             <h5>Consent Forms</h5>
@@ -207,7 +212,7 @@ class ProfileMain extends Component {
 
                         <li>
                           <div className="thr-img">
-                            <img src="assets/images/icon4.png" />
+                            <img src={icon4} />
                           </div>
                           <div className="thr-des">
                             <h5>Profile Approval</h5>

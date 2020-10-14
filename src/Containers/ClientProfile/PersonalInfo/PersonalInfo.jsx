@@ -1,18 +1,95 @@
 import React, { Component } from "react";
-import { Button, Form, Input, Dropdown, Menu } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
+import { DateInput } from "semantic-ui-calendar-react";
+import moment from "moment";
 
+import { Form, Input, Dropdown } from "semantic-ui-react-form-validator";
 const options = [
   { key: "m", text: "Male", value: "m" },
   { key: "k", text: "Female", value: "f" },
 ];
 
+const currentdate = new Date();
+const currentYear = currentdate.getFullYear();
+const maxdate = new Date(currentdate.setYear(currentdate.getFullYear()));
+
 class PersonalInfo extends Component {
   constructor(props) {
     super(props);
-    this.state = { gender: "m" };
+    this.state = {
+      gender: "m",
+      fields: {
+        first_name: "",
+        last_name: "",
+        dob: "",
+        gender: "",
+      },
+      errors: {
+        first_name: "",
+        last_name: "",
+        dob: "",
+        gender: "",
+      },
+      loading: false,
+    };
   }
 
+  setFormValue(field, e) {
+    let fields = this.state.fields;
+    fields[field] = e.target.value;
+    this.setState({ fields });
+  }
+
+  resetError = (field) => {
+    let errors = this.state.errors;
+    errors[field] = "";
+    this.setState({ errors });
+  };
+  handleChangeDate = (event, { name, value }) => {
+    if (this.state.hasOwnProperty(name)) {
+      this.setState({ [name]: value });
+    }
+    this.resetError("dob");
+
+    // this.setState({ [name]: value });
+    this.setState((prevState) => {
+      let fields = Object.assign({}, prevState.fields);
+      fields.dob = value;
+      return { fields: fields };
+    });
+  };
+
+  saveProfile = (e) => {
+    this.setState({ loading: true });
+    if (this.handleValidation()) {
+      const { first_name, last_name, dob } = this.state.fields;
+    }
+    this.setState({ loading: false });
+  };
+  handleValidation = () => {
+    let fields = this.state.fields;
+    let errors = this.state.errors;
+    let formIsValid = true;
+
+    if (fields["dob"] === "") {
+      formIsValid = false;
+      errors["dob"] = "Date of Birth can't be blank";
+    }
+
+    this.setState({ errors: errors });
+    this.setState({ loading: false });
+    return formIsValid;
+  };
+  hasError = (value) => {
+    let errors = this.state.errors;
+    if (errors[value] !== "") {
+      return true;
+    } else {
+      return false;
+    }
+  };
   render() {
+    const { submitting } = this.props;
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -32,7 +109,13 @@ class PersonalInfo extends Component {
                   <div className="col-sm-12">
                     <div className="thrprofileDes">
                       <div className="tab-content">
-                        <Form>
+                        <Form
+                          ref="form"
+                          autoComplete="off"
+                          onSubmit={this.saveProfile}
+                          onError={this.handleValidation}
+                          // onNext={this.props.onNext(this.props.onNext)}
+                        >
                           <div
                             className="tab-pane container-fluid active"
                             id="Personal"
@@ -41,66 +124,94 @@ class PersonalInfo extends Component {
                               <div className="row">
                                 <div className="col-sm-12">
                                   <div className="form-group">
-                                    <Form.Field>
-                                      {" "}
-                                      <label for="usr" className="chkBox">
-                                        First name{" "}
-                                      </label>
-                                      <Input
-                                        className="form-control"
-                                        id="name"
-                                        fullWidth={true}
-                                        name="name"
-                                        type="name"
-                                        //   margin={"normal"}
-                                      />
-                                    </Form.Field>
+                                    {" "}
+                                    <label for="usr" className="chkBox">
+                                      First name{" "}
+                                    </label>
+                                    <Input
+                                      className="form-control"
+                                      id="name"
+                                      fullWidth={true}
+                                      name="name"
+                                      type="name"
+                                      onChange={this.setFormValue.bind(
+                                        this,
+                                        "first_name"
+                                      )}
+                                      value={this.state.fields.first_name}
+                                      validators={[
+                                        "required",
+                                        "matchRegexp:^[a-zA-Z ]*$",
+                                      ]}
+                                      errorMessages={[
+                                        "this field is required",
+                                        "Invalid Name",
+                                      ]}
+                                    />
                                   </div>
                                   <div className="form-group">
-                                    <Form.Field>
-                                      <label for="usr" className="chkBox">
-                                        Last name{" "}
-                                      </label>
+                                    <label for="usr" className="chkBox">
+                                      Last name{" "}
+                                    </label>
 
-                                      <Input
-                                        className="form-control"
-                                        id="name"
-                                        fullWidth={true}
-                                        name="name"
-                                        type="name"
-                                        //   margin={"normal"}
-                                      />
-                                    </Form.Field>
+                                    <Input
+                                      className="form-control"
+                                      id="name"
+                                      fullWidth={true}
+                                      name="name"
+                                      type="name"
+                                      onChange={this.setFormValue.bind(
+                                        this,
+                                        "last_name"
+                                      )}
+                                      value={this.state.fields.last_name}
+                                      validators={[
+                                        "required",
+                                        "matchRegexp:^[a-zA-Z ]*$",
+                                      ]}
+                                      errorMessages={[
+                                        "this field is required",
+                                        "Invalid Name",
+                                      ]}
+                                    />
                                   </div>
                                   <div className="form-group">
-                                    <Form.Field>
-                                      <label for="usr" className="chkBox">
-                                        Gender{" "}
-                                      </label>
+                                    <label for="usr" className="chkBox">
+                                      Gender{" "}
+                                    </label>
 
-                                      <select
-                                        className="form-control"
-                                        id="sel1"
-                                      >
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                      </select>
-                                    </Form.Field>
+                                    <select className="form-control" id="sel1">
+                                      <option>Male</option>
+                                      <option>Female</option>
+                                    </select>
                                   </div>
                                   <div className="form-group">
-                                    <Form.Field>
-                                      <label for="usr" className="chkBox">
-                                        Birth date{" "}
-                                      </label>
-                                      <Input
-                                        className="form-control date"
-                                        id="date"
-                                        fullWidth={true}
-                                        name="date"
-                                        type="date"
-                                        //   margin={"normal"}
-                                      />{" "}
-                                    </Form.Field>
+                                    <label for="usr" className="chkBox">
+                                      Birth date{" "}
+                                    </label>
+                                    <DateInput
+                                      className="form-control date"
+                                      id="date"
+                                      fullWidth={true}
+                                      name="date"
+                                      // type="date"
+                                      value={this.state.fields.dob}
+                                      dateFormat={"YYYY-MM-DD"}
+                                      maxDate={maxdate}
+                                      // maxDate={moment().subtract(1, "years")}
+                                      // initialDate={moment().subtract(
+                                      //   1,
+                                      //   "years"
+                                      // )}
+                                      onChange={this.handleChangeDate}
+                                    />
+                                    {this.hasError("dob") && (
+                                      <div className="ui pointing label">
+                                        <div style={{ color: "red" }}>
+                                          {this.state.errors["dob"]}
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>{" "}
                                 </div>
                               </div>
@@ -110,9 +221,11 @@ class PersonalInfo extends Component {
                                 <div className="col-sm-12">
                                   <div className="text-right">
                                     <Button
-                                      type="button"
+                                      type="submit"
                                       className="btn btn-primary mr-4"
                                       data-dismiss="modal"
+                                      disabled={submitting}
+                                      // onClick={this.saveProfile}
                                     >
                                       Submit
                                     </Button>

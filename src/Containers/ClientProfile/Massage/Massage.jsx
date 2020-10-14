@@ -3,7 +3,7 @@ import { Field } from "redux-form";
 import { Form, TextArea, Dropdown, Menu, Button } from "semantic-ui-react";
 
 const options = [
-  { key: "m", text: "Male", value: "m" },
+  { key: "m", text: "Male", value: "Male" },
   { key: "k", text: "Female", value: "f" },
 ];
 const FrequencyOptions = [
@@ -15,10 +15,7 @@ const FrequencyOptions = [
 class Massage extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      gender: "male",
-      frequency: "daily",
-    };
+    this.state = {};
   }
   back = () => {
     window.location.href = "/client-profile";

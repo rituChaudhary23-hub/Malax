@@ -10,7 +10,20 @@ class Condition extends Component {
   back() {
     window.location.href = "/client-profile";
   }
+
+  // saveCondition = () => {
+  //   var fields = "input[name='list']".serializeArray();
+  //   if (fields.length == 0) {
+  //     alert("nothing selected");
+  //     // cancel submit
+  //     return false;
+  //   } else {
+  //     alert(fields.length + " items selected");
+  //   }
+  // };
+
   render() {
+    const { submitting } = this.props;
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -31,12 +44,18 @@ class Condition extends Component {
                     <div className="card-body">
                       <div className="tab-pane container-fluid" id="conditions">
                         <div className="thrChkBox graybg">
-                          <Form>
+                          <Form
+                            ref="form"
+                            autocomplete="off"
+                            onSubmit={this.saveCondition}
+                            onError={this.handleValidation}
+                          >
                             <div className="form-check form-check-inline">
                               <label>
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
+                                  name="list"
                                   id="chk_red"
                                 />
                                 <span
@@ -52,6 +71,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
+                                  name="list"
                                   id="chk_green"
                                 />
                                 <span
@@ -68,6 +88,7 @@ class Condition extends Component {
                                   className="form-check-input"
                                   type="checkbox"
                                   id="chk_blue"
+                                  name="list"
                                 />
                                 <span
                                   className="form-check-label"
@@ -273,6 +294,7 @@ class Condition extends Component {
                                   className="form-check-input"
                                   type="checkbox"
                                   id="chk_red2"
+                                  name="list"
                                 />
                                 <span
                                   className="form-check-label"
@@ -311,6 +333,7 @@ class Condition extends Component {
                                   className="form-check-input"
                                   type="checkbox"
                                   id="chk_green"
+                                  name="list"
                                 />
                                 <span
                                   className="form-check-label"
@@ -358,6 +381,7 @@ class Condition extends Component {
                                   className="form-check-input"
                                   type="checkbox"
                                   id="chk_blue"
+                                  name="list"
                                 />
                                 <span
                                   className="form-check-label"
@@ -406,6 +430,7 @@ class Condition extends Component {
                                   className="form-check-input"
                                   type="checkbox"
                                   id="chk_blue"
+                                  name="list"
                                 />
                                 <span
                                   className="form-check-label"
@@ -436,10 +461,11 @@ class Condition extends Component {
                         </div>
                         <div className="text-right mt-5">
                           <Button
-                            type="button"
+                            type="submit"
                             className="btn btn-primary mr-4"
                             data-dismiss="modal"
-                            onClick={this.back}
+                            disabled={submitting}
+                            onClick={this.saveCondition}
                           >
                             Save
                           </Button>
