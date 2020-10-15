@@ -46,9 +46,9 @@ class Header extends Component {
                         </a>
                       </li>
                       <li className="nav-item">
-                        <a className="nav-link" href="/" title="Log in">
+                        <a className="nav-link" href="/" title="LogOut">
                           <span>
-                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <i className="fa fa-sign-out"></i>
                           </span>
                         </a>
                       </li>

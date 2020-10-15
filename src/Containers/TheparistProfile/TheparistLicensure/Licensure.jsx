@@ -112,7 +112,9 @@ class Licensure extends Component {
       return { fields: fields };
     });
   };
-
+cancel=()=>{
+  window.location.href="/theparist-profile"
+}
   render() {
     const { submitting } = this.props;
 
@@ -172,7 +174,6 @@ class Licensure extends Component {
                                     id="date"
                                     fullWidth={true}
                                     name="date"
-                                    type="date"
                                     value={this.state.fields.date}
                                     dateFormat={"YYYY-MM-DD"}
                                     onChange={this.handleChangeDate}
@@ -196,7 +197,6 @@ class Licensure extends Component {
                                     id="date"
                                     fullWidth={true}
                                     name="date"
-                                    type="date"
                                     value={this.state.fields.exp_date}
                                     dateFormat={"YYYY-MM-DD"}
                                     onChange={this.handleExpDate}
@@ -269,6 +269,7 @@ class Licensure extends Component {
                                     type="button"
                                     className="btn btn-cancel"
                                     data-dismiss="modal"
+                                    onClick={this.cancel}
                                   >
                                     Cancel
                                   </Button>

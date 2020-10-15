@@ -8,7 +8,7 @@ class Condition extends Component {
     this.state = {};
   }
   back() {
-    window.location.href = "/client-profile";
+    window.location.href="/update-client-profile"
   }
 
   // saveCondition = () => {

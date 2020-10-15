@@ -132,24 +132,20 @@ class Massage extends Component {
                     <div className="col-sm-12 mt-5">
                       <div>
                         <h5>Therapist gender preference</h5>
-                        <Menu>
                           <Dropdown
                             options={options}
                             selection
                             value={this.state.gender}
                           />
-                        </Menu>{" "}
                       </div>
 
                       <div>
                         <h5>Frequency</h5>
-                        <Menu>
                           <Dropdown
                             options={FrequencyOptions}
                             selection
                             value={this.state.frequency}
                           />
-                        </Menu>
                       </div>
 
                       <div>

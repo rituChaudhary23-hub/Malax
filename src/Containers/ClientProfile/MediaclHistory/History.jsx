@@ -89,6 +89,10 @@ class History extends Component {
       return false;
     }
   };
+
+  cancelInfo=()=>{
+    window.location.href="/update-client-profile"
+  }
   render() {
     const { submitting } = this.props;
     return (
@@ -366,6 +370,7 @@ class History extends Component {
                                       type="button"
                                       className="btn btn-cancel"
                                       data-dismiss="modal"
+                                      onClick={this.cancelInfo}
                                     >
                                       Cancel
                                     </Button>

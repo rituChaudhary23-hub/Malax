@@ -129,6 +129,7 @@ export class Modalities extends Component {
                     type="button"
                     class="btn btn-cancel"
                     data-dismiss="modal"
+                    onClick={this.back}
                   >
                     Cancel
                   </Button>

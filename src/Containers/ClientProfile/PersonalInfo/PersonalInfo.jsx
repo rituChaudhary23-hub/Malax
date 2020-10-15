@@ -88,6 +88,10 @@ class PersonalInfo extends Component {
       return false;
     }
   };
+
+  cancelInfo=()=>{
+    window.location.href="/client-profile"
+  }
   render() {
     const { submitting } = this.props;
     return (
@@ -233,6 +237,7 @@ class PersonalInfo extends Component {
                                       type="button"
                                       className="btn btn-cancel"
                                       data-dismiss="modal"
+                                      onClick={this.cancelInfo}
                                     >
                                       Cancel
                                     </Button>

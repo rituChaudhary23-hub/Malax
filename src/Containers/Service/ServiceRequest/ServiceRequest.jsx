@@ -111,6 +111,10 @@ class ServiceRequest extends Component {
       return false;
     }
   };
+
+  cancel=()=>{
+    window.location.href="/client-profile"
+  }
   validate = () => {
     // let errors = {};
     let fields = this.state.fields;
@@ -414,6 +418,7 @@ class ServiceRequest extends Component {
                                 type="button"
                                 className="btn btn-cancel"
                                 data-dismiss="modal"
+                                onClick={this.cancel}
                               >
                                 Cancel
                               </Button>
