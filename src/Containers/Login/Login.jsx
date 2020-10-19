@@ -5,6 +5,9 @@ import signUp from "../../assets/images/signUp.png";
 import logo from "../../assets/images/logo.png";
 import { reduxForm, Field } from "redux-form";
 import { required, email } from "redux-form-validators";
+import { loginUser } from "../../redux/actions/user.action";
+import { connect } from "react-redux";
+
 
 import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
 
@@ -15,6 +18,7 @@ class Login extends Component {
       fields: {
         email: "",
         password: "",
+        accountType:0
       },
       errors: {
         email: "",
@@ -23,13 +27,28 @@ class Login extends Component {
       loading: false,
     };
   }
-  handleChanges = (e, { value }) => {
+  // componentDidMount = () => {
+  //   let { initialize } = this.props;
+  //   var user = JSON.parse(sessionStorage.getItem("savedUser"));
+  //   if (user) {
+  //     initialize({
+  //       email: user.email,
+  //       password: user.password,
+  //       remember: user.accountType
+  //     });
+  //   }
+  // };
+  handleChanges =( e,value) => {
     e.preventDefault();
     if (this.handleValidation()) {
-      history.push(value);
-      window.location.reload(false);
+    // this.props.onLoginUser(value, this.props.history);
+    this.props.onLoginUser(this.state.fields);
+
+      // history.push(value);
+      // window.location.reload(false);
     }
   };
+
   handleValidation = () => {
     let fields = this.state.fields;
     let errors = {};
@@ -209,7 +228,20 @@ class Login extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  console.log("####!!!!!!", state);
+  return {
+    formVal: state.form,
+    user: state.persist["c_user"],
+    usersDetails: state.user
+  };
+};
 
-export default reduxForm({
-  form: "LoginForm",
-})(Login);
+const mapDispatchToProps = dispatch => {
+  return {
+    onLoginUser: (values, history) => dispatch(loginUser(values, history))
+  };
+};
+
+// export default  reduxForm({connect(mapStateToProps, mapDispatchToProps)})(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

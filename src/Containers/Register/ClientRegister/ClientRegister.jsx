@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button, Form, Input, Tab, Label } from "semantic-ui-react";
 import logIn from "../../../assets/images/logIn.png";
+import { connect } from "react-redux";
+import {  reduxForm } from "redux-form";
+
+
+import { withRouter } from "react-router";
 import logo from "../../../assets/images/logo.png";
+import { userDetail} from ".././../../redux/actions/userList.action";
+
 
 class ClientRegister extends Component {
   constructor(props) {
@@ -12,23 +19,27 @@ class ClientRegister extends Component {
         email: "",
         password: "",
         conPassword: "",
-        first_name: "",
-        last_name: "",
-        zip_code: "",
+        firstName: "",
+        lastName: "",
+         zipCodeId: "",
+        // zipCodeId: Int32Array,
+        marketId: 0,
+        accountTypeId: 0
       },
       errors: {
         email: "",
         password: "",
         conPassword: "",
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
       },
     };
   }
-  emailRoute = (e) => {
+  signupMalax = (e) => {
     e.preventDefault();
     if (this.handleValidation()) {
-      window.location.href = "/confirm-email";
+      this.props.userDetail(this.state.fields);
+
     }
   };
 
@@ -60,15 +71,15 @@ class ClientRegister extends Component {
     }
 
     //last_name
-    if (!fields["last_name"]) {
+    if (!fields["lastName"]) {
       formIsValid = false;
-      errors["last_name"] = "required*";
+      errors["lastName"] = "required*";
     }
 
     //first name
-    if (!fields["first_name"]) {
+    if (!fields["firstName"]) {
       formIsValid = false;
-      errors["first_name"] = "required*";
+      errors["firstName"] = "required*";
     }
 
     //Confirm Password
@@ -196,11 +207,11 @@ class ClientRegister extends Component {
                 name="name"
                 margin={"normal"}
                 placeholder="First Name"
-                onChange={this.setFormValue.bind(this, "first_name")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "first_name")}
+                onChange={this.setFormValue.bind(this, "firstName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "firstName")}
               />
               <span style={{ color: "red" }}>
-                {this.state.errors["first_name"]}
+                {this.state.errors["firstName"]}
               </span>
             </Form.Field>
           </div>
@@ -216,11 +227,11 @@ class ClientRegister extends Component {
                 type="text"
                 placeholder="Last Name"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "last_name")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "last_name")}
+                onChange={this.setFormValue.bind(this, "lastName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "lastName")}
               />
               <span style={{ color: "red" }}>
-                {this.state.errors["last_name"]}
+                {this.state.errors["lastName"]}
               </span>
             </Form.Field>
           </div>
@@ -231,16 +242,16 @@ class ClientRegister extends Component {
               <Input
                 className="form-control"
                 id="zip"
-                type="text"
+                // type="numeric"
                 fullWidth={true}
                 name="zip"
                 placeholder="Zip Code"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "zip_code")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "zip_code")}
+                onChange={this.setFormValue.bind(this, "zipCodeId")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "zipCodeId")}
               />
               <span style={{ color: "red" }}>
-                {this.state.errors["zip_code"]}
+                {this.state.errors["zipCodeId"]}
               </span>
             </Form.Field>
           </div>
@@ -257,7 +268,7 @@ class ClientRegister extends Component {
               type="submit"
               disabled={submitting}
               className="btn btn-primary register"
-              onClick={this.emailRoute}
+              onClick={this.signupMalax}
             >
               Register
             </Button>
@@ -268,4 +279,26 @@ class ClientRegister extends Component {
   }
 }
 
-export default ClientRegister;
+
+const mapStateToProps = (state, ownProps) => {
+  console.log("@@@@@@>>>>>>>ritu.", state);
+  return {
+    // getOtcList: state.otc.getOtcList,
+ 
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    userDetail: data => dispatch(userDetail(data)),
+
+  };
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(reduxForm({ form: "ClientRegister" })(ClientRegister))
+);
+
