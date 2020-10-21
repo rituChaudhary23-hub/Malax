@@ -39,7 +39,7 @@ class ClientRegister extends Component {
     e.preventDefault();
     if (this.handleValidation()) {
       this.props.userDetail(this.state.fields);
-
+this.props.history.push("/confirm-email")
     }
   };
 
@@ -283,7 +283,7 @@ class ClientRegister extends Component {
 const mapStateToProps = (state, ownProps) => {
   console.log("@@@@@@>>>>>>>ritu.", state);
   return {
-    // getOtcList: state.otc.getOtcList,
+    saveUser: state.userList.saveUser,
  
   };
 };

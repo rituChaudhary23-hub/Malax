@@ -2,6 +2,12 @@ import React, { Component } from "react";
 import { Label, Button } from "semantic-ui-react";
 import logIn from "../../../assets/images/logIn.png";
 import logo from "../../../assets/images/logo.png";
+import { connect } from "react-redux";
+import {  reduxForm } from "redux-form";
+import { withRouter } from "react-router";
+import { userDetail} from ".././../../redux/actions/userList.action";
+
+
 export class ConfirmEmail extends Component {
   constructor(props) {
     super(props);
@@ -10,6 +16,9 @@ export class ConfirmEmail extends Component {
   loginClientRoute = () => {
     window.location.href = "/register";
   };
+  resendEmail=()=>{
+
+  }
 
   render() {
     return (
@@ -28,13 +37,18 @@ export class ConfirmEmail extends Component {
               <div className="conEmail">
                 <h3>Confirm your email address</h3>
                 <p>
-                  We sent a confirmation email to:<br></br>email@gmail.com
+                  We sent a confirmation email to:<br></br>
+                <h2>
+                  {/* {this.props.saveUser.Data.Email} */}
+                </h2>
                 </p>
                 <p>
                   Check your email and click on the confirmation link to
                   continue.
                 </p>
-                <Button type="submit" className="btn btn-primary mr-4">
+                <Button type="submit" className="btn btn-primary mr-4"
+                onClick={this.resendEmail}
+                >
                   Resend Mail
                 </Button>
                 <Button
@@ -53,4 +67,26 @@ export class ConfirmEmail extends Component {
   }
 }
 
-export default ConfirmEmail;
+
+const mapStateToProps = (state, ownProps) => {
+  console.log("@@@@@@>>>>>>>ritu.", state);
+  return {
+    saveUser: state.userList.saveUser,
+ 
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    userDetail: data => dispatch(userDetail(data)),
+
+  };
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(ConfirmEmail)
+);
+

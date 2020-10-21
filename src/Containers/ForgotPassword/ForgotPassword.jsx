@@ -1,8 +1,11 @@
 import React, { Component } from "react";
-
+import { connect } from "react-redux";
+import {  reduxForm } from "redux-form";
+import { withRouter } from "react-router";
 import { Button, Form, Input } from "semantic-ui-react";
 import logo from "../../assets/images/logo.png";
 import signUp from "../../assets/images/signUp.png";
+import {userForgotPassword} from "../../redux/actions/userList.action"
 
 class ForgotPassword extends Component {
   constructor(props) {
@@ -19,6 +22,17 @@ class ForgotPassword extends Component {
   routeChange() {
     window.location.href = "/";
   }
+  forgotPassword = e => {
+    e.preventDefault();
+
+    if (this.handleValidation()) {
+        this.props.userForgotPassword(this.state.fields);
+ this.props.history.push("/reset-password");
+
+    }
+    
+};
+
   setFormValue(field, e) {
     console.log("field", field);
     let fields = this.state.fields;
@@ -116,6 +130,8 @@ class ForgotPassword extends Component {
                     type="submit"
                     disabled={this.state.fields.email.length <= 5}
                     className="btn btn-primary register mr-4"
+                    onClick={this.forgotPassword}
+                  
                   >
                     Reset Password
                   </Button>
@@ -149,4 +165,25 @@ class ForgotPassword extends Component {
   }
 }
 
-export default ForgotPassword;
+
+const mapStateToProps = (state, ownProps) => {
+  console.log("@@@@@@>>>>>>>ritu.", state);
+  return {
+   userForgotPassword: state.userList.userForgotPassword,
+ 
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    userForgotPassword: data => dispatch(userForgotPassword(data)),
+
+  };
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(reduxForm({ form: "ForgotPassword" })(ForgotPassword))
+);

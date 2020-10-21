@@ -27,25 +27,30 @@ class Login extends Component {
       loading: false,
     };
   }
-  // componentDidMount = () => {
-  //   let { initialize } = this.props;
-  //   var user = JSON.parse(sessionStorage.getItem("savedUser"));
-  //   if (user) {
-  //     initialize({
-  //       email: user.email,
-  //       password: user.password,
-  //       remember: user.accountType
-  //     });
-  //   }
-  // };
-  handleChanges =( e,value) => {
+   componentDidMount = () => {
+    // let { initialize } = this.props;
+    var user = JSON.parse(sessionStorage.getItem("savedUser"));
+    // if (user) {
+    //   initialize({
+    //     email: user.email,
+    //     password: user.password,
+    //     remember: user.accountType
+    //   });
+    // }
+    console.log("user-token",user)
+   };
+  handleChanges =async( e,value) =>  {
     e.preventDefault();
     if (this.handleValidation()) {
     // this.props.onLoginUser(value, this.props.history);
-    this.props.onLoginUser(this.state.fields);
-
-      // history.push(value);
-      // window.location.reload(false);
+   var res = await this.props.onLoginUser(this.state.fields,value);
+debugger
+if(res == true){
+      this.props.history.push(value.value);
+} else{
+  
+}
+    //  window.location.reload(false);
     }
   };
 

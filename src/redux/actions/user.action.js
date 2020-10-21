@@ -1,7 +1,7 @@
 import { UserService } from "../Services/UserService";
 import { toast } from "../../Components/Toast/Toast";
 import { startLoading, stopLoading } from "./loading.action";
-
+import { history } from "../../store/history";
 import {
   loginUserPersist,
   logoutUserPersist,
@@ -50,30 +50,55 @@ export function logoutUser() {
   };
 }
 
-export function loginUser(data, history) {
+export function loginUser(data, value) {
   debugger
   return (dispatch, getState) => {
     dispatch(startLoading());
     return UserService.login(data)
       .then(async (user) => {
-        console.log("Ritu", user);
+        debugger
+        if(user.data.Success){
+        console.log("response", user.data.Data.Token);
         dispatch(
-          loginUserTempPersist({ token: user["data"]["data"]["access_token"] })
+           loginUserTempPersist({ token: user["data"]["Data"]["Token"] })
         );
-     
-          sessionStorage.setItem("savedUser", JSON.stringify(data));
+        debugger
+     console.log("saveduser", JSON.stringify(data))
+          sessionStorage.setItem("savedUser", user.data.Data.Token);
         
         dispatch(stopLoading());
         console.log("DDD", user["data"]);
-        toast.success(user["data"]["message"]);
+        // toast.success(user["data"]["Message"]);
+        toast.success(user.data.Message);
         dispatch(loginUserSuccess(user["data"]["data"]));
         
-          // history.push("client-profile");    
+      //    history.push(value.value); 
+          let { accountType} = user["data"];
+        if (accountType === 0) {
+        dispatch(
+          loginUserPersist({ token: user["data"]["Token"] })
+          )
+          // history.push("/client-profile");
+        
+        } else {
+          dispatch(
+            loginUserPersist({ token: user["data"]["Token"] })
+          );
+        // history.push("/theparist-profile");
+        }
+      return true
+        } else {
+          toast.error(user.data.Message);
+          return false;
+        }
       })
       .catch((error) => {
+        return false
         console.log("ERROR", error);
         if (error) {
-          toast.error(error["data"]["message"]);
+          // toast.error(error["data"]["Message"]);
+          // toast.error(data.Message)
+          toast.error(error.Message);
         }
         dispatch(stopLoading());
       });
