@@ -4,8 +4,6 @@ import { Button, Form, Input, Tab, Label } from "semantic-ui-react";
 import logIn from "../../../assets/images/logIn.png";
 import { connect } from "react-redux";
 import {  reduxForm } from "redux-form";
-
-
 import { withRouter } from "react-router";
 import logo from "../../../assets/images/logo.png";
 import { userDetail} from ".././../../redux/actions/userList.action";
@@ -35,12 +33,16 @@ class ClientRegister extends Component {
       },
     };
   }
-  signupMalax = (e) => {
+  signupMalax = async(e,data) => {
     e.preventDefault();
-    if (this.handleValidation()) {
-      this.props.userDetail(this.state.fields);
-this.props.history.push("/confirm-email")
-    }
+if (this.handleValidation()) {
+ var res = await this.props.userDetail(this.state.fields);
+if(res == true){
+  this.props.history.push("/confirm-email")
+} else{
+
+}
+  }
   };
 
   //signup form validation
@@ -290,7 +292,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    userDetail: data => dispatch(userDetail(data)),
+    userDetail: (data,history) => dispatch(userDetail(data,history)),
 
   };
 };

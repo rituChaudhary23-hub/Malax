@@ -5,7 +5,7 @@ import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import loading from "./loading.reducer";
 import userList from "./userList.reducer";
-
+import globalReducer from "./global.reducer"
 
 export const history = createBrowserHistory();
 
@@ -14,6 +14,7 @@ const appReducer = combineReducers({
   form: formReducer,
   router: connectRouter(history),
   loading,
+  globalReducer,
   userList,
  
 });

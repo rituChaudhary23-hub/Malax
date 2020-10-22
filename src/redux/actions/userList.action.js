@@ -1,6 +1,8 @@
 import { UserService } from "../Services/UserService";
 import { toast } from "../../Components/Toast/Toast";
 import { startLoading, stopLoading } from "./loading.action";
+import { push } from 'react-router-redux';
+import { history } from 'react-router'
 
 
 export const actionTypes = {
@@ -34,8 +36,8 @@ export function userResetPassword(data) {
 }
 
 //register
-export function userDetail(data) {
-  debugger
+export function userDetail(data,location) {
+  
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -45,23 +47,29 @@ export function userDetail(data) {
       .then(async (data) => {
         console.log("Userlist", data);
         dispatch(stopLoading());
-        // history.push('/login');
-        dispatch(saveDetails(data));
-        console.log("susces",data.data.Message)
+        if(data.data.Success){
+          console.log("push-path",push)          
+          // browserHistory.push('/confirm-email');
+          dispatch(saveDetails(data));
         toast.success(data["data"]["message"]);
-        
-
+        // history.push("/confirm-email");
+        //  dispatch(push('/confirm-email'));
+        return true
+      } else {
+        toast.error(data.data.Message);
+        return false;
+      }
 
       })
-      .catch((error) => {
-        console.log("ERROR", data.Message);
-        if (error) {
-          console.log("ERROR", data.Message);
+      // .catch((error) => {
+      //   console.log("ERROR", data.Message);
+      //   if (error) {
+      //     console.log("ERROR", data.Message);
 
-          toast.error(error["data"]["Message"]);
-        }
-        dispatch(stopLoading());
-      });
+      //     toast.error(error["data"]["Message"]);
+      //   }
+      //   dispatch(stopLoading());
+      // });
   };
 }
 
@@ -70,7 +78,7 @@ export function userDetail(data) {
 
 //forgot-password
 export function userForgotPassword(data,history) {
-  debugger
+  
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -107,7 +115,7 @@ export function userForgotPassword(data,history) {
 //reset-password
 
 export function fetchResetPassword(data) {
-  debugger
+  
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -117,7 +125,6 @@ export function fetchResetPassword(data) {
         if(data.data.Success){
 
         console.log("Reset Password", data);
-        // sessionStorage.getItem("savedUser", data.data.Data.Token);
 
         dispatch(stopLoading());
         // history.push('/login');
@@ -145,3 +152,34 @@ export function fetchResetPassword(data) {
 }
 
 //resend-email
+export function fetchResendEmail(data) {
+  
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return UserService.resendEmail(data, {
+    })
+      .then(async (data) => {
+        if(data.data.Success){
+        console.log("resend", data);
+        dispatch(stopLoading());
+        console.log("susces",data.data.Message)
+        toast.success(data.data.Message);
+        return true;
+        }
+        else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        console.log("ERROR", data.Message);
+        if (error) {
+          console.log("ERROR", data.Message);
+          toast.error(error(data.Data.Message));
+          // toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}

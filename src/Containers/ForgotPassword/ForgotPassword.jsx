@@ -22,13 +22,13 @@ class ForgotPassword extends Component {
   routeChange() {
     window.location.href = "/";
   }
+
+  
   forgotPassword = e => {
     e.preventDefault();
 
     if (this.handleValidation()) {
         this.props.userForgotPassword(this.state.fields);
- this.props.history.push("/reset-password");
-
     }
     
 };

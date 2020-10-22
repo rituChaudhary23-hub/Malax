@@ -51,35 +51,31 @@ export function logoutUser() {
 }
 
 export function loginUser(data, value) {
-  debugger
+  
   return (dispatch, getState) => {
     dispatch(startLoading());
     return UserService.login(data)
       .then(async (user) => {
-        debugger
+        
         if(user.data.Success){
         console.log("response", user.data.Data.Token);
         dispatch(
            loginUserTempPersist({ token: user["data"]["Data"]["Token"] })
         );
-        debugger
+        
      console.log("saveduser", JSON.stringify(data))
           sessionStorage.setItem("savedUser", user.data.Data.Token);
         
         dispatch(stopLoading());
         console.log("DDD", user["data"]);
-        // toast.success(user["data"]["Message"]);
+       
         toast.success(user.data.Message);
         dispatch(loginUserSuccess(user["data"]["data"]));
-        
-      //    history.push(value.value); 
           let { accountType} = user["data"];
         if (accountType === 0) {
         dispatch(
           loginUserPersist({ token: user["data"]["Token"] })
           )
-          // history.push("/client-profile");
-        
         } else {
           dispatch(
             loginUserPersist({ token: user["data"]["Token"] })

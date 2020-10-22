@@ -5,19 +5,24 @@ import logo from "../../../assets/images/logo.png";
 import { connect } from "react-redux";
 import {  reduxForm } from "redux-form";
 import { withRouter } from "react-router";
-import { userDetail} from ".././../../redux/actions/userList.action";
+import { fetchResendEmail} from ".././../../redux/actions/userList.action";
 
 
 export class ConfirmEmail extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      email:""
+    };
   }
   loginClientRoute = () => {
     window.location.href = "/register";
   };
-  resendEmail=()=>{
 
+  resendEmail=()=>{
+    var data = this.props.saveUser.data.Data.Email
+  this.state.email = data;
+    this.props.fetchResendEmail(data)
   }
 
   render() {
@@ -39,7 +44,8 @@ export class ConfirmEmail extends Component {
                 <p>
                   We sent a confirmation email to:<br></br>
                 <h2>
-                  {/* {this.props.saveUser.Data.Email} */}
+                  {this.props.saveUser.data &&
+                this.props.saveUser.data.Data.Email}
                 </h2>
                 </p>
                 <p>
@@ -71,14 +77,14 @@ export class ConfirmEmail extends Component {
 const mapStateToProps = (state, ownProps) => {
   console.log("@@@@@@>>>>>>>ritu.", state);
   return {
-    saveUser: state.userList.saveUser,
+  saveUser: state.userList.saveUser,
  
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    userDetail: data => dispatch(userDetail(data)),
+    fetchResendEmail: data => dispatch(fetchResendEmail(data)),
 
   };
 };

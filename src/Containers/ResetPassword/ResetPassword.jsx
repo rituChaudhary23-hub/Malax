@@ -23,19 +23,18 @@ class ResetPassword extends Component {
   }
   routeChange() {
     window.location.href = "/";
+  
   }
   resetPassword = e => {
     e.preventDefault();
-
+this.state.fields.token = new URLSearchParams(this.props.location.search).get("Token")
     if (this.handleValidation()) {
-    //  sessionStorage.getItem("savedUser", data.data.Data.Token);
 
         this.props.fetchResetPassword(this.state.fields);
         this.props.history.push("/");
 
     }
-};
-
+ };
 
   handleSignupKeyup(field, e) {
     this.setState((prevState) => {
@@ -95,8 +94,9 @@ class ResetPassword extends Component {
     this.setState({ fields });
   }
   render() {
+    
     const { handleSubmit, pristine, reset, submitting } = this.props;
-
+console.log("props",this.props)
     return (
       <section className="log-in">
         <div className="container">
