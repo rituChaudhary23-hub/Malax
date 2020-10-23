@@ -8,7 +8,6 @@ import { required, email } from "redux-form-validators";
 import { loginUser } from "../../redux/actions/user.action";
 import { connect } from "react-redux";
 
-
 import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
 
 class Login extends Component {
@@ -18,7 +17,7 @@ class Login extends Component {
       fields: {
         email: "",
         password: "",
-        accountType:0
+        accountType: 0,
       },
       errors: {
         email: "",
@@ -27,30 +26,20 @@ class Login extends Component {
       loading: false,
     };
   }
-   componentDidMount = () => {
-    // let { initialize } = this.props;
+  componentDidMount = () => {
     var user = JSON.parse(sessionStorage.getItem("savedUser"));
-    // if (user) {
-    //   initialize({
-    //     email: user.email,
-    //     password: user.password,
-    //     remember: user.accountType
-    //   });
-    // }
-    console.log("user-token",user)
-   };
-  handleChanges =async( e,value) =>  {
+    console.log("user-token", user);
+  };
+  handleChanges = async (e, value) => {
     e.preventDefault();
     if (this.handleValidation()) {
-    // this.props.onLoginUser(value, this.props.history);
-   var res = await this.props.onLoginUser(this.state.fields,value);
-debugger
-if(res == true){
-      this.props.history.push(value.value);
-} else{
-  
-}
-    //  window.location.reload(false);
+      var res = await this.props.onLoginUser(this.state.fields, value);
+
+      if (res == true) {
+        this.props.history.push(value.value);
+      } else {
+      }
+      //  window.location.reload(false);
     }
   };
 
@@ -233,18 +222,18 @@ if(res == true){
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   console.log("####!!!!!!", state);
   return {
     formVal: state.form,
     user: state.persist["c_user"],
-    usersDetails: state.user
+    usersDetails: state.user,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onLoginUser: (values, history) => dispatch(loginUser(values, history))
+    onLoginUser: (values, history) => dispatch(loginUser(values, history)),
   };
 };
 

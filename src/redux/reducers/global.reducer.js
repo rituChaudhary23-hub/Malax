@@ -10,7 +10,7 @@ const globalReducer = (state = initialState, action) => {
     case actionTypes.GLOBAL_CATEGORY_NAME:
       return {
         ...state,
-        saveUser: action.data,
+        categoryName: action.data,
       };
 
     default:

@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 import { Button, Form, Input, Tab, Label } from "semantic-ui-react";
 import logIn from "../../../assets/images/logIn.png";
 import { connect } from "react-redux";
-import {  reduxForm } from "redux-form";
+import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
 import logo from "../../../assets/images/logo.png";
-import { userDetail} from ".././../../redux/actions/userList.action";
-
+import { userDetail } from ".././../../redux/actions/userList.action";
 
 class ClientRegister extends Component {
   constructor(props) {
@@ -19,10 +18,10 @@ class ClientRegister extends Component {
         conPassword: "",
         firstName: "",
         lastName: "",
-         zipCodeId: "",
+        zipCodeId: "",
         // zipCodeId: Int32Array,
         marketId: 0,
-        accountTypeId: 0
+        accountTypeId: 0,
       },
       errors: {
         email: "",
@@ -33,16 +32,15 @@ class ClientRegister extends Component {
       },
     };
   }
-  signupMalax = async(e,data) => {
+  signupMalax = async (e, data) => {
     e.preventDefault();
-if (this.handleValidation()) {
- var res = await this.props.userDetail(this.state.fields);
-if(res == true){
-  this.props.history.push("/confirm-email")
-} else{
-
-}
-  }
+    if (this.handleValidation()) {
+      var res = await this.props.userDetail(this.state.fields);
+      if (res == true) {
+        this.props.history.push("/confirm-email");
+      } else {
+      }
+    }
   };
 
   //signup form validation
@@ -281,19 +279,16 @@ if(res == true){
   }
 }
 
-
 const mapStateToProps = (state, ownProps) => {
   console.log("@@@@@@>>>>>>>ritu.", state);
   return {
     saveUser: state.userList.saveUser,
- 
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    userDetail: (data,history) => dispatch(userDetail(data,history)),
-
+    userDetail: (data, history) => dispatch(userDetail(data, history)),
   };
 };
 
@@ -303,4 +298,3 @@ export default withRouter(
     mapDispatchToProps
   )(reduxForm({ form: "ClientRegister" })(ClientRegister))
 );
-
