@@ -1,28 +1,72 @@
 import React, { Component } from "react";
 import { Button, Form, Input, Tab, Label } from "semantic-ui-react";
+import { userDetail } from ".././../../redux/actions/userList.action";
+import { connect } from "react-redux";
+import { reduxForm } from "redux-form";
+import { withRouter } from "react-router";
+import {
+  fetchCategoryName,
+} from ".././../../redux/actions/global.action";
+
 
 class TheparistRegister extends Component {
+  golbalID = 0;
   constructor(props) {
     super(props);
     this.state = {
-      fields: {
-        email: "",
-        password: "",
-        conPassword: "",
-        first_name: "",
-        last_name: "",
-        zip_code: "",
-      },
-      errors: {
-        email: "",
-        password: "",
-        conPassword: "",
-        first_name: "",
-        last_name: "",
-        zip_code: "",
-      },
-    };
+      name: "UserAccountTypes",
+      CodeName: "Therapist ",
+       fields: {
+      email: "",
+      password: "",
+      conPassword: "",
+      firstName: "",
+      lastName: "",
+      zipCodeId: "",
+
+      marketId: 0,
+      accountTypeId: 0,
+    },
+    errors: {
+      email: "",
+      password: "",
+      conPassword: "",
+      firstName: "",
+      lastName: "",
+    },
+  };
   }
+
+  componentDidMount = async () => {
+    debugger
+    var data = await this.props.fetchCategoryName(this.state.name);
+    let courseData;
+    debugger
+    if (this.props.categoryName){
+      courseData = this.props.categoryName.filter(
+        (item) => item.CodeName == this.state.CodeName
+      )[0];
+      debugger
+    this.golbalID = courseData.GlobalCodeId;
+      }
+  };
+
+
+  signupMalax = async (e, data) => {
+    debugger
+    e.preventDefault();
+    if (this.handleValidation()) {
+      debugger
+      this.state.fields.accountTypeId = this.golbalID;
+      debugger
+      var res = await this.props.userDetail(this.state.fields);
+      if (res == true) {
+        this.props.history.push("/confirm-email");
+      } else {
+      }
+    }
+  };
+
   handleValidation = () => {
     let fields = this.state.fields;
     let errors = {};
@@ -48,22 +92,17 @@ class TheparistRegister extends Component {
           "Password should have one uppercase letter one number and one special character,minimum 8 characters";
       }
     }
-    //zipcode
-    if (!fields["zip_code"]) {
-      formIsValid = false;
-      errors["zip_code"] = "required*";
-    }
 
     //last_name
-    if (!fields["last_name"]) {
+    if (!fields["lastName"]) {
       formIsValid = false;
-      errors["last_name"] = "required*";
+      errors["lastName"] = "required*";
     }
 
     //first name
-    if (!fields["first_name"]) {
+    if (!fields["firstName"]) {
       formIsValid = false;
-      errors["first_name"] = "required*";
+      errors["firstName"] = "required*";
     }
 
     //Confirm Password
@@ -112,6 +151,8 @@ class TheparistRegister extends Component {
     fields[field] = e.target.value;
     this.setState({ fields });
   }
+
+
   handleSignupKeyup(field, e) {
     this.setState((prevState) => {
       let errors = Object.assign({}, prevState.errors);
@@ -119,12 +160,8 @@ class TheparistRegister extends Component {
       return { errors };
     });
   }
-  emailRoute = (e) => {
-    e.preventDefault();
-    if (this.handleValidation()) {
-      window.location.href = "/confirm-email";
-    }
-  };
+
+
 
   render() {
     const { submitting } = this.props;
@@ -197,12 +234,13 @@ class TheparistRegister extends Component {
                 name="name"
                 placeholder="First Name"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "first_name")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "first_name")}
+                onChange={this.setFormValue.bind(this, "firstName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "firstName")}
               />
               <span style={{ color: "red" }}>
-                {this.state.errors["first_name"]}
+                {this.state.errors["firstName"]}
               </span>
+              
             </Form.Field>
           </div>
 
@@ -217,11 +255,11 @@ class TheparistRegister extends Component {
                 type="text"
                 margin={"normal"}
                 placeholder="Last Name"
-                onChange={this.setFormValue.bind(this, "last_name")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "last_name")}
+                onChange={this.setFormValue.bind(this, "lastName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "lastName")}
               />
               <span style={{ color: "red" }}>
-                {this.state.errors["last_name"]}
+                {this.state.errors["lastName"]}
               </span>
             </Form.Field>
           </div>
@@ -249,9 +287,8 @@ class TheparistRegister extends Component {
             <Button
               type="submit"
               disabled={submitting}
-              placeholder="Email"
               className="btn btn-primary register"
-              onClick={this.emailRoute}
+              onClick={this.signupMalax}
             >
               Register
             </Button>
@@ -262,4 +299,25 @@ class TheparistRegister extends Component {
   }
 }
 
-export default TheparistRegister;
+const mapStateToProps = (state, ownProps) => {
+  console.log("@@@@@@>>>>>>>ritu.", state);
+  return {
+    saveUser: state.userList.saveUser,
+    categoryName: state.globalReducer.categoryName,
+
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    userDetail: (data, history) => dispatch(userDetail(data, history)),
+    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+  };
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(reduxForm({ form: "TheparistRegister" })(TheparistRegister))
+);

@@ -7,11 +7,19 @@ import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
 import logo from "../../../assets/images/logo.png";
 import { userDetail } from ".././../../redux/actions/userList.action";
+import {
+  fetchCategoryName,
+  fetchValidateZip,
+} from ".././../../redux/actions/global.action";
 
 class ClientRegister extends Component {
+  golbalID = 0;
   constructor(props) {
     super(props);
     this.state = {
+      name: "UserAccountTypes",
+      CodeName: "Client",
+      zipCode: "",
       fields: {
         email: "",
         password: "",
@@ -19,7 +27,7 @@ class ClientRegister extends Component {
         firstName: "",
         lastName: "",
         zipCodeId: "",
-        // zipCodeId: Int32Array,
+
         marketId: 0,
         accountTypeId: 0,
       },
@@ -32,9 +40,22 @@ class ClientRegister extends Component {
       },
     };
   }
+
+  componentDidMount = async () => {
+    var data = await this.props.fetchCategoryName(this.state.name);
+    let courseData;
+    if (this.props.categoryName)
+      courseData = this.props.categoryName.filter(
+        (item) => item.CodeName == this.state.CodeName
+      )[0];
+    this.golbalID = courseData.GlobalCodeId;
+  };
+
+
   signupMalax = async (e, data) => {
     e.preventDefault();
     if (this.handleValidation()) {
+      this.state.fields.accountTypeId = this.golbalID;
       var res = await this.props.userDetail(this.state.fields);
       if (res == true) {
         this.props.history.push("/confirm-email");
@@ -127,6 +148,15 @@ class ClientRegister extends Component {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
+    // this.props.fetchValidateZip(this.state.zipCode)
+  }
+  abc(e) {
+    this.state.zipCode = e;
+    var data = {
+      zipCode: this.state.zipCode,
+    };
+    this.state.fields.zipCodeId = e;
+    this.props.fetchValidateZip(data);
   }
   handleSignupKeyup(field, e) {
     this.setState((prevState) => {
@@ -134,11 +164,11 @@ class ClientRegister extends Component {
       errors[field] = "";
       return { errors };
     });
+    //  this.props.fetchValidateZip(this.state.zipCode)
   }
 
   render() {
     const { submitting } = this.props;
-
     return (
       <div className="log-in-form">
         <Form autoComplete="off">
@@ -238,6 +268,7 @@ class ClientRegister extends Component {
 
           <div className="form-group">
             <label>ZIP Code</label>
+            {/* {this.props.fetchValidateZip(this.state.zipCode) && ( */}
             <Form.Field>
               <Input
                 className="form-control"
@@ -247,13 +278,16 @@ class ClientRegister extends Component {
                 name="zip"
                 placeholder="Zip Code"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "zipCodeId")}
+                onChange={(e) => {
+                  this.abc(e.target.value);
+                }}
                 onKeyUp={this.handleSignupKeyup.bind(this, "zipCodeId")}
               />
               <span style={{ color: "red" }}>
                 {this.state.errors["zipCodeId"]}
               </span>
             </Form.Field>
+            {/* )} */}
           </div>
           <div className="form-group">
             <p>
@@ -283,12 +317,15 @@ const mapStateToProps = (state, ownProps) => {
   console.log("@@@@@@>>>>>>>ritu.", state);
   return {
     saveUser: state.userList.saveUser,
+    categoryName: state.globalReducer.categoryName,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     userDetail: (data, history) => dispatch(userDetail(data, history)),
+    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+    fetchValidateZip: (data) => dispatch(fetchValidateZip(data)),
   };
 };
 

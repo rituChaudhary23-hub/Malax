@@ -1,5 +1,9 @@
-import { fetch } from "./Fetch";
-import { API_HOST } from "../../utils/config/constants/index";
+import {
+  fetch
+} from "./Fetch";
+import {
+  API_HOST
+} from "../../utils/config/constants/index";
 
 const register = (data) => {
   return fetch("post", `${API_HOST}/AuthAPI/SignUp`, data);
@@ -9,30 +13,31 @@ const login = (data) => {
   return fetch("post", `${API_HOST}/AuthAPI/Login`, data);
 };
 
+
+
+
 //forgot-password-service
-const forgotPassword=(data)=>{
+const forgotPassword = (data) => {
   return fetch("post", `${API_HOST}/AuthAPI/ForgotPassword`, data);
-}
+};
 
 //reset-password-service
-const resetPassword=(data)=>{
+const resetPassword = (data) => {
   return fetch("post", `${API_HOST}/AuthAPI/ResetForgotPassword`, data);
-
-}
+};
 
 //resend-email
-const resendEmail=(data)=>{
+const resendEmail = (data) => {
   var data1 = {
-    email:data
-  }
+    email: data,
+  };
   return fetch("post", `${API_HOST}/AuthAPI/SendConfirmationEmail`, data1);
-
-}
+};
 
 export const UserService = {
   register,
   forgotPassword,
   resetPassword,
   login,
-  resendEmail
+  resendEmail,
 };

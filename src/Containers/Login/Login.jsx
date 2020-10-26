@@ -31,10 +31,12 @@ class Login extends Component {
     console.log("user-token", user);
   };
   handleChanges = async (e, value) => {
+    console.log("event",e)
+    console.log("value",value)
     e.preventDefault();
     if (this.handleValidation()) {
       var res = await this.props.onLoginUser(this.state.fields, value);
-
+      console.log("value", value);
       if (res == true) {
         this.props.history.push(value.value);
       } else {
@@ -116,10 +118,12 @@ class Login extends Component {
 
   render() {
     const options = [
+     
       { key: 3, text: "LogIn As Client", value: "/client-profile" },
       { key: 4, text: "LogIn As Theparist", value: "/theparist-profile" },
       { key: 5, text: "LogIn As Admin", value: "/dashboard" },
     ];
+    console.log("options",this.props.saveUser.accountTypeId)
     const { handleSubmit, submitting } = this.props;
 
     console.log("props", this.props);
@@ -228,6 +232,8 @@ const mapStateToProps = (state) => {
     formVal: state.form,
     user: state.persist["c_user"],
     usersDetails: state.user,
+    saveUser: state.userList.saveUser,
+
   };
 };
 

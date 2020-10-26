@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {  reduxForm } from "redux-form";
+import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
 import { Button, Form, Input } from "semantic-ui-react";
 import logo from "../../assets/images/logo.png";
 import signUp from "../../assets/images/signUp.png";
-import {fetchResetPassword} from "../../redux/actions/userList.action"
+import { fetchResetPassword } from "../../redux/actions/userList.action";
 
 class ResetPassword extends Component {
   constructor(props) {
@@ -13,28 +13,27 @@ class ResetPassword extends Component {
     this.state = {
       fields: {
         password: "",
-        token:""
+        token: "",
       },
       errors: {
         password: "",
-        conPassword:""
+        conPassword: "",
       },
     };
   }
   routeChange() {
     window.location.href = "/";
-  
   }
-  resetPassword = e => {
+  resetPassword = (e) => {
     e.preventDefault();
-this.state.fields.token = new URLSearchParams(this.props.location.search).get("Token")
+    this.state.fields.token = new URLSearchParams(
+      this.props.location.search
+    ).get("Token");
     if (this.handleValidation()) {
-
-        this.props.fetchResetPassword(this.state.fields);
-        this.props.history.push("/");
-
+      this.props.fetchResetPassword(this.state.fields);
+      this.props.history.push("/");
     }
- };
+  };
 
   handleSignupKeyup(field, e) {
     this.setState((prevState) => {
@@ -94,9 +93,8 @@ this.state.fields.token = new URLSearchParams(this.props.location.search).get("T
     this.setState({ fields });
   }
   render() {
-    
     const { handleSubmit, pristine, reset, submitting } = this.props;
-console.log("props",this.props)
+    console.log("props", this.props);
     return (
       <section className="log-in">
         <div className="container">
@@ -105,56 +103,63 @@ console.log("props",this.props)
               <div className="login-div">
                 <div className="log-in-inner signUp sign-first">
                   <h3 class="text-center">Reset Password</h3>
-                  <p>
-                    Enter your New  password.
-                  </p>
+                  <p>Enter your New password.</p>
                   <Form>
                     <div className="log-in-form">
-                    <div className="form-group">
-            <label>New Password</label>
-            <Form.Field>
-              <Input
-                className="form-control"
-                id="password"
-                fullWidth={true}
-                name="password"
-                type="password"
-                placeholder="Password"
-                margin={"normal"}
-                onChange={this.setFormValue.bind(this, "password")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "password")}
-              />
+                      <div className="form-group">
+                        <label>New Password</label>
+                        <Form.Field>
+                          <Input
+                            className="form-control"
+                            id="password"
+                            fullWidth={true}
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                            margin={"normal"}
+                            onChange={this.setFormValue.bind(this, "password")}
+                            onKeyUp={this.handleSignupKeyup.bind(
+                              this,
+                              "password"
+                            )}
+                          />
 
-              <span style={{ color: "red" }}>
-                {this.state.errors["password"]}
-              </span>
-            </Form.Field>
-          </div>
-          <div className="form-group">
-            <label>Password Confirmation</label>
-            <Form.Field>
-              <Input
-                className="form-control"
-                id="password"
-                type="password"
-                margin={"normal"}
-                placeholder="Confirm Password"
-                onChange={this.setFormValue.bind(this, "conPassword")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "conPassword")}
-              />
-              <span style={{ color: "red" }}>
-                {this.state.errors["conPassword"]}
-              </span>
-            </Form.Field>
-          </div>
+                          <span style={{ color: "red" }}>
+                            {this.state.errors["password"]}
+                          </span>
+                        </Form.Field>
+                      </div>
+                      <div className="form-group">
+                        <label>Password Confirmation</label>
+                        <Form.Field>
+                          <Input
+                            className="form-control"
+                            id="password"
+                            type="password"
+                            margin={"normal"}
+                            placeholder="Confirm Password"
+                            onChange={this.setFormValue.bind(
+                              this,
+                              "conPassword"
+                            )}
+                            onKeyUp={this.handleSignupKeyup.bind(
+                              this,
+                              "conPassword"
+                            )}
+                          />
+                          <span style={{ color: "red" }}>
+                            {this.state.errors["conPassword"]}
+                          </span>
+                        </Form.Field>
+                      </div>
                       <br></br>
                     </div>
                   </Form>
                 </div>
                 <div className="text-center sign-up-button sign-first">
                   <Button
-                      type="submit"
-                      disabled={submitting}
+                    type="submit"
+                    disabled={submitting}
                     className="btn btn-primary register mr-4"
                     onClick={this.resetPassword}
                   >
@@ -190,19 +195,16 @@ console.log("props",this.props)
   }
 }
 
-
 const mapStateToProps = (state, ownProps) => {
   console.log("@@@@@@>>>>>>>ritu.", state);
   return {
     resetPassword: state.userList.resetPassword,
- 
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    fetchResetPassword: data => dispatch(fetchResetPassword(data)),
-
+    fetchResetPassword: (data) => dispatch(fetchResetPassword(data)),
   };
 };
 

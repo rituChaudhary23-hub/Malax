@@ -1,4 +1,4 @@
-import { actionTypes } from "../actions/userList.action";
+import { actionTypes } from "../actions/global.action";
 
 const initialState = { 
   categoryName:{},

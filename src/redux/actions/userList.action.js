@@ -49,11 +49,9 @@ export function userDetail(data,location) {
         dispatch(stopLoading());
         if(data.data.Success){
           console.log("push-path",push)          
-          // browserHistory.push('/confirm-email');
           dispatch(saveDetails(data));
         toast.success(data["data"]["message"]);
-        // history.push("/confirm-email");
-        //  dispatch(push('/confirm-email'));
+      
         return true
       } else {
         toast.error(data.data.Message);
