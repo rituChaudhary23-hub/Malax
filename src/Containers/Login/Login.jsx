@@ -7,6 +7,9 @@ import { reduxForm, Field } from "redux-form";
 import { required, email } from "redux-form-validators";
 import { loginUser } from "../../redux/actions/user.action";
 import { connect } from "react-redux";
+import {
+  fetchCategoryName,
+} from "../../redux/actions/global.action";
 
 import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
 
@@ -14,6 +17,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: "UserAccountTypes",
       fields: {
         email: "",
         password: "",
@@ -29,7 +33,21 @@ class Login extends Component {
   componentDidMount = () => {
     var user = JSON.parse(sessionStorage.getItem("savedUser"));
     console.log("user-token", user);
+    this.props.fetchCategoryName(this.state.name)
   };
+
+  // componentDidMount = async () => {
+  //   var data = await this.props.fetchCategoryName(this.state.name);
+  //   let courseData;
+  //   if (this.props.categoryName)
+  //     courseData = this.props.categoryName.filter(
+  //       (item) => item.CodeName == this.state.CodeName
+  //     )[0];
+  //   this.golbalID = courseData.GlobalCodeId;
+  // };
+
+
+
   handleChanges = async (e, value) => {
     console.log("event",e)
     console.log("value",value)
@@ -123,6 +141,7 @@ class Login extends Component {
       { key: 4, text: "LogIn As Theparist", value: "/theparist-profile" },
       { key: 5, text: "LogIn As Admin", value: "/dashboard" },
     ];
+
     console.log("options",this.props.saveUser.accountTypeId)
     const { handleSubmit, submitting } = this.props;
 
@@ -240,6 +259,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onLoginUser: (values, history) => dispatch(loginUser(values, history)),
+    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+
   };
 };
 
