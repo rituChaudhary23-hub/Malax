@@ -1,19 +1,47 @@
 import React, { Component, Fragment } from "react";
 import { Modal } from "react-bootstrap";
+import { reduxForm } from "redux-form";
+import { withRouter } from "react-router";
+
+import { Button, Input, Form } from "semantic-ui-react";
+
+import { connect } from "react-redux";
+import { fetchUpdateEmail } from "../../../redux/actions/client.action";
 
 class UpdateEmail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fields: {
-        email: "",
+        userId: 0,
+        fieldType: "e",
+        value: "",
       },
     };
   }
+
+  UpdateEmail = () => {
+    var data = this.props.user.Data.UserId;
+    this.state.fields.userId = data;
+    console.log("%%%%%%%%%%%", data);
+    this.props.fetchUpdateEmail(this.state.fields);
+    this.props.toggle();
+  };
+
+  setFormValue(field, e) {
+    console.log("field", field);
+    let fields = this.state.fields;
+    fields[field] = e.target.value;
+    this.setState({ fields });
+  }
+
   render() {
+    const { submitting } = this.props;
+    console.log("!!!!!!!!!!!!!", this.props.user.Data.UserId);
+
     return (
       <Fragment>
-        <form>
+        <Form autoComplete="off">
           <Modal
             show={this.props.modal}
             onHide={this.props.toggle}
@@ -39,7 +67,7 @@ class UpdateEmail extends Component {
                   </div>
                 </div>
                 <div className="col-lg-8 col-md-6 col-5 mb-4">
-                  <div className="modCon">client@aol.com</div>
+                  <div className="modCon"> {this.props.user.Data.Email}</div>
                 </div>
                 <div className="col-lg-4 col-md-6 col-6">
                   <div className="modCon">
@@ -51,6 +79,7 @@ class UpdateEmail extends Component {
                     className="login-form-textfield form-control"
                     id="email"
                     fullWidth={true}
+                    onChange={this.setFormValue.bind(this, "value")}
                     name="email"
                     type="email"
                   />
@@ -58,28 +87,44 @@ class UpdateEmail extends Component {
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <button
-                color="blue"
+              <Button
                 type="submit"
-                className="btn btn-sm btn-primary"
-                disabled={this.state.fields.email.length <= 5}
+                disabled={this.state.fields.value.length <= 5}
+                className="btn btn-primary register mr-4"
+                onClick={this.UpdateEmail}
               >
                 Update Email
-              </button>
+              </Button>
               <button
                 color="gray"
                 type="submit"
                 className="btn btn-sm btn-white"
-                onClick={this.close}
+                onClick={this.props.toggle}
               >
                 Cancel
               </button>
             </Modal.Footer>
           </Modal>
-        </form>
+        </Form>
       </Fragment>
     );
   }
 }
 
-export default UpdateEmail;
+const mapStateToProps = (state) => {
+  console.log("####!!!!!!", state);
+  return {
+    formVal: state.form,
+    user: state.user.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUpdateEmail: (data) => dispatch(fetchUpdateEmail(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(UpdateEmail)
+);

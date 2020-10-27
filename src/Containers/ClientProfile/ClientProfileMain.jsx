@@ -3,6 +3,9 @@ import { Table, Search, Pagination, Button, Modal } from "semantic-ui-react";
 import Verification from "../../Components/Shared/VerificationCodeModal/Verification";
 import UpdateEmail from "../../Components/Shared/UpdateEmailModal/UpdateEmail";
 import Consent from "../../Components/Shared/ConsentFormModal/ConsentForm";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+
 import Agreement from "../../Components/Shared/AgreementModal/Agreement";
 import Image from "../../Components/Shared/ImageModal/Image";
 import icon1 from "../../assets/images/icon1.png";
@@ -21,6 +24,7 @@ class ProfileMain extends Component {
       agreementModal: false,
       imageModal: false,
     };
+    userId:0
   }
 
   showModal = () => {
@@ -98,7 +102,7 @@ class ProfileMain extends Component {
                           </div>
                         </li>
                         <li>
-                          <p>therapist@aol.com</p>
+                          <p> {this.props.user.Data.Email}</p>
                         </li>
                         <li>
                           <Button
@@ -249,4 +253,22 @@ class ProfileMain extends Component {
   }
 }
 
-export default ProfileMain;
+
+const mapStateToProps = (state) => {
+  console.log("####!!!!!!", state);
+  return {
+    formVal: state.form,
+    user: state.user.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  };
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(ProfileMain))

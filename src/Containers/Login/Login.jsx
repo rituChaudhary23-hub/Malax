@@ -14,14 +14,18 @@ import {
 import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
 
 class Login extends Component {
+  golbalID = 0;
+dropVal:any;
   constructor(props) {
     super(props);
     this.state = {
       name: "UserAccountTypes",
+      CodeName: "Therapist ",
+      CodeName: "Client",
       fields: {
         email: "",
         password: "",
-        accountType: 0,
+        accountTypeId: 0,
       },
       errors: {
         email: "",
@@ -30,10 +34,21 @@ class Login extends Component {
       loading: false,
     };
   }
-  componentDidMount = () => {
+  componentDidMount = async() => {
     var user = JSON.parse(sessionStorage.getItem("savedUser"));
     console.log("user-token", user);
-    this.props.fetchCategoryName(this.state.name)
+    debugger
+   var data = await this.props.fetchCategoryName(this.state.name);
+   debugger
+ if(data != false){
+    this.dropVal = data.data.Data.globalCodeData
+    console.log('aaaaaaaaa',this.dropVal);
+ }
+   
+      // courseData = this.props.categoryName.filter(
+      //   (item) => item.CodeName == this.state.CodeName
+      // )[0];
+   // this.golbalID = courseData.GlobalCodeId;
   };
 
   // componentDidMount = async () => {
@@ -49,8 +64,14 @@ class Login extends Component {
 
 
   handleChanges = async (e, value) => {
+    debugger
     console.log("event",e)
-    console.log("value",value)
+    console.log("value",value);
+    var loginAs= e.target.outerText;
+    loginAs = loginAs.split(' ')[2];
+    console.log('loginas', loginAs);
+    var globalId = this.dropVal.filter(x=>x.CodeName == loginAs)[0].GlobalCodeId;
+    this.state.fields.accountTypeId = globalId;
     e.preventDefault();
     if (this.handleValidation()) {
       var res = await this.props.onLoginUser(this.state.fields, value);
@@ -137,7 +158,7 @@ class Login extends Component {
   render() {
     const options = [
      
-      { key: 3, text: "LogIn As Client", value: "/client-profile" },
+      { key: 2, text: "LogIn As Client", value: "/client-profile" },
       { key: 4, text: "LogIn As Theparist", value: "/theparist-profile" },
       { key: 5, text: "LogIn As Admin", value: "/dashboard" },
     ];

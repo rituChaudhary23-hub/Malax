@@ -1,9 +1,5 @@
-import {
-  fetch
-} from "./Fetch";
-import {
-  API_HOST
-} from "../../utils/config/constants/index";
+import { fetch } from "./Fetch";
+import { API_HOST } from "../../utils/config/constants/index";
 
 const register = (data) => {
   return fetch("post", `${API_HOST}/AuthAPI/SignUp`, data);
@@ -12,9 +8,6 @@ const register = (data) => {
 const login = (data) => {
   return fetch("post", `${API_HOST}/AuthAPI/Login`, data);
 };
-
-
-
 
 //forgot-password-service
 const forgotPassword = (data) => {

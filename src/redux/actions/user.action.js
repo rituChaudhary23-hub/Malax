@@ -70,7 +70,7 @@ export function loginUser(data, value) {
         console.log("DDD", user["data"]);
        
         toast.success(user.data.Message);
-        dispatch(loginUserSuccess(user["data"]["data"]));
+        dispatch(loginUserSuccess(user["data"]));
           let { accountType} = user["data"];
         if (accountType === 0) {
         dispatch(

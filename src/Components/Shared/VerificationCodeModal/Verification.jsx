@@ -1,13 +1,33 @@
 import React, { Component, Fragment } from "react";
 import { Modal } from "react-bootstrap";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { fetchUpdateEmail } from "../../../redux/actions/client.action";
+
 class Verification extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fields: {
-        phone: "",
+        userId: 0,
+        fieldType: "p",
+        value: "",
       },
     };
+  }
+  verifyPhone = () => {
+    var data = this.props.user.Data.UserId;
+    this.state.fields.userId = data;
+    console.log("%%%%%%%%%%%", data);
+    this.props.fetchUpdateEmail(this.state.fields);
+    this.props.toggle();
+  };
+
+  setFormValue(field, e) {
+    console.log("field", field);
+    let fields = this.state.fields;
+    fields[field] = e.target.value;
+    this.setState({ fields });
   }
 
   render() {
@@ -43,8 +63,11 @@ class Verification extends Component {
                   className="login-form-textfield form-control"
                   id="number"
                   fullWidth={true}
+                  onChange={this.setFormValue.bind(this, "value")}
                   name="number"
-                  type="number"
+                  minLength="10"
+                  maxLength="10"
+                  type="tel"
                 />
               </div>
             </div>
@@ -52,9 +75,10 @@ class Verification extends Component {
           <Modal.Footer>
             <button
               color="blue"
-              type="button"
               className="btn btn-sm btn-primary"
-              disabled={this.state.fields.phone.length <= 7}
+              onClick={this.verifyPhone}
+              type="submit"
+              disabled={this.state.fields.value.length <= 9}
             >
               Verify{" "}
             </button>
@@ -73,4 +97,20 @@ class Verification extends Component {
   }
 }
 
-export default Verification;
+const mapStateToProps = (state) => {
+  console.log("####!!!!!!", state);
+  return {
+    formVal: state.form,
+    user: state.user.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUpdateEmail: (data) => dispatch(fetchUpdateEmail(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Verification)
+);

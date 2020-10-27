@@ -37,7 +37,7 @@ export function fetchCategoryName(data) {
         
         dispatch(globalCategoryName(data.data.Data.globalCodeData));
         toast.success(data.data.Message);
-        return true;
+        return data;
         }
         else {
           toast.error(data.data.Message);

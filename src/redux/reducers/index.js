@@ -6,7 +6,8 @@ import { createBrowserHistory } from "history";
 import loading from "./loading.reducer";
 import userList from "./userList.reducer";
 import globalReducer from "./global.reducer"
-
+import clientReducer from "./client.reducer"
+import user from "./user.reducer"
 export const history = createBrowserHistory();
 
 const appReducer = combineReducers({
@@ -14,8 +15,10 @@ const appReducer = combineReducers({
   form: formReducer,
   router: connectRouter(history),
   loading,
+  user,
   globalReducer,
   userList,
+  clientReducer
  
 });
 const rootReducer = (state, action) => {
