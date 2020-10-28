@@ -4,10 +4,7 @@ import { userDetail } from ".././../../redux/actions/userList.action";
 import { connect } from "react-redux";
 import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
-import {
-  fetchCategoryName,
-} from ".././../../redux/actions/global.action";
-
+import { fetchCategoryName } from ".././../../redux/actions/global.action";
 
 class TheparistRegister extends Component {
   golbalID = 0;
@@ -16,49 +13,44 @@ class TheparistRegister extends Component {
     this.state = {
       name: "UserAccountTypes",
       CodeName: "Therapist ",
-       fields: {
-      email: "",
-      password: "",
-      conPassword: "",
-      firstName: "",
-      lastName: "",
-      zipCodeId: "",
+      fields: {
+        email: "",
+        password: "",
+        conPassword: "",
+        firstName: "",
+        lastName: "",
+        zipCodeId: "",
 
-      marketId: 0,
-      accountTypeId: 0,
-    },
-    errors: {
-      email: "",
-      password: "",
-      conPassword: "",
-      firstName: "",
-      lastName: "",
-    },
-  };
+        marketId: 0,
+        accountTypeId: 0,
+      },
+      errors: {
+        email: "",
+        password: "",
+        conPassword: "",
+        firstName: "",
+        lastName: "",
+      },
+    };
   }
 
   componentDidMount = async () => {
-    debugger
     var data = await this.props.fetchCategoryName(this.state.name);
     let courseData;
-    debugger
-    if (this.props.categoryName){
+
+    if (this.props.categoryName) {
       courseData = this.props.categoryName.filter(
         (item) => item.CodeName == this.state.CodeName
       )[0];
-      debugger
-    this.golbalID = courseData.GlobalCodeId;
-      }
+      this.golbalID = courseData.GlobalCodeId;
+    }
   };
 
-
   signupMalax = async (e, data) => {
-    debugger
     e.preventDefault();
     if (this.handleValidation()) {
-      debugger
       this.state.fields.accountTypeId = this.golbalID;
-      debugger
+
       var res = await this.props.userDetail(this.state.fields);
       if (res == true) {
         this.props.history.push("/confirm-email");
@@ -152,7 +144,6 @@ class TheparistRegister extends Component {
     this.setState({ fields });
   }
 
-
   handleSignupKeyup(field, e) {
     this.setState((prevState) => {
       let errors = Object.assign({}, prevState.errors);
@@ -160,8 +151,6 @@ class TheparistRegister extends Component {
       return { errors };
     });
   }
-
-
 
   render() {
     const { submitting } = this.props;
@@ -240,7 +229,6 @@ class TheparistRegister extends Component {
               <span style={{ color: "red" }}>
                 {this.state.errors["firstName"]}
               </span>
-              
             </Form.Field>
           </div>
 
@@ -300,11 +288,9 @@ class TheparistRegister extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("@@@@@@>>>>>>>ritu.", state);
   return {
     saveUser: state.userList.saveUser,
     categoryName: state.globalReducer.categoryName,
-
   };
 };
 

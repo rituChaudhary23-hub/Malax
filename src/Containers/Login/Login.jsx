@@ -7,15 +7,13 @@ import { reduxForm, Field } from "redux-form";
 import { required, email } from "redux-form-validators";
 import { loginUser } from "../../redux/actions/user.action";
 import { connect } from "react-redux";
-import {
-  fetchCategoryName,
-} from "../../redux/actions/global.action";
+import { fetchCategoryName } from "../../redux/actions/global.action";
 
 import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
 
 class Login extends Component {
   golbalID = 0;
-dropVal:any;
+  dropVal: any;
   constructor(props) {
     super(props);
     this.state = {
@@ -34,48 +32,23 @@ dropVal:any;
       loading: false,
     };
   }
-  componentDidMount = async() => {
-    var user = JSON.parse(sessionStorage.getItem("savedUser"));
-    console.log("user-token", user);
-    debugger
-   var data = await this.props.fetchCategoryName(this.state.name);
-   debugger
- if(data != false){
-    this.dropVal = data.data.Data.globalCodeData
-    console.log('aaaaaaaaa',this.dropVal);
- }
-   
-      // courseData = this.props.categoryName.filter(
-      //   (item) => item.CodeName == this.state.CodeName
-      // )[0];
-   // this.golbalID = courseData.GlobalCodeId;
+  componentDidMount = async () => {
+    var user = sessionStorage.getItem("savedUser");
+    var data = await this.props.fetchCategoryName(this.state.name);
+    if (data != false) {
+      this.dropVal = data.data.Data.globalCodeData;
+    }
   };
 
-  // componentDidMount = async () => {
-  //   var data = await this.props.fetchCategoryName(this.state.name);
-  //   let courseData;
-  //   if (this.props.categoryName)
-  //     courseData = this.props.categoryName.filter(
-  //       (item) => item.CodeName == this.state.CodeName
-  //     )[0];
-  //   this.golbalID = courseData.GlobalCodeId;
-  // };
-
-
-
   handleChanges = async (e, value) => {
-    debugger
-    console.log("event",e)
-    console.log("value",value);
-    var loginAs= e.target.outerText;
-    loginAs = loginAs.split(' ')[2];
-    console.log('loginas', loginAs);
-    var globalId = this.dropVal.filter(x=>x.CodeName == loginAs)[0].GlobalCodeId;
+    var loginAs = e.target.outerText;
+    loginAs = loginAs.split(" ")[2];
+    var globalId = this.dropVal.filter((x) => x.CodeName == loginAs)[0]
+      .GlobalCodeId;
     this.state.fields.accountTypeId = globalId;
     e.preventDefault();
     if (this.handleValidation()) {
       var res = await this.props.onLoginUser(this.state.fields, value);
-      console.log("value", value);
       if (res == true) {
         this.props.history.push(value.value);
       } else {
@@ -141,7 +114,6 @@ dropVal:any;
     return formIsValid;
   };
   setFormValue(field, e) {
-    console.log("field", field);
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
@@ -157,16 +129,13 @@ dropVal:any;
 
   render() {
     const options = [
-     
       { key: 2, text: "LogIn As Client", value: "/client-profile" },
-      { key: 4, text: "LogIn As Theparist", value: "/theparist-profile" },
+      { key: 4, text: "LogIn As Therapist", value: "/theparist-profile" },
       { key: 5, text: "LogIn As Admin", value: "/dashboard" },
     ];
 
-    console.log("options",this.props.saveUser.accountTypeId)
     const { handleSubmit, submitting } = this.props;
 
-    console.log("props", this.props);
     return (
       <section className="log-in">
         <div className="container">
@@ -267,13 +236,11 @@ dropVal:any;
   }
 }
 const mapStateToProps = (state) => {
-  console.log("####!!!!!!", state);
   return {
     formVal: state.form,
     user: state.persist["c_user"],
     usersDetails: state.user,
     saveUser: state.userList.saveUser,
-
   };
 };
 
@@ -281,7 +248,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onLoginUser: (values, history) => dispatch(loginUser(values, history)),
     fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
-
   };
 };
 

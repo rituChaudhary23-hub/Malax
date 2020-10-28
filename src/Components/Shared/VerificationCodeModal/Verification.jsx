@@ -18,13 +18,11 @@ class Verification extends Component {
   verifyPhone = () => {
     var data = this.props.user.Data.UserId;
     this.state.fields.userId = data;
-    console.log("%%%%%%%%%%%", data);
     this.props.fetchUpdateEmail(this.state.fields);
     this.props.toggle();
   };
 
   setFormValue(field, e) {
-    console.log("field", field);
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
@@ -98,7 +96,6 @@ class Verification extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("####!!!!!!", state);
   return {
     formVal: state.form,
     user: state.user.user,

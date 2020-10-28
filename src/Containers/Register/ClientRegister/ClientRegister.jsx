@@ -51,7 +51,6 @@ class ClientRegister extends Component {
     this.golbalID = courseData.GlobalCodeId;
   };
 
-
   signupMalax = async (e, data) => {
     e.preventDefault();
     if (this.handleValidation()) {
@@ -314,7 +313,6 @@ class ClientRegister extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("@@@@@@>>>>>>>ritu.", state);
   return {
     saveUser: state.userList.saveUser,
     categoryName: state.globalReducer.categoryName,

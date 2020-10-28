@@ -4,6 +4,8 @@ import { startLoading, stopLoading } from "./loading.action";
 
 export const actionTypes = {
   SAVE_USER_ID: "SAVE_USER_ID",
+  SAVE_USER_PHONE:"SAVE_USER_PHONE",
+  GET_PHONE:"GET_PHONE"
 };
 
 export function saveUserId(data) {
@@ -12,6 +14,31 @@ export function saveUserId(data) {
     data: data,
   };
 }
+
+
+export function getUserPhone(data) {
+  return {
+    type: actionTypes.GET_PHONE,
+    data: data,
+  };
+}
+export function saveUserPhone(data) {
+  return {
+    type: actionTypes.SAVE_USER_PHONE,
+    data: data,
+  };
+}
+
+
+
+export function saveAgreement(data) {
+  return {
+    type: actionTypes.SAVE_AGREEMENT,
+    data: data,
+  };
+}
+
+
 
 //get email id
 export function fetchUserEmail(data) {
@@ -22,7 +49,6 @@ export function fetchUserEmail(data) {
     let state = getState();
     return ClientService.getUserEmail(data, {})
       .then(async (data) => {
-        console.log("getUserEmail", data);
         dispatch(stopLoading());
         if (data.data.Success) {
           dispatch(saveUserId(data));
@@ -53,10 +79,10 @@ export function fetchUpdateEmail(data) {
     let state = getState();
     return ClientService.updateUserEmail(data, {})
       .then(async (data) => {
-        console.log("getUserEmail", data);
         dispatch(stopLoading());
-        console.log("^^^^^^^^^^^^^^^^",data.data)
         if (data.data.Success) {
+          debugger
+          dispatch(saveUserPhone(data.data));
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -76,8 +102,6 @@ export function fetchUpdateEmail(data) {
 
 
 //get user phone
-
-//update email
 export function fetchUserPhone(data) {
   debugger;
   return (dispatch, getState) => {
@@ -86,10 +110,9 @@ export function fetchUserPhone(data) {
     let state = getState();
     return ClientService.getUserPhone(data, {})
       .then(async (data) => {
-        console.log("getUserPhone", data);
         dispatch(stopLoading());
-        console.log("^^^^^^^^^^^^^^^^",data.data)
         if (data.data.Success) {
+          dispatch(getUserPhone(data));
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -101,6 +124,36 @@ export function fetchUserPhone(data) {
       .catch((error) => {
         if (error) {
           toast.error(error["data"]["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+
+
+//consent agreement forms 
+export function fetchConsentForm(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+
+    let state = getState();
+    return ClientService.ConsentFormApi(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          dispatch(saveAgreement(data));
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
         }
         dispatch(stopLoading());
       });

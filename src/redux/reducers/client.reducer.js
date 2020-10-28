@@ -2,6 +2,9 @@ import { actionTypes } from "../actions/client.action";
 
 const initialState = {
   userId: "",
+  savePhone:{},
+  saveashu:{}
+
 };
 
 const clientReducer = (state = initialState, action) => {
@@ -12,6 +15,19 @@ const clientReducer = (state = initialState, action) => {
         ...state,
         userId: action.data,
       };
+      case actionTypes.SAVE_USER_PHONE:
+        return {
+          ...state,
+          savePhone: action.data,
+        };
+        case actionTypes.GET_PHONE:
+          return {
+            ...state,
+            saveashu: action.data,
+          };
+
+        
+
     default:
       return state;
   }

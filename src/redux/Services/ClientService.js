@@ -15,14 +15,18 @@ const updateUserEmail = (data) => {
 
 //get user phone number
 const getUserPhone = (data) => {
-  console.log("user phone------------", data);
-  debugger;
   return fetch("post", `${API_HOST}/AuthAPI/GetUserPhoneNumber`, data);
 };
 
+//consent form
+const ConsentFormApi = (data) => {
+  console.log("user consent------------", data);
+  debugger;
+  return fetch("post", `${API_HOST}/ClientAPI/AddClientConsentForms`, data);
+};
 
 export const ClientService = {
   getUserEmail,
   updateUserEmail,
-  getUserPhone
+  getUserPhone,ConsentFormApi
 };

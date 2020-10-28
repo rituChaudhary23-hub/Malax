@@ -13,8 +13,10 @@ import icon2 from "../../assets/images/icon2.png";
 import icon3 from "../../assets/images/icon3.png";
 import icon4 from "../../assets/images/icon4.png";
 import icon5 from "../../assets/images/icon5.png";
+import { fetchUserPhone } from "../../redux/actions/client.action";
 
 class ProfileMain extends Component {
+  phone;
   constructor(props) {
     super(props);
     this.state = {
@@ -24,8 +26,15 @@ class ProfileMain extends Component {
       agreementModal: false,
       imageModal: false,
     };
-    userId:0
   }
+
+  componentDidMount = async (data) => {
+    data = {
+      userId: this.props.user.Data.UserId,
+    };
+    var res = await this.props.fetchUserPhone(data);
+    this.phone = sessionStorage.getItem("value");
+  };
 
   showModal = () => {
     this.setState({ modal1: true });
@@ -36,7 +45,11 @@ class ProfileMain extends Component {
   closeModal = () => {
     this.setState({ modal1: false });
   };
-  closePhoneModal = () => {
+  closePhoneModal = async () => {
+    var data = {
+      userId: this.props.user.Data.UserId,
+    };
+    var res = await this.props.fetchUserPhone(data);
     this.setState({ phoneModal: false });
   };
   ShowconsentModal = () => {
@@ -66,6 +79,7 @@ class ProfileMain extends Component {
   serviceRequest() {
     window.location.href = "client-service-request";
   }
+
   render() {
     return (
       <div className="tab-content pistPro">
@@ -123,7 +137,11 @@ class ProfileMain extends Component {
                           </div>
                         </li>
                         <li>
-                          <p>Not yet confirmed</p>
+                       
+                          <p>
+                          {this.props.saveashu.data ?
+                            this.props.saveashu.data.Data.PhoneNumber: "Not Yet Confirmed"}
+                            </p>
                         </li>
                         <li>
                           <Button
@@ -253,22 +271,20 @@ class ProfileMain extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
-  console.log("####!!!!!!", state);
   return {
     formVal: state.form,
     user: state.user.user,
+    saveashu: state.clientReducer.saveashu,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    fetchUserPhone: (data) => dispatch(fetchUserPhone(data)),
   };
 };
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ProfileMain))
+  connect(mapStateToProps, mapDispatchToProps)(ProfileMain)
+);

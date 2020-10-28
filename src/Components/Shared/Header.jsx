@@ -41,8 +41,11 @@ class Header extends Component {
                         </a>
                       </li>
                       <li className="nav-item profile">
-                        <a className="nav-link" href="/" title="My Account"
-                        onClick={sessionStorage.removeItem('savedUser')}
+                        <a
+                          className="nav-link"
+                          href="/"
+                          title="My Account"
+                          onClick={sessionStorage.removeItem("savedUser")}
                         >
                           <img src={profile1} />
                         </a>
