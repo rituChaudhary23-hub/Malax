@@ -2,38 +2,58 @@ import React, { Component } from "react";
 import { Button } from "semantic-ui-react";
 import { DateInput } from "semantic-ui-calendar-react";
 import moment from "moment";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { fetchCategoryName } from "../../../redux/actions/global.action";
+
+import { fetchUserInfo, getUserInfo } from "../../../redux/actions/client.action";
 
 import { Form, Input, Dropdown } from "semantic-ui-react-form-validator";
-const options = [
-  { key: "m", text: "Male", value: "m" },
-  { key: "k", text: "Female", value: "f" },
-];
 
 const currentdate = new Date();
 const currentYear = currentdate.getFullYear();
 const maxdate = new Date(currentdate.setYear(currentdate.getFullYear()));
 
 class PersonalInfo extends Component {
+  golbalID = 0;
+  dropVal: any;
   constructor(props) {
     super(props);
     this.state = {
-      gender: "m",
+      name: "Gender",
+      genderValue: "",
+      
+        clientId: 0,
+   
       fields: {
-        first_name: "",
-        last_name: "",
-        dob: "",
-        gender: "",
+        clientPersonalInfoId: 0,
+        clientId: 0,
+        firstName: "",
+        lastName: "",
+        birthDate: "",
+        genderId: "",
+        actionBy: "",
       },
+
       errors: {
-        first_name: "",
-        last_name: "",
-        dob: "",
-        gender: "",
+        firstName: "",
+        lastName: "",
+        birthDate: "",
+        genderId: "",
       },
       loading: false,
     };
   }
-
+  componentDidMount = async (data1) => {
+    var data = await this.props.fetchCategoryName(this.state.name);
+    if (data != false) {
+      this.dropVal = data.data.Data.globalCodeData;
+    }
+    data1 = {
+      userId: this.props.user.Data.UserId,
+    };
+    this.props.getUserInfo(data1)
+  };
   setFormValue(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
@@ -49,31 +69,23 @@ class PersonalInfo extends Component {
     if (this.state.hasOwnProperty(name)) {
       this.setState({ [name]: value });
     }
-    this.resetError("dob");
+    this.resetError("birthDate");
 
-    // this.setState({ [name]: value });
     this.setState((prevState) => {
       let fields = Object.assign({}, prevState.fields);
-      fields.dob = value;
+      fields.birthDate = value;
       return { fields: fields };
     });
   };
 
-  saveProfile = (e) => {
-    this.setState({ loading: true });
-    if (this.handleValidation()) {
-      const { first_name, last_name, dob } = this.state.fields;
-    }
-    this.setState({ loading: false });
-  };
   handleValidation = () => {
     let fields = this.state.fields;
     let errors = this.state.errors;
     let formIsValid = true;
 
-    if (fields["dob"] === "") {
+    if (fields["birthDate"] === "") {
       formIsValid = false;
-      errors["dob"] = "Date of Birth can't be blank";
+      errors["birthDate"] = "Date of Birth can't be blank";
     }
 
     this.setState({ errors: errors });
@@ -89,11 +101,36 @@ class PersonalInfo extends Component {
     }
   };
 
-  cancelInfo=()=>{
-    window.location.href="/client-profile"
-  }
+  cancelInfo = () => {
+    window.location.href = "/client-profile";
+  };
+
+  handleChanges = async (e, value) => {
+    var InfoAs = e.target.outerText;
+    var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
+      .GlobalCodeId;
+    this.state.fields.genderId = globalId;
+    this.setState({ genderValue: value });
+  };
+  saveProfile = async (e, data) => {
+    e.preventDefault();
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
+    if (this.handleValidation()) {
+      var res = await this.props.fetchUserInfo(this.state.fields);
+      if (res == true) {
+        console.log("res--------", res);
+      } else {
+      }
+    }
+  };
+
   render() {
     const { submitting } = this.props;
+    const options = [
+      { key: "m", text: "Male", value: "Male" },
+      { key: "k", text: "Female", value: "Female" },
+    ];
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -118,7 +155,6 @@ class PersonalInfo extends Component {
                           autoComplete="off"
                           onSubmit={this.saveProfile}
                           onError={this.handleValidation}
-                          // onNext={this.props.onNext(this.props.onNext)}
                         >
                           <div
                             className="tab-pane container-fluid active"
@@ -140,9 +176,14 @@ class PersonalInfo extends Component {
                                       type="name"
                                       onChange={this.setFormValue.bind(
                                         this,
-                                        "first_name"
+                                        "firstName"
                                       )}
-                                      value={this.state.fields.first_name}
+                                      value=
+                                      
+                                      {this.props.saveData.data
+                                        ? this.props.saveashu.data.Data.FirstName
+                                        : this.state.fields.firstName}
+
                                       validators={[
                                         "required",
                                         "matchRegexp:^[a-zA-Z ]*$",
@@ -166,9 +207,9 @@ class PersonalInfo extends Component {
                                       type="name"
                                       onChange={this.setFormValue.bind(
                                         this,
-                                        "last_name"
+                                        "lastName"
                                       )}
-                                      value={this.state.fields.last_name}
+                                      value={this.state.fields.lastName}
                                       validators={[
                                         "required",
                                         "matchRegexp:^[a-zA-Z ]*$",
@@ -184,10 +225,18 @@ class PersonalInfo extends Component {
                                       Gender{" "}
                                     </label>
 
-                                    <select className="form-control" id="sel1">
-                                      <option>Male</option>
-                                      <option>Female</option>
-                                    </select>
+                                    <Dropdown
+                                      name="info"
+                                      type="submit"
+                                      disabled={submitting}
+                                      className="dropNav"
+                                      text="Please Select"
+                                      options={options}
+                                      value={this.state.genderValue}
+                                      onChange={this.handleChanges}
+                                      simple
+                                      item
+                                    />
                                   </div>
                                   <div className="form-group">
                                     <label for="usr" className="chkBox">
@@ -198,21 +247,15 @@ class PersonalInfo extends Component {
                                       id="date"
                                       fullWidth={true}
                                       name="date"
-                                      // type="date"
-                                      value={this.state.fields.dob}
+                                      value={this.state.fields.birthDate}
                                       dateFormat={"YYYY-MM-DD"}
                                       maxDate={maxdate}
-                                      // maxDate={moment().subtract(1, "years")}
-                                      // initialDate={moment().subtract(
-                                      //   1,
-                                      //   "years"
-                                      // )}
                                       onChange={this.handleChangeDate}
                                     />
-                                    {this.hasError("dob") && (
+                                    {this.hasError("birthDate") && (
                                       <div className="ui pointing label">
                                         <div style={{ color: "red" }}>
-                                          {this.state.errors["dob"]}
+                                          {this.state.errors["birthDate"]}
                                         </div>
                                       </div>
                                     )}
@@ -260,4 +303,23 @@ class PersonalInfo extends Component {
   }
 }
 
-export default PersonalInfo;
+const mapStateToProps = (state) => {
+  console.log("sttate dekho--------",state)
+  return {
+    user: state.user.user,
+    saveData: state.clientReducer.saveData,
+
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserInfo: (data) => dispatch(fetchUserInfo(data)),
+    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+    getUserInfo:(data)=>dispatch(getUserInfo(data))
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(PersonalInfo)
+);

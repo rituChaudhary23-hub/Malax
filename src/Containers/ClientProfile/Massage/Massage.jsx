@@ -10,7 +10,7 @@ const FrequencyOptions = [
   { key: "m", text: "Daily", value: "daily" },
   { key: "k", text: "Weekly", value: "weekly" },
   { key: "k", text: "Monthky", value: "monthly" },
-];
+]; 
 
 class Massage extends Component {
   constructor(props) {

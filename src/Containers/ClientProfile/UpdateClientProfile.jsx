@@ -9,48 +9,8 @@ import Condition from "./MedicalCondition/Condition";
 import Location from "./Locations/Location";
 import Massage from "./Massage/Massage";
 
-const panes = [
-  {
-    menuItem: "Personal Information",
-    render: () => (
-      <Tab.Pane attached={false}>
-        <PersonalInfo />
-      </Tab.Pane>
-    ),
-  },
-  {
-    menuItem: "Medical History",
-    render: () => (
-      <Tab.Pane attached={false}>
-        <History />
-      </Tab.Pane>
-    ),
-  },
-  {
-    menuItem: "Medical Conditions",
-    render: () => (
-      <Tab.Pane attached={false}>
-        <Condition />
-      </Tab.Pane>
-    ),
-  },
-  {
-    menuItem: "Massage Preferences",
-    render: () => (
-      <Tab.Pane attached={false}>
-        <Massage />
-      </Tab.Pane>
-    ),
-  },
-  {
-    menuItem: "Locations",
-    render: () => (
-      <Tab.Pane attached={false}>
-        <Location />
-      </Tab.Pane>
-    ),
-  },
-];
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
 
 class UpdateClientProfile extends Component {
   constructor(props) {
@@ -60,9 +20,53 @@ class UpdateClientProfile extends Component {
   routeChange() {
     window.location.href = "client-service-request";
   }
-  render() {
-    return (
 
+  render() {
+    let panes = [
+      {
+        menuItem: "Personal Information",
+        render: () => (
+          <Tab.Pane attached={false}>
+            <PersonalInfo name="ritu" />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: "Medical History",
+
+        render: () => (
+          <Tab.Pane attached={false}>
+            <History />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: "Medical Conditions",
+        render: () => (
+          <Tab.Pane attached={false}>
+            <Condition />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: "Massage Preferences",
+        render: () => (
+          <Tab.Pane attached={false}>
+            <Massage />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: "Locations",
+        render: () => (
+          <Tab.Pane attached={false}>
+            <Location />
+          </Tab.Pane>
+        ),
+      },
+    ];
+
+    return (
       <div>
         <Header />
         <section className="therapistProDes TheraPro ">
@@ -73,7 +77,10 @@ class UpdateClientProfile extends Component {
                   <h2 className="card-title pb-0">Client Profile</h2>
                 </div>
                 <div className="col-sm-6 text-sm-right">
-                  <Button className="btn btn-primary" onClick={this.routeChange}>
+                  <Button
+                    className="btn btn-primary"
+                    onClick={this.routeChange}
+                  >
                     Schedule A New Service
                   </Button>
                 </div>
@@ -83,7 +90,11 @@ class UpdateClientProfile extends Component {
                   <div className="col-sm-12">
                     <div className="thrprofile">
                       <ul className="nav nav-pills">
-                        <Tab menu={{ secondary: true }} panes={panes} />
+                        <Tab
+                          //  activeIndex={tabIndex()}
+                          menu={{ secondary: true }}
+                          panes={panes}
+                        />
                       </ul>
                     </div>
                   </div>
@@ -97,4 +108,16 @@ class UpdateClientProfile extends Component {
   }
 }
 
-export default UpdateClientProfile;
+const mapStateToProps = (state) => {
+  return {
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(UpdateClientProfile)
+);

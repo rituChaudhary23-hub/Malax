@@ -137,11 +137,11 @@ class ProfileMain extends Component {
                           </div>
                         </li>
                         <li>
-                       
                           <p>
-                          {this.props.saveashu.data ?
-                            this.props.saveashu.data.Data.PhoneNumber: "Not Yet Confirmed"}
-                            </p>
+                            {this.props.saveashu.data
+                              ? this.props.saveashu.data.Data.PhoneNumber
+                              : "Not Yet Confirmed"}
+                          </p>
                         </li>
                         <li>
                           <Button

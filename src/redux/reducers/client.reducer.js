@@ -3,7 +3,11 @@ import { actionTypes } from "../actions/client.action";
 const initialState = {
   userId: "",
   savePhone:{},
-  saveashu:{}
+  saveashu:{},
+  saveUser:{},
+  saveHistory:{},
+  saveCondition:{},
+  saveData:{}
 
 };
 
@@ -25,9 +29,30 @@ const clientReducer = (state = initialState, action) => {
             ...state,
             saveashu: action.data,
           };
-
-        
-
+          case actionTypes.SAVE_INFO:
+            return {
+              ...state,
+              saveUser: action.data,
+            };
+          
+            
+            case actionTypes.SAVE_USER_HISTORY:
+              return {
+                ...state,
+                saveHistory: action.data,
+              };
+              case actionTypes.SAVE_USER_CONDITION:
+                return {
+                  ...state,
+                  saveCondition: action.data,
+                };
+                case actionTypes.SAVE_PERSONAL_INFO:
+                  return {
+                    ...state,
+                    saveData: action.data,
+                  };
+              
+                
     default:
       return state;
   }

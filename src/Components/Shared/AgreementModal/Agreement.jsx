@@ -1,12 +1,47 @@
 import React, { Component, Fragment } from "react";
 import { Modal } from "react-bootstrap";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { fetchConsentForm } from "../../../redux/actions/client.action";
+
 
 export class Agreement extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-  }
+    
+   
+    this.state = {
+      buttoncheck: false,
+      fields: {
+        clientId: 0,
+        userId: 0,
+        malaxConsentForm: "MTAF",
+        consentFormStatus: false,
+        actionBy: "",
+      },
 
+      errors: {
+        terms: "",
+      },
+    };
+  }
+  agreed = (e) => {
+    this.state.fields.consentFormStatus = e.target.checked;
+  };
+  consentAgreed = (e) => {
+    this.setState({
+      buttoncheck: !this.state.buttoncheck,
+    });
+    e.preventDefault();
+    var data = this.props.user.Data.UserId;
+    this.state.fields.userId = data;
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
+    if (this.state.fields.consentFormStatus == true) {
+      this.props.fetchConsentForm(this.state.fields);
+      this.props.toggle();
+    }
+  };
   render() {
     return (
       <Fragment>
@@ -32,27 +67,27 @@ export class Agreement extends Component {
                   Augue scelerisque nunc adipiscing ultrices orci, sollicitudin.
                   Sit egestas ultricies ipsum, posuere ut bibendum semper. Non
                   nibh nibh accumsan metus pharetra integer aliquam vitae.{" "}
-                  <br></br>Lorem ipsum dolor sit amet, consectetur adipiscing
-                  elit. In tellus nulla volutpat risus id adipiscing leo
-                  tristique. Sollicitudin ac rhoncus posuere bibendum aliquet
-                  elementum viverra volutpat. Amet libero in eu, ut erat platea
-                  laoreet. Augue scelerisque nunc adipiscing ultrices orci,
-                  sollicitudin. Sit egestas ultricies ipsum, posuere ut bibendum
-                  semper. Non nibh nibh accumsan metus pharetra integer aliquam
-                  vitae.
+                  
                 </p>
               </div>
 
               <div className="col-sm-12 mt-4">
                 <div className="form-check form-check-inline">
                   <label>
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="chk_red"
-                    />
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="chk_red"
+                    onChange={this.agreed}
+                  />
                     <span className="form-check-label" for="chk_red">
                       I confirm that I have read and agree to the terms above
+                    </span>
+                    <span style={{ color: "red" }}>
+                      {this.state.buttoncheck &&
+                      this.state.fields.consentFormStatus == false
+                        ? ["Please accept term and condtions"]
+                        : [""]}
                     </span>
                   </label>
                 </div>
@@ -60,11 +95,11 @@ export class Agreement extends Component {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <button
+          <button
               color="blue"
-              type="button"
+              type="submit"
               className="btn btn-sm btn-primary"
-              disabled={true}
+              onClick={this.consentAgreed}
             >
               I Agree
             </button>
@@ -83,4 +118,19 @@ export class Agreement extends Component {
   }
 }
 
-export default Agreement;
+const mapStateToProps = (state) => {
+  return {
+    formVal: state.form,
+    user: state.user.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchConsentForm: (data) => dispatch(fetchConsentForm(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Agreement)
+);

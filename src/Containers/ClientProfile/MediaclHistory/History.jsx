@@ -1,38 +1,40 @@
 import React, { Component } from "react";
 import { Button } from "semantic-ui-react";
 import { DateInput } from "semantic-ui-calendar-react";
-
+import { fetchUserHistory } from "../../../redux/actions/client.action";
 import { Form, Input, Dropdown } from "semantic-ui-react-form-validator";
-const options = [
-  { key: "m", text: "Male", value: "m" },
-  { key: "k", text: "Female", value: "f" },
-];
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
 
 class History extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fields: {
-        emergency_Contactname: "",
-        emergency_phone: "",
-        physician_Contactname: "",
-        phone: "",
+        medicalHistoryId: 0,
+        clientId: 0,
+        emergencyContactName: "",
+        emergencyPhoneNumber: "",
+        physicianContactName: "",
+        physicianPhoneNumber: "",
         hobbies: "",
-        medications: "",
-        Surgeries: "",
-        Dislocations: "",
-        Profession: "",
+        currentMedications: "",
+        surgeries: "",
+        dislocations: "",
+        profession: "",
+
+        actionBy: "",
       },
       errors: {
-        emergency_Contactname: "",
-        emergency_phone: "",
-        physician_Contactname: "",
-        phone: "",
+        emergencyContactName: "",
+        emergencyPhoneNumber: "",
+        physicianContactName: "",
+        physicianPhoneNumber: "",
         hobbies: "",
-        medications: "",
-        Surgeries: "",
-        Dislocations: "",
-        Profession: "",
+        currentMedications: "",
+        surgeries: "",
+        dislocations: "",
+        profession: "",
       },
       loading: false,
     };
@@ -60,13 +62,16 @@ class History extends Component {
     });
   };
 
-  saveProfile = (e) => {
+  saveMedicalHistory = async (e) => {
     this.setState({ loading: true });
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
     if (this.handleValidation()) {
-      const { first_name, last_name, dob } = this.state.fields;
+      this.props.fetchUserHistory(this.state.fields);
     }
     this.setState({ loading: false });
   };
+
   handleValidation = () => {
     let fields = this.state.fields;
     let errors = this.state.errors;
@@ -90,9 +95,9 @@ class History extends Component {
     }
   };
 
-  cancelInfo=()=>{
-    window.location.href="/update-client-profile"
-  }
+  cancelInfo = () => {
+    window.location.href = "/update-client-profile";
+  };
   render() {
     const { submitting } = this.props;
     return (
@@ -117,7 +122,7 @@ class History extends Component {
                         <Form
                           ref="form"
                           autocomplete="off"
-                          onSubmit={this.saveProfile}
+                          onSubmit={this.saveMedicalHistory}
                           onError={this.handleValidation}
                         >
                           <div
@@ -140,10 +145,10 @@ class History extends Component {
                                       type="name"
                                       onChange={this.setFormValue.bind(
                                         this,
-                                        "emergency_Contactname"
+                                        "emergencyContactName"
                                       )}
                                       value={
-                                        this.state.fields.emergency_Contactname
+                                        this.state.fields.emergencyContactName
                                       }
                                       validators={[
                                         "required",
@@ -166,12 +171,16 @@ class History extends Component {
                                       id="number"
                                       fullWidth={true}
                                       name="number"
-                                      // type="number"
+                                     type="tel"
+                                     minLength="10"
+                                     maxLength="10"
                                       onChange={this.setFormValue.bind(
                                         this,
-                                        "emergency_phone"
+                                        "emergencyPhoneNumber"
                                       )}
-                                      value={this.state.fields.emergency_phone}
+                                      value={
+                                        this.state.fields.emergencyPhoneNumber
+                                      }
                                       validators={["required"]}
                                       errorMessages={[
                                         "this field is required",
@@ -193,10 +202,10 @@ class History extends Component {
                                       type="name"
                                       onChange={this.setFormValue.bind(
                                         this,
-                                        "physician_Contactname"
+                                        "physicianContactName"
                                       )}
                                       value={
-                                        this.state.fields.physician_Contactname
+                                        this.state.fields.physicianContactName
                                       }
                                       validators={[
                                         "required",
@@ -219,12 +228,16 @@ class History extends Component {
                                       id="number"
                                       fullWidth={true}
                                       name="number"
-                                      // type="number"
+                                     type="tel"
+                                      minLength="10"
+                                      maxLength="10"
                                       onChange={this.setFormValue.bind(
                                         this,
-                                        "phone"
+                                        "physicianPhoneNumber"
                                       )}
-                                      value={this.state.fields.phone}
+                                      value={
+                                        this.state.fields.physicianPhoneNumber
+                                      }
                                       validators={["required"]}
                                       errorMessages={[
                                         "this field is required",
@@ -243,9 +256,11 @@ class History extends Component {
                                       type="text"
                                       onChange={this.setFormValue.bind(
                                         this,
-                                        "medications"
+                                        "currentMedications"
                                       )}
-                                      value={this.state.fields.medications}
+                                      value={
+                                        this.state.fields.currentMedications
+                                      }
                                       validators={[
                                         "required",
                                         "matchRegexp:^[a-zA-Z ]*$",
@@ -267,9 +282,9 @@ class History extends Component {
                                       type="text"
                                       onChange={this.setFormValue.bind(
                                         this,
-                                        "Surgeries"
+                                        "surgeries"
                                       )}
-                                      value={this.state.fields.Surgeries}
+                                      value={this.state.fields.surgeries}
                                       validators={[
                                         "required",
                                         "matchRegexp:^[a-zA-Z ]*$",
@@ -315,9 +330,9 @@ class History extends Component {
                                       type="text"
                                       onChange={this.setFormValue.bind(
                                         this,
-                                        "Dislocations"
+                                        "dislocations"
                                       )}
-                                      value={this.state.fields.Dislocations}
+                                      value={this.state.fields.dislocations}
                                       validators={[
                                         "required",
                                         "matchRegexp:^[a-zA-Z ]*$",
@@ -339,9 +354,9 @@ class History extends Component {
                                       type="text"
                                       onChange={this.setFormValue.bind(
                                         this,
-                                        "Profession"
+                                        "profession"
                                       )}
-                                      value={this.state.fields.Profession}
+                                      value={this.state.fields.profession}
                                       validators={["required"]}
                                       errorMessages={[
                                         "this field is required",
@@ -393,4 +408,18 @@ class History extends Component {
   }
 }
 
-export default History;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserHistory: (data) => dispatch(fetchUserHistory(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(History)
+);
