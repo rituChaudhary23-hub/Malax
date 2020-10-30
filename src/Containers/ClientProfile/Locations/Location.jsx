@@ -1,11 +1,25 @@
 import React, { Component } from "react";
 import { Radio, Button } from "semantic-ui-react";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import {
+  fetchClientLoc,
+  getLocation,
+} from "../../../redux/actions/client.action";
 
 export class Location extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      clientId: 0,
+    };
   }
+  componentDidMount = async (data1) => {
+    var data1 = this.props.user.Data.ClientId;
+    this.state.clientId = data1;
+    this.props.getLocation(data1);
+  };
+
   back() {
     window.location.href = "/client-profile";
   }
@@ -21,7 +35,7 @@ export class Location extends Component {
           </p>
         </div>
         <br></br>
-   
+
         <section className="therapistProDes">
           <div className="card">
             <div className="card-body">
@@ -118,4 +132,20 @@ export class Location extends Component {
   }
 }
 
-export default Location;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+    saveMedicalData: state.clientReducer.saveMedicalData,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchClientLoc: (data) => dispatch(fetchClientLoc(data)),
+    getLocation: (data) => dispatch(getLocation(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Location)
+);

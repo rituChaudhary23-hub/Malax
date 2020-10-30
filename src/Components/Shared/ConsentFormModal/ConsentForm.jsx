@@ -2,13 +2,17 @@ import React, { Component, Fragment } from "react";
 import { Modal } from "react-bootstrap";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { fetchConsentForm } from "../../../redux/actions/client.action";
+import {
+  fetchConsentForm,
+  getConsentForm,
+} from "../../../redux/actions/client.action";
 
 class Consent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       buttoncheck: false,
+      clientId: 0,
       fields: {
         clientId: 0,
         userId: 0,
@@ -22,7 +26,36 @@ class Consent extends Component {
       },
     };
   }
+
+  componentDidMount = async (e, data1) => {
+    debugger;
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
+    // this.state.fields.consentFormStatus = e.target.checked;
+
+    var res = await this.props.getConsentForm(data1);
+
+    // this.props.saveConsent.data
+    //   ? this.props.saveConsent.data.Data.MCF
+    //   : consentFormStatus;
+    if (this.state.fields.consentFormStatus==true) {
+      debugger;
+      this.state.fields.consentFormStatus = this.props.saveConsent.data.Data.MCF;
+      //  if(this.props.saveConsent.data.Data.MCF==true)
+      // document.getElementById("abc123").checked = true;
+    }
+  };
+
   agreed = (e) => {
+    debugger;
+    // eslint-disable-next-line react/no-direct-mutation-state
+    // e.preventDefault();
+    // if(e.target.checked==true){
+    //   document.getElementById('chk_red').checked = true;
+    // } else {
+    //   document.getElementById('chk_red').checked = false;
+
+    // }
     this.state.fields.consentFormStatus = e.target.checked;
   };
 
@@ -36,12 +69,18 @@ class Consent extends Component {
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
     if (this.state.fields.consentFormStatus == true) {
+      // ({
+      //   this.props.saveConsent.data
+      //     ? this.props.saveConsent.data.Data.MCF
+      //     : this.props.fetchConsentForm(this.state.fields);
+      // })
       this.props.fetchConsentForm(this.state.fields);
       this.props.toggle();
     }
   };
 
   render() {
+    console.log("ashu--------", this.props.saveConsent.data);
     return (
       <Fragment>
         <Modal
@@ -74,8 +113,22 @@ class Consent extends Component {
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    id="chk_red"
+                    id="abc123"
+                    //  value={ this.state.fields.consentFormStatus}
                     onChange={this.agreed}
+                    //  defaultChecked={this.state.fields.consentFormStatus}
+
+                    /// checked={this.state.fields.consentFormStatus}
+                    // value={
+                    //   //  this.props.saveConsent.data
+                    //   //    ? this.props.saveConsent.data.Data.MCF
+                    //   //    : ""
+                    // }
+                    // onChange={
+                    //   this.props.saveConsent.data
+                    //     ? this.props.saveConsent.data.Data.MCF
+                    //     : this.agreed
+                    // }
                   />
                   <label>
                     <span className="form-check-label" for="chk_red">
@@ -121,12 +174,14 @@ const mapStateToProps = (state) => {
   return {
     formVal: state.form,
     user: state.user.user,
+    saveConsent: state.clientReducer.saveConsent,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchConsentForm: (data) => dispatch(fetchConsentForm(data)),
+    getConsentForm: (data) => dispatch(getConsentForm(data)),
   };
 };
 

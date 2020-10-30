@@ -6,7 +6,10 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { fetchCategoryName } from "../../../redux/actions/global.action";
 
-import { fetchUserInfo, getUserInfo } from "../../../redux/actions/client.action";
+import {
+  fetchUserInfo,
+  getUserInfo,
+} from "../../../redux/actions/client.action";
 
 import { Form, Input, Dropdown } from "semantic-ui-react-form-validator";
 
@@ -22,9 +25,9 @@ class PersonalInfo extends Component {
     this.state = {
       name: "Gender",
       genderValue: "",
-      
-        clientId: 0,
-   
+
+      clientId: 0,
+
       fields: {
         clientPersonalInfoId: 0,
         clientId: 0,
@@ -49,10 +52,9 @@ class PersonalInfo extends Component {
     if (data != false) {
       this.dropVal = data.data.Data.globalCodeData;
     }
-    data1 = {
-      userId: this.props.user.Data.UserId,
-    };
-    this.props.getUserInfo(data1)
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
+    this.props.getUserInfo(data1);
   };
   setFormValue(field, e) {
     let fields = this.state.fields;
@@ -114,8 +116,10 @@ class PersonalInfo extends Component {
   };
   saveProfile = async (e, data) => {
     e.preventDefault();
+    debugger;
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
+    debugger;
     if (this.handleValidation()) {
       var res = await this.props.fetchUserInfo(this.state.fields);
       if (res == true) {
@@ -126,6 +130,7 @@ class PersonalInfo extends Component {
   };
 
   render() {
+    console.log("---------saveData----", this.props.saveData.data);
     const { submitting } = this.props;
     const options = [
       { key: "m", text: "Male", value: "Male" },
@@ -178,12 +183,12 @@ class PersonalInfo extends Component {
                                         this,
                                         "firstName"
                                       )}
-                                      value=
-                                      
-                                      {this.props.saveData.data
-                                        ? this.props.saveashu.data.Data.FirstName
-                                        : this.state.fields.firstName}
-
+                                      value={
+                                        this.props.saveData.data
+                                          ? this.props.saveData.data.Data
+                                              .FirstName
+                                          : this.state.fields.firstName
+                                      }
                                       validators={[
                                         "required",
                                         "matchRegexp:^[a-zA-Z ]*$",
@@ -209,7 +214,12 @@ class PersonalInfo extends Component {
                                         this,
                                         "lastName"
                                       )}
-                                      value={this.state.fields.lastName}
+                                      value={
+                                        this.props.saveData.data
+                                          ? this.props.saveData.data.Data
+                                              .LastName
+                                          : this.state.fields.lastName
+                                      }
                                       validators={[
                                         "required",
                                         "matchRegexp:^[a-zA-Z ]*$",
@@ -247,7 +257,14 @@ class PersonalInfo extends Component {
                                       id="date"
                                       fullWidth={true}
                                       name="date"
-                                      value={this.state.fields.birthDate}
+                                      closable="true"
+                                      value={
+                                        this.props.saveData.data
+                                          ? this.props.saveData.data.Data
+                                              .BirthDate
+                                          : this.state.fields.birthDate
+                                      }
+                                      // value={this.state.fields.birthDate}
                                       dateFormat={"YYYY-MM-DD"}
                                       maxDate={maxdate}
                                       onChange={this.handleChangeDate}
@@ -304,11 +321,10 @@ class PersonalInfo extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("sttate dekho--------",state)
+  console.log("sttate dekho--------", state);
   return {
     user: state.user.user,
     saveData: state.clientReducer.saveData,
-
   };
 };
 
@@ -316,7 +332,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchUserInfo: (data) => dispatch(fetchUserInfo(data)),
     fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
-    getUserInfo:(data)=>dispatch(getUserInfo(data))
+    getUserInfo: (data) => dispatch(getUserInfo(data)),
   };
 };
 

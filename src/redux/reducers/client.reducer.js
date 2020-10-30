@@ -2,13 +2,15 @@ import { actionTypes } from "../actions/client.action";
 
 const initialState = {
   userId: "",
-  savePhone:{},
-  saveashu:{},
-  saveUser:{},
-  saveHistory:{},
-  saveCondition:{},
-  saveData:{}
-
+  savePhone: {},
+  saveashu: {},
+  saveUser: {},
+  saveHistory: {},
+  saveCondition: {},
+  saveData: {},
+  saveMedicalData: {},
+  saveConsent: {},
+  saveLoc: {},
 };
 
 const clientReducer = (state = initialState, action) => {
@@ -19,40 +21,55 @@ const clientReducer = (state = initialState, action) => {
         ...state,
         userId: action.data,
       };
-      case actionTypes.SAVE_USER_PHONE:
-        return {
-          ...state,
-          savePhone: action.data,
-        };
-        case actionTypes.GET_PHONE:
-          return {
-            ...state,
-            saveashu: action.data,
-          };
-          case actionTypes.SAVE_INFO:
-            return {
-              ...state,
-              saveUser: action.data,
-            };
-          
-            
-            case actionTypes.SAVE_USER_HISTORY:
-              return {
-                ...state,
-                saveHistory: action.data,
-              };
-              case actionTypes.SAVE_USER_CONDITION:
-                return {
-                  ...state,
-                  saveCondition: action.data,
-                };
-                case actionTypes.SAVE_PERSONAL_INFO:
-                  return {
-                    ...state,
-                    saveData: action.data,
-                  };
-              
-                
+    case actionTypes.SAVE_USER_PHONE:
+      return {
+        ...state,
+        savePhone: action.data,
+      };
+    case actionTypes.GET_PHONE:
+      return {
+        ...state,
+        saveashu: action.data,
+      };
+    case actionTypes.SAVE_INFO:
+      return {
+        ...state,
+        saveUser: action.data,
+      };
+
+    case actionTypes.SAVE_USER_HISTORY:
+      return {
+        ...state,
+        saveHistory: action.data,
+      };
+    case actionTypes.SAVE_USER_CONDITION:
+      return {
+        ...state,
+        saveCondition: action.data,
+      };
+    case actionTypes.SAVE_PERSONAL_INFO:
+      return {
+        ...state,
+        saveData: action.data,
+      };
+
+    case actionTypes.SAVE_MEDICAL_INFO:
+      return {
+        ...state,
+        saveMedicalData: action.data,
+      };
+
+    case actionTypes.SAVE_CONSENT:
+      return {
+        ...state,
+        saveConsent: action.data,
+      };
+    case actionTypes.SAVE_LOCATION:
+      return {
+        ...state,
+        saveLoc: action.data,
+      };
+
     default:
       return state;
   }

@@ -8,7 +8,10 @@ export const actionTypes = {
   GET_PHONE: "GET_PHONE",
   SAVE_INFO: "SAVE_INFO",
   SAVE_USER_HISTORY: "SAVE_USER_HISTORY",
-  SAVE_PERSONAL_INFO:"SAVE_PERSONAL_INFO"
+  SAVE_PERSONAL_INFO: "SAVE_PERSONAL_INFO",
+  SAVE_MEDICAL_INFO: "SAVE_MEDICAL_INFO",
+  SAVE_CONSENT: "SAVE_CONSENT",
+  SAVE_LOCATION: "SAVE_LOCATION",
 };
 
 export function saveUserId(data) {
@@ -45,6 +48,26 @@ export function savePersonalInfo(data) {
   };
 }
 
+export function saveMedicalInfo(data) {
+  return {
+    type: actionTypes.SAVE_MEDICAL_INFO,
+    data: data,
+  };
+}
+
+export function saveLocation(data) {
+  return {
+    type: actionTypes.SAVE_LOCATION,
+    data: data,
+  };
+}
+
+export function saveConsent(data) {
+  return {
+    type: actionTypes.SAVE_CONSENT,
+    data: data,
+  };
+}
 export function saveInfo(data) {
   return {
     type: actionTypes.SAVE_INFO,
@@ -183,6 +206,35 @@ export function fetchConsentForm(data) {
   };
 }
 
+//get-consent-form
+export function getConsentForm(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientService.getConsentAgreement(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          debugger;
+          dispatch(saveConsent(data));
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+
 //add personal info
 export function fetchUserInfo(data) {
   return (dispatch, getState) => {
@@ -211,10 +263,9 @@ export function fetchUserInfo(data) {
   };
 }
 
-
 //get-personal info
-
 export function getUserInfo(data) {
+  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -222,6 +273,7 @@ export function getUserInfo(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
+          debugger;
           dispatch(savePersonalInfo(data));
           toast.success(data["data"]["Message"]);
 
@@ -239,7 +291,7 @@ export function getUserInfo(data) {
       });
   };
 }
-//medical-history
+//add-medical-history
 export function fetchUserHistory(data) {
   debugger;
   return (dispatch, getState) => {
@@ -268,9 +320,36 @@ export function fetchUserHistory(data) {
   };
 }
 
+//get-medical-history
+export function getUserHistory(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientService.getMedicalInfo(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          debugger;
+          dispatch(saveMedicalInfo(data));
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
 
 //medical-conditions
-
 export function fetchUserMedicalCondition(data) {
   debugger;
   return (dispatch, getState) => {
@@ -298,6 +377,63 @@ export function fetchUserMedicalCondition(data) {
   };
 }
 
+//client-loc
+export function fetchClientLoc(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+
+    let state = getState();
+    return ClientService.addClientLoc(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        debugger;
+        if (data.data.Success) {
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+
+//get-client-loc
+export function getLocation(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientService.getClientLoc(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          debugger;
+          dispatch(saveLocation(data));
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
 
 //tab change
 export function tabIndex(data) {

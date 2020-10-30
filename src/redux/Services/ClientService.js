@@ -49,18 +49,51 @@ const medicalConditionApi = (data) => {
 
 //get info
 const getUserInfo = (data) => {
-  console.log("user info------------", data);
-  debugger;
-  return fetch(
-    "post",
-    `${API_HOST}/ClientAPI/GetClientPersonalInfo`,
-    data
-  );
+  var data1 = {
+    clientId: data,
+  };
+  return fetch("post", `${API_HOST}/ClientAPI/GetClientPersonalInfo`, data1);
 };
 
+//get medical history
+const getMedicalInfo = (data) => {
+  var data1 = {
+    clientId: data,
+  };
+  return fetch("post", `${API_HOST}/ClientAPI/GetClientMedicalHistory`, data1);
+};
 
+//get consent form
+const getConsentAgreement = (data) => {
+  console.log("user info------------", data);
+  debugger;
+  var data1 = {
+    clientId: data,
+  };
+  return fetch("post", `${API_HOST}/ClientAPI/GetClientConsentForms`, data1);
+};
+
+//client-loc
+const addClientLoc = (data) => {
+  console.log("user info------------", data);
+  debugger;
+  return fetch("post", `${API_HOST}/ClientAPI/AddUpdateClientLocations`, data);
+};
+//get-loc
+const getClientLoc = (data) => {
+  console.log("user info------------", data);
+  debugger;
+  var data1 = {
+    clientId: data,
+  };
+  return fetch("post", `${API_HOST}/ClientAPI/GetClientLocations`, data1);
+};
 export const ClientService = {
   getUserEmail,
+  getMedicalInfo,
+  getConsentAgreement,
+  getClientLoc,
+  addClientLoc,
   getUserInfo,
   updateUserEmail,
   getUserPhone,

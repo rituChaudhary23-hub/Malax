@@ -2,87 +2,135 @@ import React, { Component } from "react";
 import { Button } from "semantic-ui-react";
 import { Dropdown, Form, Input } from "semantic-ui-react-form-validator";
 import { DateInput } from "semantic-ui-calendar-react";
-
+import { withRouter } from "react-router";
+import { fetchClientAppointment } from "../../../redux/actions/clientSchedule.action";
+import {
+  fetchCategoryName,
+  fetchValidateZip,
+} from "../../../redux/actions/global.action";
+import { connect } from "react-redux";
 import Header from "../../../Components/Shared/Header";
+import { toast } from "../../../Components/Toast/Toast";
 
-// const currentdate = new Date();
-// const currentYear = currentdate.getFullYear();
-// const mindate = new Date(currentdate.setYear(currentdate.getFullYear()));
-
-const options = [
-  { key: "m", text: "20 minutes", value: "20 minutes" },
-  { key: "k", text: "40 minutes", value: "40 minutes" },
-  { key: "k", text: "60 minutes", value: "60 minutes" },
-];
-const massageOptions = [
-  { key: "r", text: "Relaxation", value: "relaxation" },
-  { key: "r", text: "Relax", value: "relax" },
-];
-
-const locationOptions = [
-  { key: "g", text: "Town-Heights", value: "Town-Heights" },
-  { key: "s", text: "Location 2", value: "Location 2" },
-  { key: "s", text: "Location 3", value: "Location 3" },
-];
-const stateOptions = [
-  { key: "g", text: "New York", value: "New York" },
-  { key: "s", text: "Texas", value: "Texas" },
-];
-const typeOptions = [
-  { key: "g", text: "At Home", value: "At Home" },
-  { key: "s", text: "At Work", value: "At Work" },
-  { key: "s", text: "Other", value: "Other" },
-];
-const genderOptions = [
-  { key: "u", text: "Male Only", value: "m" },
-  { key: "j", text: "Female Only", value: "f" },
-];
 class ServiceRequest extends Component {
+  golbalID = 0;
+  dropVal: any;
   constructor(props) {
     super(props);
     this.state = {
+      name: "Gender",
+      name: "LocationType",
+      name:"State",
+      zipCode: "",
       fields: {
-        doc_type: "",
+        clientScheduleId: 0,
+        clientId: 0,
+        therapistId: 0,
+        massageType: "",
         doc_number: "",
         city: "",
-        address: "",
-        dob: "",
-        time: "",
-        location: "",
-        gender: "",
+        streetAddress: "",
+        serviceDate: "",
+        timelength: "",
+        generallocation: "",
+        from: "",
+        to: "",
+        therapistGender: "",
         state: "",
-        loc_type: "",
-        zip_code: "",
+        locationType: "",
+        zipCode: "",
       },
       errors: {
-        dob: "",
+        serviceDate: "",
         city: "",
-        address: "",
-        zip_code: "",
+        locationType: "",
+        streetAddress: "",
+        zipCode: "",
       },
       loading: false,
     };
   }
+
+  componentDidMount = async () => {
+    debugger;
+    var data = await this.props.fetchCategoryName(this.state.name);
+    if (data != false) {
+      this.dropVal = data.data.Data.globalCodeData;
+    }
+  };
+
   handleChangeDate = (event, { name, value }) => {
-    this.resetError("dob");
+    this.resetError("serviceDate");
 
     this.setState({ [name]: value });
     this.setState((prevState) => {
       let fields = Object.assign({}, prevState.fields);
-      fields.dob = value;
+      fields.serviceDate = value;
       return { fields: fields };
     });
   };
 
-  dropdownChange = (e, { name, value }) => {
-    this.resetError(name);
-    this.setState({ [name]: value });
+  dropdownChange = (e, value) => {
+    debugger;
+    // this.resetError(name);
+    // this.setState({ [name]: value1 });
+    var InfoAs = e.target.outerText;
+    var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
+      .GlobalCodeId;
+    this.state.fields.therapistGender = globalId;
+    // this.setState({ genderValue: value });
 
-    this.setState((prevState) => {
-      let fields = Object.assign({}, prevState.fields);
-      fields[name] = value;
-      return { fields: fields };
+    // this.setState((prevState) => {
+    //   let fields = Object.assign({}, prevState.fields);
+    //   fields[name] = value1;
+    //   return { fields: fields };
+    // });
+  };
+
+  //location-type
+  locType = (e, data) => {
+    console.log(data.value);
+    // this.state.fields.zipCode
+    console.log("---------e-------", e);
+    var InfoAs = e.target.outerText;
+    debugger;
+    var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
+      .GlobalCodeId;
+    this.state.fields.locationType = globalId;
+    this.setState({ locationType: data.value }, () => {
+      console.log("locationType----------", data.value);
     });
+  };
+
+  //state
+  
+  selectState = (e, data) => {
+    console.log(data.value);
+    console.log("---------e-------", e);
+    var InfoAs = e.target.outerText;
+    debugger;
+    var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
+      .GlobalCodeId;
+    this.state.fields.state = globalId;
+    this.setState({ state: data.value }, () => {
+      console.log("locationType----------", data.value);
+    });
+  };
+
+  //zipcode
+  abc = async (e) => {
+    console.log("-------zipcode -----------", e);
+    this.state.zipCode = e;
+    var data = {
+      zipCode: this.state.zipCode,
+    };
+    this.state.fields.zipCodeId = e;
+    var res = await this.props.fetchValidateZip(data);
+    if ((res = true)) {
+      toast.success("Available");
+    } else {
+      toast.error("Not Available to this area");
+    }
   };
 
   setFormValue(field, e) {
@@ -90,14 +138,24 @@ class ServiceRequest extends Component {
     fields[field] = e.target.value;
     this.setState({ fields });
   }
-  submitDocument = (e) => {
-    if (!this.validate()) {
-      return;
-    }
 
-    const { doc_type, doc_number } = this.state.fields;
-    window.location.href = "/payment";
+  //appointment-submit
+  submitRequest = async (e) => {
+    e.preventDefault();
+    debugger;
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
+    debugger;
+    if (this.validate()) {
+      var res = await this.props.fetchClientAppointment(this.state.fields);
+      if (res == true) {
+        console.log("res--------", res);
+        this.props.history.push("/payment");
+      } else {
+      }
+    }
   };
+
   resetError = (field) => {
     let errors = this.state.errors;
     errors[field] = "";
@@ -112,18 +170,18 @@ class ServiceRequest extends Component {
     }
   };
 
-  cancel=()=>{
-    window.location.href="/client-profile"
-  }
+  cancel = () => {
+    window.location.href = "/client-profile";
+  };
   validate = () => {
     // let errors = {};
     let fields = this.state.fields;
     let errors = this.state.errors;
 
     let formIsValid = true;
-    if (fields["dob"] === "") {
+    if (fields["serviceDate"] === "") {
       formIsValid = false;
-      errors["dob"] = "Date of Birth can't be blank";
+      errors["serviceDate"] = "Date of Birth can't be blank";
     }
     this.setState({ errors: errors });
 
@@ -131,6 +189,37 @@ class ServiceRequest extends Component {
   };
   render() {
     const { submitting } = this.props;
+
+    const options = [
+      { key: "m", text: "20 minutes", value: "20 minutes" },
+      { key: "k", text: "40 minutes", value: "40 minutes" },
+      { key: "k", text: "60 minutes", value: "60 minutes" },
+    ];
+    const massageOptions = [
+      { key: "r", text: "Relaxation", value: "relaxation" },
+      { key: "r", text: "Relax", value: "relax" },
+    ];
+
+    const locationOptions = [
+      { key: "g", text: "Town-Heights", value: "Town-Heights" },
+      { key: "s", text: "Location 2", value: "Location 2" },
+      { key: "s", text: "Location 3", value: "Location 3" },
+    ];
+    const stateOptions = [
+      { key: "g", text: "New York", value: "New York" },
+      { key: "s", text: "North Carolina 3", value: "North Carolina 3" },
+      { key: "t", text: "Ohio", value: "Ohio" },
+      { key: "w", text: "Texas", value: "Texas" },
+    ];
+    const typeOptions = [
+      { key: "g", text: "At home", value: "At home" },
+      { key: "s", text: "At work", value: "At work" },
+      { key: "s", text: "Other", value: "Other" },
+    ];
+    const genderOptions = [
+      { key: "u", text: "Male", value: "Male" },
+      { key: "j", text: "Female", value: "Female" },
+    ];
     return (
       //
 
@@ -145,7 +234,7 @@ class ServiceRequest extends Component {
                   <div className="thrprofileDes">
                     <Form
                       ref="form"
-                      onSubmit={this.submitDocument}
+                      onSubmit={this.submitRequest}
                       onError={this.validate}
                     >
                       <div className="container">
@@ -161,16 +250,16 @@ class ServiceRequest extends Component {
                                 id="date"
                                 fullWidth={true}
                                 name="date"
-                                value={this.state.fields.dob}
+                                value={this.state.fields.serviceDate}
                                 dateFormat={"YYYY-MM-DD"}
                                 minDate={new Date()}
                                 closable="true"
                                 onChange={this.handleChangeDate}
                               />
-                              {this.hasError("dob") && (
+                              {this.hasError("serviceDate") && (
                                 <div className="ui pointing label">
                                   <div style={{ color: "red" }}>
-                                    {this.state.errors["dob"]}
+                                    {this.state.errors["serviceDate"]}
                                   </div>
                                 </div>
                               )}
@@ -219,8 +308,8 @@ class ServiceRequest extends Component {
                                 options={options}
                                 selection
                                 name="time"
-                                onChange={this.dropdownChange}
-                                value={this.state.fields.time}
+                                // onChange={this.dropdownChange}
+                                value={this.state.fields.timelength}
                                 validators={["required"]}
                                 errorMessages={["this field is required"]}
                               />
@@ -236,9 +325,9 @@ class ServiceRequest extends Component {
                               <Dropdown
                                 options={massageOptions}
                                 selection
-                                name="doc_type"
-                                onChange={this.dropdownChange}
-                                value={this.state.fields.doc_type}
+                                // onChange={this.dropdownChange}
+
+                                value={this.state.fields.massageType}
                                 validators={["required"]}
                                 errorMessages={["this field is required"]}
                               />
@@ -251,14 +340,25 @@ class ServiceRequest extends Component {
                               <label for="usr" className="chkBox">
                                 Therapist gender preference{" "}
                               </label>
-                              <Dropdown
+                              {/* <Dropdown
                                 options={genderOptions}
                                 selection
-                                name="gender"
-                                onChange={this.dropdownChange}
-                                value={this.state.fields.gender}
+                               onChange={this.dropdownChange}
+                               value={this.state.fields.therapistGender}
                                 validators={["required"]}
                                 errorMessages={["this field is required"]}
+                              /> */}
+                              <Dropdown
+                                name="info"
+                                type="submit"
+                                disabled={submitting}
+                                className="dropNav"
+                                text="Please Select"
+                                options={genderOptions}
+                                // value={this.state.genderValue}
+                                onChange={this.dropdownChange}
+                                simple
+                                item
                               />
                             </div>
                           </div>
@@ -273,9 +373,8 @@ class ServiceRequest extends Component {
                                 className="form-control"
                                 options={locationOptions}
                                 selection
-                                name="location"
-                                onChange={this.dropdownChange}
-                                value={this.state.fields.location}
+                                // onChange={this.dropdownChange}
+                                value={this.state.fields.generallocation}
                                 validators={["required"]}
                                 errorMessages={["this field is required"]}
                               />
@@ -294,9 +393,9 @@ class ServiceRequest extends Component {
                                 name="address"
                                 onChange={this.setFormValue.bind(
                                   this,
-                                  "address"
+                                  "streetAddress"
                                 )}
-                                value={this.state.fields.address}
+                                value={this.state.fields.streetAddress}
                                 validators={[
                                   "required",
                                   "matchRegexp:^[a-zA-Z ]*$",
@@ -344,15 +443,24 @@ class ServiceRequest extends Component {
                               <label for="usr" className="chkBox">
                                 State{" "}
                               </label>
-                              <Dropdown
-                                options={stateOptions}
-                                selection
-                                name="state"
-                                onChange={this.dropdownChange}
+                              {/* <Dropdown
+                               
+                                name=""
+                                // onChange={this.dropdownChange}
                                 value={this.state.fields.state}
                                 validators={["required"]}
                                 errorMessages={["this field is required"]}
-                              />{" "}
+                              />{" "} */}
+                              <Dropdown
+                                options={stateOptions}
+                                selection
+                                placeholder="Select State"
+                                name="state"
+                                onChange={(e, data) => this.selectState(e, data)}
+                              />
+                              <span style={{ color: "red" }}>
+                                {this.state.errors["state"]}
+                              </span>
                             </div>
                           </div>
 
@@ -366,13 +474,21 @@ class ServiceRequest extends Component {
                                 className="login-form-textfield"
                                 id="zip code"
                                 fullWidth={true}
-                                name="zip_code"
+                                name="zipCode"
                                 margin={"normal"}
-                                onChange={this.setFormValue.bind(
+                                // onChange={this.setFormValue.bind(
+                                //   this,
+                                //   "zipCode"
+                                // )}
+
+                                onChange={(e) => {
+                                  this.abc(e.target.value);
+                                }}
+                                onKeyUp={this.setFormValue.bind(
                                   this,
-                                  "zip_code"
+                                  "zipCode"
                                 )}
-                                value={this.state.fields.zip_code}
+                                // value={this.state.fields.zipCode}
                                 validators={["required"]}
                                 errorMessages={[
                                   "this field is required",
@@ -392,12 +508,17 @@ class ServiceRequest extends Component {
                               <Dropdown
                                 options={typeOptions}
                                 selection
-                                name="loc_type"
-                                onChange={this.dropdownChange}
-                                value={this.state.fields.loc_type}
-                                validators={["required"]}
-                                errorMessages={["this field is required"]}
+                                placeholder="Select Location Type"
+                                name="locationType"
+                                onChange={(e, data) => this.locType(e, data)}
+
+                                //  value={this.state.fields.locationType}
+                                // validators={["required"]}
+                                // errorMessages={["this field is required"]}
                               />
+                              <span style={{ color: "red" }}>
+                                {this.state.errors["locationType"]}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -438,4 +559,21 @@ class ServiceRequest extends Component {
   }
 }
 
-export default ServiceRequest;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+    saveashu: state.clientReducer.saveashu,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchClientAppointment: (data) => dispatch(fetchClientAppointment(data)),
+    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+    fetchValidateZip: (data) => dispatch(fetchValidateZip(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ServiceRequest)
+);

@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { Button } from "semantic-ui-react";
 import { DateInput } from "semantic-ui-calendar-react";
-import { fetchUserHistory } from "../../../redux/actions/client.action";
+import {
+  fetchUserHistory,
+  getUserHistory,
+} from "../../../redux/actions/client.action";
 import { Form, Input, Dropdown } from "semantic-ui-react-form-validator";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
@@ -10,6 +13,7 @@ class History extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      clientId: 0,
       fields: {
         medicalHistoryId: 0,
         clientId: 0,
@@ -39,6 +43,12 @@ class History extends Component {
       loading: false,
     };
   }
+
+  componentDidMount = async (data1) => {
+    var data1 = this.props.user.Data.ClientId;
+    this.state.clientId = data1;
+    this.props.getUserHistory(data1);
+  };
 
   setFormValue(field, e) {
     let fields = this.state.fields;
@@ -147,8 +157,15 @@ class History extends Component {
                                         this,
                                         "emergencyContactName"
                                       )}
+                                      // value={
+                                      //   this.state.fields.emergencyContactName
+                                      // }
                                       value={
-                                        this.state.fields.emergencyContactName
+                                        this.props.saveMedicalData.data
+                                          ? this.props.saveMedicalData.data.Data
+                                              .EmergencyContactName
+                                          : this.state.fields
+                                              .emergencyContactName
                                       }
                                       validators={[
                                         "required",
@@ -171,15 +188,22 @@ class History extends Component {
                                       id="number"
                                       fullWidth={true}
                                       name="number"
-                                     type="tel"
-                                     minLength="10"
-                                     maxLength="10"
+                                      type="tel"
+                                      minLength="10"
+                                      maxLength="10"
                                       onChange={this.setFormValue.bind(
                                         this,
                                         "emergencyPhoneNumber"
                                       )}
+                                      // value={
+                                      //   this.state.fields.emergencyPhoneNumber
+                                      // }
                                       value={
-                                        this.state.fields.emergencyPhoneNumber
+                                        this.props.saveMedicalData.data
+                                          ? this.props.saveMedicalData.data.Data
+                                              .EmergencyPhoneNumber
+                                          : this.state.fields
+                                              .emergencyPhoneNumber
                                       }
                                       validators={["required"]}
                                       errorMessages={[
@@ -204,8 +228,15 @@ class History extends Component {
                                         this,
                                         "physicianContactName"
                                       )}
+                                      // value={
+                                      //   this.state.fields.physicianContactName
+                                      // }
                                       value={
-                                        this.state.fields.physicianContactName
+                                        this.props.saveMedicalData.data
+                                          ? this.props.saveMedicalData.data.Data
+                                              .PhysicianContactName
+                                          : this.state.fields
+                                              .physicianContactName
                                       }
                                       validators={[
                                         "required",
@@ -228,15 +259,22 @@ class History extends Component {
                                       id="number"
                                       fullWidth={true}
                                       name="number"
-                                     type="tel"
+                                      type="tel"
                                       minLength="10"
                                       maxLength="10"
                                       onChange={this.setFormValue.bind(
                                         this,
                                         "physicianPhoneNumber"
                                       )}
+                                      // value={
+                                      //   this.state.fields.physicianPhoneNumber
+                                      // }
                                       value={
-                                        this.state.fields.physicianPhoneNumber
+                                        this.props.saveMedicalData.data
+                                          ? this.props.saveMedicalData.data.Data
+                                              .PhysicianPhoneNumber
+                                          : this.state.fields
+                                              .physicianPhoneNumber
                                       }
                                       validators={["required"]}
                                       errorMessages={[
@@ -258,8 +296,14 @@ class History extends Component {
                                         this,
                                         "currentMedications"
                                       )}
+                                      // value={
+                                      //   this.state.fields.currentMedications
+                                      // }
                                       value={
-                                        this.state.fields.currentMedications
+                                        this.props.saveMedicalData.data
+                                          ? this.props.saveMedicalData.data.Data
+                                              .CurrentMedications
+                                          : this.state.fields.currentMedications
                                       }
                                       validators={[
                                         "required",
@@ -284,7 +328,13 @@ class History extends Component {
                                         this,
                                         "surgeries"
                                       )}
-                                      value={this.state.fields.surgeries}
+                                      // value={this.state.fields.surgeries}
+                                      value={
+                                        this.props.saveMedicalData.data
+                                          ? this.props.saveMedicalData.data.Data
+                                              .Surgeries
+                                          : this.state.fields.surgeries
+                                      }
                                       validators={[
                                         "required",
                                         "matchRegexp:^[a-zA-Z ]*$",
@@ -308,7 +358,13 @@ class History extends Component {
                                         this,
                                         "hobbies"
                                       )}
-                                      value={this.state.fields.hobbies}
+                                      // value={this.state.fields.hobbies}
+                                      value={
+                                        this.props.saveMedicalData.data
+                                          ? this.props.saveMedicalData.data.Data
+                                              .Hobbies
+                                          : this.state.fields.hobbies
+                                      }
                                       validators={[
                                         "required",
                                         "matchRegexp:^[a-zA-Z ]*$",
@@ -332,7 +388,13 @@ class History extends Component {
                                         this,
                                         "dislocations"
                                       )}
-                                      value={this.state.fields.dislocations}
+                                      // value={this.state.fields.dislocations}
+                                      value={
+                                        this.props.saveMedicalData.data
+                                          ? this.props.saveMedicalData.data.Data
+                                              .Dislocations
+                                          : this.state.fields.dislocations
+                                      }
                                       validators={[
                                         "required",
                                         "matchRegexp:^[a-zA-Z ]*$",
@@ -356,7 +418,13 @@ class History extends Component {
                                         this,
                                         "profession"
                                       )}
-                                      value={this.state.fields.profession}
+                                      // value={this.state.fields.profession}
+                                      value={
+                                        this.props.saveMedicalData.data
+                                          ? this.props.saveMedicalData.data.Data
+                                              .Profession
+                                          : this.state.fields.profession
+                                      }
                                       validators={["required"]}
                                       errorMessages={[
                                         "this field is required",
@@ -411,12 +479,14 @@ class History extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
+    saveMedicalData: state.clientReducer.saveMedicalData,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchUserHistory: (data) => dispatch(fetchUserHistory(data)),
+    getUserHistory: (data) => dispatch(getUserHistory(data)),
   };
 };
 

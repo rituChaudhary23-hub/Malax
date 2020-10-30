@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Button } from "semantic-ui-react";
 import { Dropdown, Form, Input } from "semantic-ui-react-form-validator";
 import { DateInput } from "semantic-ui-calendar-react";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import {fetchPaymentDetails} from "../../../redux/actions/clientSchedule.action"
 
 class Payment extends Component {
   constructor(props) {
@@ -140,6 +143,8 @@ class Payment extends Component {
                                 id="number"
                                 fullWidth={true}
                                 name="number"
+                                minLength="12"
+                                maxLength="12"
                                 margin={"normal"}
                                 type="number"
                                 onChange={this.setFormValue.bind(
@@ -168,6 +173,8 @@ class Payment extends Component {
                                 name="number"
                                 margin={"normal"}
                                 type="number"
+                                minLength="3"
+                                maxLength="3"
                                 onChange={this.setFormValue.bind(this, "cvv")}
                                 value={this.state.fields.cvv}
                                 validators={["required"]}
@@ -319,4 +326,21 @@ class Payment extends Component {
   }
 }
 
-export default Payment;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+    saveashu: state.clientReducer.saveashu,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchPaymentDetails: (data) => dispatch(fetchPaymentDetails(data)),
+
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Payment)
+);
+
