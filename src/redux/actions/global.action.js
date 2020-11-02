@@ -36,11 +36,11 @@ export function fetchCategoryName(data) {
         dispatch(stopLoading());
         
         dispatch(globalCategoryName(data.data.Data.globalCodeData));
-        toast.success(data.data.Message);
+        // toast.success(data.data.Message);
         return data;
         }
         else {
-          toast.error(data.data.Message);
+          // toast.error(data.data.Message);
           return false;
         }
       })
@@ -60,7 +60,7 @@ export function fetchCategoryName(data) {
 export function fetchValidateZip(data) {
   
   return (dispatch, getState) => {
-    dispatch(startLoading());
+    // dispatch(startLoading());
     let state = getState();
     return GlobalService.validateZip(data, {
     })
@@ -78,12 +78,12 @@ export function fetchValidateZip(data) {
           return false;
         }
       })
-      .catch((error) => {
-        if (error) {
-          toast.error(error(data.Data.Message));
-          // toast.error(error["data"]["Message"]);
-        }
-        dispatch(stopLoading());
-      });
+      // .catch((error) => {
+      //   if (error) {
+      //     toast.error(error(data.Data.Message));
+      //     // toast.error(error["data"]["Message"]);
+      //   }
+      //   dispatch(stopLoading());
+      // });
   };
 }

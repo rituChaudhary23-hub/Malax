@@ -15,6 +15,11 @@ const updateUserEmail = (data) => {
 
 //get user phone number
 const getUserPhone = (data) => {
+  // var data1={
+    
+  //     userId: data
+    
+  // }
   return fetch("post", `${API_HOST}/AuthAPI/GetUserPhoneNumber`, data);
 };
 
@@ -88,9 +93,18 @@ const getClientLoc = (data) => {
   };
   return fetch("post", `${API_HOST}/ClientAPI/GetClientLocations`, data1);
 };
+
+
+//upload-image
+
+const addImage = (data) => {
+  console.log("user info------------", data);
+  debugger;
+  return fetch("post", `${API_HOST}/ClientAPI/AddClientIdentityImage`, data);
+};
 export const ClientService = {
   getUserEmail,
-  getMedicalInfo,
+  getMedicalInfo,addImage,
   getConsentAgreement,
   getClientLoc,
   addClientLoc,

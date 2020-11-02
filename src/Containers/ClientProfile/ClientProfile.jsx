@@ -24,6 +24,8 @@ const panes = [
 
 class ClientProfile extends Component {
   constructor(props) {
+    // window.onbeforeunload = function() { return "Your work will be lost."; };
+
     super(props);
     this.state = {};
   }

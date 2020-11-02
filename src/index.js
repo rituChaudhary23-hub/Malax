@@ -10,29 +10,27 @@ import {
   Route,
   Switch,
   Redirect,
-  HashRouter
+  HashRouter,
 } from "react-router-dom";
-import "../src/assets/scss/style.scss"
-import "../src/assets/scss/comman.scss"
+import "../src/assets/scss/style.scss";
+import "../src/assets/scss/comman.scss";
 import { ConnectedRouter } from "connected-react-router";
 import { history } from "./store/history";
-
+import LoaderComponent from "./Components/LoaderComponent/LoaderComponent";
 import { PersistGate } from "redux-persist/lib/integration/react";
-
-
 
 // export const store = configureStore();
 let { store, persistor } = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-        <ConnectedRouter history={history}>
+    <PersistGate loading={null} persistor={persistor}>
+      <ConnectedRouter history={history}>
+        <LoaderComponent></LoaderComponent>
 
-    <App />
-    </ConnectedRouter>
+        <App />
+      </ConnectedRouter>
     </PersistGate>
-
   </Provider>,
   document.getElementById("root")
 );

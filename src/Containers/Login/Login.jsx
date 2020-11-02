@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import { fetchCategoryName } from "../../redux/actions/global.action";
 
 import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
+import loading from "../../redux/reducers/loading.reducer";
 
 class Login extends Component {
   golbalID = 0;

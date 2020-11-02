@@ -3,6 +3,8 @@ import { Button } from "semantic-ui-react";
 import { Dropdown, Form, Input } from "semantic-ui-react-form-validator";
 import { DateInput } from "semantic-ui-calendar-react";
 import { withRouter } from "react-router";
+import TimePicker from "react-time-picker";
+
 import { fetchClientAppointment } from "../../../redux/actions/clientSchedule.action";
 import {
   fetchCategoryName,
@@ -15,12 +17,22 @@ import { toast } from "../../../Components/Toast/Toast";
 class ServiceRequest extends Component {
   golbalID = 0;
   dropVal: any;
+  dropvalState: any;
   constructor(props) {
     super(props);
     this.state = {
-      name: "Gender",
-      name: "LocationType",
-      name:"State",
+      abcGender: {
+        name: "Gender",
+      },
+      abc: {
+        name: "LocationType",
+      },
+      abcState: {
+        name: "State",
+      },
+      abcTime: {
+        name: "TimeLength",
+      },
       zipCode: "",
       fields: {
         clientScheduleId: 0,
@@ -53,10 +65,20 @@ class ServiceRequest extends Component {
 
   componentDidMount = async () => {
     debugger;
-    var data = await this.props.fetchCategoryName(this.state.name);
-    if (data != false) {
-      this.dropVal = data.data.Data.globalCodeData;
+    var _state = await this.props.fetchCategoryName(this.state.abcState.name);
+
+    if (_state) {
+      debugger;
+      this.dropvalState = _state.data.Data.globalCodeData;
     }
+    var _gender = await this.props.fetchCategoryName(this.state.abcGender.name);
+    if (_gender) {
+      debugger;
+
+      this.dropVal = _gender.data.Data.globalCodeData;
+      console.log("dropVal", this.dropVal);
+    }
+    console.log("state", this.dropvalState);
   };
 
   handleChangeDate = (event, { name, value }) => {
@@ -87,6 +109,19 @@ class ServiceRequest extends Component {
     // });
   };
 
+  //state
+
+  selectState = (e) => {
+    debugger;
+    var InfoAs = e.target.outerText;
+    debugger;
+    var globalState = this.dropvalState.filter((x) => x.CodeName == InfoAs)[0]
+      .GlobalCodeId;
+    this.state.fields.state = globalState;
+    // this.setState({ state: data.value }, () => {
+    //   console.log("locationType----------", data.value);
+    // });
+  };
   //location-type
   locType = (e, data) => {
     console.log(data.value);
@@ -102,21 +137,19 @@ class ServiceRequest extends Component {
     });
   };
 
-  //state
-  
-  selectState = (e, data) => {
+  //time-length
+  selectTimeLength = (e, data) => {
     console.log(data.value);
     console.log("---------e-------", e);
     var InfoAs = e.target.outerText;
     debugger;
     var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
       .GlobalCodeId;
-    this.state.fields.state = globalId;
-    this.setState({ state: data.value }, () => {
-      console.log("locationType----------", data.value);
+    this.state.fields.timelength = globalId;
+    this.setState({ timelength: data.value }, () => {
+      console.log("timelength----------", data.value);
     });
   };
-
   //zipcode
   abc = async (e) => {
     console.log("-------zipcode -----------", e);
@@ -187,10 +220,17 @@ class ServiceRequest extends Component {
 
     return formIsValid;
   };
+
+  onChangeToTime = (time) => {
+    debugger;
+    // this.setState({ time });
+    this.state.fields.to = time.target.value;
+  };
+
   render() {
     const { submitting } = this.props;
 
-    const options = [
+    const timeLengthOptions = [
       { key: "m", text: "20 minutes", value: "20 minutes" },
       { key: "k", text: "40 minutes", value: "40 minutes" },
       { key: "k", text: "60 minutes", value: "60 minutes" },
@@ -276,12 +316,13 @@ class ServiceRequest extends Component {
                             <div className="form-group">
                               <Input
                                 className="form-control date"
-                                value="11:00"
+                                // value="this.state.fields.to"
                                 step="900"
                                 id="time"
                                 fullWidth={true}
                                 name="time"
                                 type="time"
+                                onChange={this.onChangeToTime}
                                 //   margin={"normal"}
                               />
                             </div>
@@ -292,7 +333,7 @@ class ServiceRequest extends Component {
                               <input
                                 type="time"
                                 className="form-control date"
-                                value="13:00"
+                                value={this.state.fields.from}
                                 step="900"
                               />
                             </div>
@@ -304,15 +345,26 @@ class ServiceRequest extends Component {
                               <label for="usr" className="chkBox">
                                 Time length{" "}
                               </label>
-                              <Dropdown
-                                options={options}
+                              {/* <Dropdown
+                                options={timeLengthOptions}
                                 selection
                                 name="time"
                                 // onChange={this.dropdownChange}
                                 value={this.state.fields.timelength}
                                 validators={["required"]}
                                 errorMessages={["this field is required"]}
+                              /> */}
+                              <Dropdown
+                                options={timeLengthOptions}
+                                selection
+                                placeholder="Select TimeLength"
+                                onChange={(e, data) =>
+                                  this.selectTimeLength(e, data)
+                                }
                               />
+                              <span style={{ color: "red" }}>
+                                {this.state.errors["timelength"]}
+                              </span>
                             </div>
                           </div>
 
@@ -451,16 +503,30 @@ class ServiceRequest extends Component {
                                 validators={["required"]}
                                 errorMessages={["this field is required"]}
                               />{" "} */}
-                              <Dropdown
+                              {/* <Dropdown
                                 options={stateOptions}
                                 selection
                                 placeholder="Select State"
                                 name="state"
-                                onChange={(e, data) => this.selectState(e, data)}
+                                onChange={(e, data) =>
+                                  this.selectState(e, data)
+                                }
                               />
                               <span style={{ color: "red" }}>
                                 {this.state.errors["state"]}
-                              </span>
+                              </span> */}
+                              <Dropdown
+                                name="info"
+                                type="submit"
+                                disabled={submitting}
+                                className="dropNav"
+                                text="Please Select"
+                                options={stateOptions}
+                                // value={this.state.genderValue}
+                                onChange={this.selectState}
+                                simple
+                                item
+                              />
                             </div>
                           </div>
 

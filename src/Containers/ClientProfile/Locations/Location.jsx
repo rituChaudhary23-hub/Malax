@@ -12,12 +12,61 @@ export class Location extends Component {
     super(props);
     this.state = {
       clientId: 0,
+      fields: {
+        clientLocationId: 0,
+        clientId: 0,
+        locationForMessage: "",
+        spaceAvailability: "",
+        presencePets: "",
+        actionBy: "",
+      },
     };
   }
   componentDidMount = async (data1) => {
     var data1 = this.props.user.Data.ClientId;
     this.state.clientId = data1;
     this.props.getLocation(data1);
+  };
+
+  updateLoc = (e) => {
+    debugger;
+    if (e.target.checked) {
+      console.log("-------ritu----------", e.target.value);
+      // this.setState({ locationForMessage: e.target.value });
+      var data1 = e.target.value;
+      this.state.fields.locationForMessage = data1;
+    }
+  };
+
+  updateConfirm = (e) => {
+    debugger;
+    if (e.target.checked) {
+      console.log("-------ritu-ashu---------", e.target.value);
+      var space = e.target.value;
+      this.state.fields.spaceAvailability = space;
+    }
+  };
+
+  updatePets = (e) => {
+    debugger;
+    if (e.target.checked) {
+      console.log("-------ritu-ashu---------", e.target.value);
+      var petsdata=e.target.value
+      this.state.fields.presencePets=petsdata;
+    }
+  };
+
+  updateLocation = async () => {
+    debugger;
+    var data = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data;
+
+    debugger;
+    var res = await this.props.fetchClientLoc(this.state.fields);
+    if (res == true) {
+      console.log("res--------", res);
+    } else {
+    }
   };
 
   back() {
@@ -46,19 +95,31 @@ export class Location extends Component {
                     <div class="rdio rdio-primary radio-inline">
                       <input
                         name="radio"
-                        value="1"
+                        value="In home"
                         id="radio1"
                         type="radio"
-                        checked
+                        onChange={this.updateLoc}
                       />
                       <label for="radio1">In home</label>
                     </div>
                     <div class="rdio rdio-primary radio-inline">
-                      <input name="radio" value="2" id="radio2" type="radio" />
+                      <input
+                        name="radio"
+                        value="At work"
+                        id="radio2"
+                        type="radio"
+                        onChange={this.updateLoc}
+                      />
                       <label for="radio2">At work</label>
                     </div>
                     <div class="rdio rdio-primary radio-inline">
-                      <input name="radio" value="3" id="radio3" type="radio" />
+                      <input
+                        name="radio"
+                        value="Other"
+                        id="radio3"
+                        type="radio"
+                        onChange={this.updateLoc}
+                      />
                       <label for="radio3">Other</label>
                     </div>
                   </div>
@@ -69,15 +130,21 @@ export class Location extends Component {
                     <div class="rdio rdio-primary radio-inline">
                       <input
                         name="radio1"
-                        value="1"
+                        value="Yes"
                         id="Yes"
                         type="radio"
-                        checked
+                        onChange={this.updateConfirm}
                       />
                       <label for="Yes">Yes</label>
                     </div>
                     <div class="rdio rdio-primary radio-inline">
-                      <input name="radio1" value="2" id="No" type="radio" />
+                      <input
+                        name="radio1"
+                        value="No"
+                        id="No"
+                        type="radio"
+                        onChange={this.updateConfirm}
+                      />
                       <label for="No">No</label>
                     </div>
                   </div>
@@ -87,15 +154,21 @@ export class Location extends Component {
                     <div class="rdio rdio-primary radio-inline">
                       <input
                         name="radio2"
-                        value="1"
+                        value="Yes"
                         id="Yes1"
                         type="radio"
-                        checked
+                        onChange={this.updatePets}
                       />
                       <label for="Yes1">Yes</label>
                     </div>
                     <div class="rdio rdio-primary radio-inline">
-                      <input name="radio2" value="2" id="No2" type="radio" />
+                      <input
+                        name="radio2"
+                        value="No"
+                        id="No2"
+                        type="radio"
+                        onChange={this.updatePets}
+                      />
                       <label for="No2">No</label>
                     </div>
                   </div>
@@ -105,17 +178,18 @@ export class Location extends Component {
                     <div className="col-sm-12">
                       <div className="text-right">
                         <Button
-                          type="button"
-                          className="btn btn-primary mr-4"
-                          data-dismiss="modal"
-                          onClick={this.back}
+                          color="blue"
+                          type="submit"
+                          className="btn btn-sm btn-primary"
+                          onClick={this.updateLocation}
                         >
                           Save
                         </Button>
                         <Button
-                          type="button"
+                          type="submit"
                           className="btn btn-cancel"
                           data-dismiss="modal"
+                          onClick={this.back}
                         >
                           Cancel
                         </Button>

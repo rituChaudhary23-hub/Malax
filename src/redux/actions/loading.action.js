@@ -1,7 +1,7 @@
 /** seting action types */
 export const actionTypes = {
   START_LOADING: "START_LOADING",
-  STOP_LOADING: "STOP_LOADING",
+  STOP_LOADING: "STOP_LOADING"
 };
 
 /*
@@ -10,12 +10,12 @@ export const actionTypes = {
 
 export function startLoading() {
   return {
-    type: actionTypes.START_LOADING,
+    type: actionTypes.START_LOADING
   };
 }
 
 export function stopLoading() {
   return {
-    type: actionTypes.STOP_LOADING,
+    type: actionTypes.STOP_LOADING
   };
 }

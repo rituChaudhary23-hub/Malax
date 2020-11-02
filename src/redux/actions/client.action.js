@@ -12,6 +12,7 @@ export const actionTypes = {
   SAVE_MEDICAL_INFO: "SAVE_MEDICAL_INFO",
   SAVE_CONSENT: "SAVE_CONSENT",
   SAVE_LOCATION: "SAVE_LOCATION",
+  SAVE_USER_IMAGE: "SAVE_USER_IMAGE",
 };
 
 export function saveUserId(data) {
@@ -48,6 +49,12 @@ export function savePersonalInfo(data) {
   };
 }
 
+export function saveUserImage(data) {
+  return {
+    type: actionTypes.SAVE_USER_IMAGE,
+    data: data,
+  };
+}
 export function saveMedicalInfo(data) {
   return {
     type: actionTypes.SAVE_MEDICAL_INFO,
@@ -96,7 +103,9 @@ export function fetchUserEmail(data) {
     dispatch(startLoading());
 
     let state = getState();
-    return ClientService.getUserEmail(data, {})
+    return ClientService.getUserEmail(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
@@ -125,7 +134,9 @@ export function fetchUpdateEmail(data) {
     dispatch(startLoading());
 
     let state = getState();
-    return ClientService.updateUserEmail(data, {})
+    return ClientService.updateUserEmail(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
@@ -155,25 +166,26 @@ export function fetchUserPhone(data) {
     dispatch(startLoading());
 
     let state = getState();
-    return ClientService.getUserPhone(data, {})
-      .then(async (data) => {
-        dispatch(stopLoading());
-        if (data.data.Success) {
-          dispatch(getUserPhone(data));
-          toast.success(data["data"]["Message"]);
+    return ClientService.getUserPhone(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    }).then(async (data) => {
+      dispatch(stopLoading());
+      if (data.data.Success) {
+        dispatch(getUserPhone(data));
+        // toast.success(data["data"]["Message"]);
 
-          return true;
-        } else {
-          toast.error(data.data.Message);
-          return false;
-        }
-      })
-      .catch((error) => {
-        if (error) {
-          toast.error(error["data"]["data"]["Message"]);
-        }
-        dispatch(stopLoading());
-      });
+        return true;
+      } else {
+        toast.error(data.data.Message);
+        return false;
+      }
+    });
+    // .catch((error) => {
+    //   if (error) {
+    //     toast.error(error["data"]["data"]["Message"]);
+    //   }
+    //   dispatch(stopLoading());
+    // });
   };
 }
 
@@ -184,7 +196,9 @@ export function fetchConsentForm(data) {
     dispatch(startLoading());
 
     let state = getState();
-    return ClientService.ConsentFormApi(data, {})
+    return ClientService.ConsentFormApi(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         debugger;
@@ -212,17 +226,19 @@ export function getConsentForm(data) {
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
-    return ClientService.getConsentAgreement(data, {})
+    return ClientService.getConsentAgreement(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
           debugger;
           dispatch(saveConsent(data));
-          toast.success(data["data"]["Message"]);
+          // toast.success(data["data"]["Message"]);
 
           return true;
         } else {
-          toast.error(data.data.Message);
+          // toast.error(data.data.Message);
           return false;
         }
       })
@@ -241,7 +257,9 @@ export function fetchUserInfo(data) {
     dispatch(startLoading());
 
     let state = getState();
-    return ClientService.personalInfoApi(data, {})
+    return ClientService.personalInfoApi(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
@@ -269,17 +287,19 @@ export function getUserInfo(data) {
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
-    return ClientService.getUserInfo(data, {})
+    return ClientService.getUserInfo(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
           debugger;
           dispatch(savePersonalInfo(data));
-          toast.success(data["data"]["Message"]);
+          // toast.success(data["data"]["Message"]);
 
           return true;
         } else {
-          toast.error(data.data.Message);
+          // toast.error(data.data.Message);
           return false;
         }
       })
@@ -298,7 +318,9 @@ export function fetchUserHistory(data) {
     dispatch(startLoading());
 
     let state = getState();
-    return ClientService.historyApi(data, {})
+    return ClientService.historyApi(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
@@ -326,12 +348,41 @@ export function getUserHistory(data) {
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
-    return ClientService.getMedicalInfo(data, {})
+    return ClientService.getMedicalInfo(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
           debugger;
           dispatch(saveMedicalInfo(data));
+          // toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          // toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+//image-upload
+export function fetchIdentityImage(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientService.addImage(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          dispatch(saveUserImage(data));
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -348,14 +399,15 @@ export function getUserHistory(data) {
       });
   };
 }
-
 //medical-conditions
 export function fetchUserMedicalCondition(data) {
   debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
-    return ClientService.medicalConditionApi(data, {})
+    return ClientService.medicalConditionApi(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
@@ -384,7 +436,9 @@ export function fetchClientLoc(data) {
     dispatch(startLoading());
 
     let state = getState();
-    return ClientService.addClientLoc(data, {})
+    return ClientService.addClientLoc(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         debugger;
@@ -412,17 +466,19 @@ export function getLocation(data) {
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
-    return ClientService.getClientLoc(data, {})
+    return ClientService.getClientLoc(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
           debugger;
           dispatch(saveLocation(data));
-          toast.success(data["data"]["Message"]);
+          // toast.success(data["data"]["Message"]);
 
           return true;
         } else {
-          toast.error(data.data.Message);
+          // toast.error(data.data.Message);
           return false;
         }
       })

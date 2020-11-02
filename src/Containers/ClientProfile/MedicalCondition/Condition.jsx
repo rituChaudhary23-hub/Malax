@@ -1,26 +1,67 @@
 import React, { Component } from "react";
 import { Form, TextArea, Button } from "semantic-ui-react";
 import { Field } from "redux-form";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { fetchUserMedicalCondition } from "../../../redux/actions/client.action";
 
 class Condition extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      fields: {
+        clientMedicalConditionId: 0,
+        clientId: 0,
+        healthConcerns: "",
+        medicalConditionRequest: [
+          {
+            medicalConditionId: 0,
+          },
+        ],
+        actionBy: "",
+      },
+    };
   }
   back() {
-    window.location.href="/update-client-profile"
+    window.location.href = "/update-client-profile";
   }
 
-  // saveCondition = () => {
-  //   var fields = "input[name='list']".serializeArray();
-  //   if (fields.length == 0) {
-  //     alert("nothing selected");
-  //     // cancel submit
-  //     return false;
-  //   } else {
-  //     alert(fields.length + " items selected");
-  //   }
-  // };
+  saveCondition = () => {
+    debugger;
+    var inputElems = document.getElementsByTagName("input"),
+      count = 0;
+    for (var i = 0; i < inputElems.length; i++) {
+      if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
+        count++;
+
+        alert(count);
+      }
+    }
+
+    // onSelectPermissions = (e, title, id) => {
+    //   let permissions = [...this.state.permissions];
+    //   if (e.target.checked) {
+    //     permissions.push(id);
+    //     this.setState({ permissions: permissions });
+    //   } else {
+    //     for (var i = 0; i < permissions.length; i++) {
+    //       if (permissions[i] == id) {
+    //         permissions.splice(i, 1);
+    //       }
+    //     }
+    //     this.setState({ permissions: permissions });
+    //   }
+    // };
+
+    // var fields = "input[name='list']".serializeArray();
+    // if (fields.length == 0) {
+    //   alert("nothing selected");
+    //   // cancel submit
+    //   return false;
+    // } else {
+    //   alert(fields.length + " items selected");
+    // }
+  };
 
   render() {
     const { submitting } = this.props;
@@ -87,7 +128,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_blue"
+                                  id="chk_green1"
                                   name="list"
                                 />
                                 <span
@@ -118,7 +159,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_green1"
+                                  id="chk_green2"
                                 />
                                 <span
                                   className="form-check-label"
@@ -165,7 +206,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_red2"
+                                  id="chk_red3"
                                 />
                                 <span
                                   className="form-check-label"
@@ -181,7 +222,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_red2"
+                                  id="chk_red4"
                                 />
                                 <span
                                   className="form-check-label"
@@ -197,7 +238,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_red2"
+                                  id="chk_red5"
                                 />
                                 <span
                                   className="form-check-label"
@@ -213,7 +254,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_red2"
+                                  id="chk_red6"
                                 />
                                 <span
                                   className="form-check-label"
@@ -229,7 +270,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_red2"
+                                  id="chk_red7"
                                 />
                                 <span
                                   className="form-check-label"
@@ -245,7 +286,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_red2"
+                                  id="chk_red8"
                                 />
                                 <span
                                   className="form-check-label"
@@ -261,7 +302,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_red2"
+                                  id="chk_red9"
                                 />{" "}
                                 <span
                                   className="form-check-label"
@@ -277,7 +318,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_red2"
+                                  id="chk_red12"
                                 />{" "}
                                 <span
                                   className="form-check-label"
@@ -293,7 +334,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_red2"
+                                  id="chk_red22"
                                   name="list"
                                 />
                                 <span
@@ -317,7 +358,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_red"
+                                  id="chk_redd"
                                 />
                                 <span
                                   className="form-check-label"
@@ -332,7 +373,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_green"
+                                  id="chk_green9"
                                   name="list"
                                 />
                                 <span
@@ -348,7 +389,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_blue"
+                                  id="chk_blue9"
                                 />
                                 <span
                                   className="form-check-label"
@@ -364,11 +405,11 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_blue"
+                                  id="chk_blue11"
                                 />{" "}
                                 <span
                                   className="form-check-label"
-                                  for="chk_blue1"
+                                  for="chk_blue11"
                                 >
                                   Hands
                                 </span>
@@ -380,7 +421,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_blue"
+                                  id="chk_bluee"
                                   name="list"
                                 />
                                 <span
@@ -397,7 +438,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_blue"
+                                  id="chk_bluue"
                                 />{" "}
                                 <span
                                   className="form-check-label"
@@ -413,7 +454,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_blue"
+                                  id="chk_bblue"
                                 />{" "}
                                 <span
                                   className="form-check-label"
@@ -429,7 +470,7 @@ class Condition extends Component {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="chk_blue"
+                                  id="chk_blue15"
                                   name="list"
                                 />
                                 <span
@@ -491,4 +532,19 @@ class Condition extends Component {
   }
 }
 
-export default Condition;
+const mapStateToProps = (state) => {
+  return {
+    saveConsent: state.clientReducer.saveConsent,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserMedicalCondition: (data) =>
+      dispatch(fetchUserMedicalCondition(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Condition)
+);

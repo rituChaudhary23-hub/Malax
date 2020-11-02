@@ -42,8 +42,10 @@ class ClientRegister extends Component {
   }
 
   componentDidMount = async () => {
+    debugger
     var data = await this.props.fetchCategoryName(this.state.name);
     let courseData;
+    debugger
     if (this.props.categoryName)
       courseData = this.props.categoryName.filter(
         (item) => item.CodeName == this.state.CodeName
@@ -56,7 +58,8 @@ class ClientRegister extends Component {
     if (this.handleValidation()) {
       this.state.fields.accountTypeId = this.golbalID;
       var res = await this.props.userDetail(this.state.fields);
-      if (res == true) {
+      var resw1= await this.props.fetchValidateZip(this.state.zipCode)
+      if (res == true&& resw1==true) {
         this.props.history.push("/confirm-email");
       } else {
       }

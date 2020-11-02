@@ -4,6 +4,7 @@ import { startLoading, stopLoading } from "./loading.action";
 import { push } from "react-router-redux";
 import { history } from "react-router";
 
+
 export const actionTypes = {
   SUCCESS_REGISTER: "SUCCESS_REGISTER",
   FETCH_FORGOT_PASSWORD: "FETCH_FORGOT_PASSWORD",
@@ -37,7 +38,9 @@ export function userDetail(data, location) {
     dispatch(startLoading());
 
     let state = getState();
-    return UserService.register(data, {}).then(async (data) => {
+    return UserService.register(data, {
+      jwt: state["persist"]["c_temp_user"]["token"]
+    }).then(async (data) => {
       console.log("Userlist", data);
       dispatch(stopLoading());
       if (data.data.Success) {

@@ -85,6 +85,7 @@ export function loginUser(data, value) {
       return true
         } else {
           toast.error(user.data.Message);
+          dispatch(stopLoading());
           return false;
         }
       })

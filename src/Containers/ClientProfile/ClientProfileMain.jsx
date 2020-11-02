@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 
 import Agreement from "../../Components/Shared/AgreementModal/Agreement";
 import Image from "../../Components/Shared/ImageModal/Image";
+import ClientIdentityImage from "../../Components/Shared/ImageModal/ClientIdentityImage"
 import icon1 from "../../assets/images/icon1.png";
 import icon2 from "../../assets/images/icon2.png";
 import icon3 from "../../assets/images/icon3.png";
@@ -20,20 +21,24 @@ class ProfileMain extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      phone:"",
       modal1: false,
       phoneModal: false,
       consentFormModal: false,
       agreementModal: false,
       imageModal: false,
+      IdentityImageModal:false
     };
   }
 
-  componentDidMount = async (data) => {
+  componentDidMount =  (data) => {
     data = {
       userId: this.props.user.Data.UserId,
     };
-    var res = await this.props.fetchUserPhone(data);
-    this.phone = sessionStorage.getItem("value");
+    // var data1 = this.props.user.Data.ClientId;
+    // this.state.fields.clientId = data1;
+    this.props.fetchUserPhone(data);
+    // this.phone = sessionStorage.getItem("value");
   };
 
   showModal = () => {
@@ -73,6 +78,15 @@ class ProfileMain extends Component {
     this.setState({ imageModal: false });
   };
 
+  ShowIdentityImageModal = () => {
+    this.setState({ IdentityImageModal: true });
+  };
+  closeIdentityImageModal = () => {
+    this.setState({ IdentityImageModal: false });
+  };
+
+
+
   routeChange() {
     window.location.href = "/update-client-profile";
   }
@@ -81,6 +95,7 @@ class ProfileMain extends Component {
   }
 
   render() {
+   console.log('****Navi**********',this.props.saveashu.data)
     return (
       <div className="tab-content pistPro">
         <div id="TherapistProfile1" className="tab-pane active">
@@ -138,7 +153,10 @@ class ProfileMain extends Component {
                         </li>
                         <li>
                           <p>
-                            {this.props.saveashu.data
+                            {/* {this.props.saveashu.data.Data!=null
+                              && this.props.saveashu.data.Data.PhoneNumber
+                             } */}
+                              {this.props.saveashu.data && this.props.saveashu.data.Data
                               ? this.props.saveashu.data.Data.PhoneNumber
                               : "Not Yet Confirmed"}
                           </p>
@@ -197,7 +215,7 @@ class ProfileMain extends Component {
                           <Button
                             type="button"
                             className="btn btn-sm"
-                            onClick={() => this.ShowImageModal()}
+                            onClick={() => this.ShowIdentityImageModal()}
                           >
                             Upload ID photo
                           </Button>
@@ -265,7 +283,10 @@ class ProfileMain extends Component {
             imagemodal={this.state.imageModal}
             toggle={this.closeImageModal}
           />
-        </div>
+          <ClientIdentityImage 
+            imageIdentitymodal={this.state.IdentityImageModal}
+            toggle={this.closeIdentityImageModal}
+          />        </div>
       </div>
     );
   }

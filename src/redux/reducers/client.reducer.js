@@ -10,7 +10,8 @@ const initialState = {
   saveData: {},
   saveMedicalData: {},
   saveConsent: {},
-  saveLoc: {},
+  saveLoc: {},  saveImage: {},
+
 };
 
 const clientReducer = (state = initialState, action) => {
@@ -69,7 +70,12 @@ const clientReducer = (state = initialState, action) => {
         ...state,
         saveLoc: action.data,
       };
-
+      case actionTypes.SAVE_USER_IMAGE:
+        return {
+          ...state,
+          saveImage: action.data,
+        };
+  
     default:
       return state;
   }

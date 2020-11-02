@@ -1,7 +1,7 @@
 import { actionTypes } from "../actions/loading.action";
 
 const initialState = {
-  meta: { loading: false },
+  meta: { loading: false }
 };
 
 const loading = (state = initialState, action) => {
@@ -9,14 +9,14 @@ const loading = (state = initialState, action) => {
     case actionTypes.START_LOADING:
       return {
         meta: {
-          loading: true,
-        },
+          loading: true
+        }
       };
     case actionTypes.STOP_LOADING:
       return {
         meta: {
-          loading: false,
-        },
+          loading: false
+        }
       };
 
     default:

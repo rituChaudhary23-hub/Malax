@@ -6,7 +6,7 @@ import { fetchCategoryName } from "../../../redux/actions/global.action";
 
 import { connect } from "react-redux";
 
-class Image extends Component {
+class ClientIdentityImage extends Component {
   golbalID = 0;
   dropVal: any;
   clientImage:any;
@@ -91,7 +91,7 @@ var _sts = this;
     return (
       <Fragment>
         <Modal
-          show={this.props.imagemodal}
+          show={this.props.imageIdentitymodal}
           onHide={this.props.toggle}
           size="lg"
           className="custom-modal"
@@ -142,7 +142,7 @@ var _sts = this;
               //  disabled={this.state.fields.consentFormStatus}
               onClick={this.uploadImage}
             >
-              CurrentPhoto
+              IDPhoto
             </button>
 
             <button
@@ -174,4 +174,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Image));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ClientIdentityImage));

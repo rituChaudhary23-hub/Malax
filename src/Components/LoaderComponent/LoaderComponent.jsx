@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
 import { connect } from "react-redux";
-
 class LoaderComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   render() {
     if (this.props.loading.loading) {
       return (
@@ -21,7 +24,7 @@ class LoaderComponent extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log("state",loader)
+  console.log(">>>>>>>>>>>>>>>>>>>>>>>", state);
   return {
     loading: state.loading.meta
   };

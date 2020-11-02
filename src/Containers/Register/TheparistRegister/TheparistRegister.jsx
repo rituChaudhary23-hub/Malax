@@ -12,7 +12,7 @@ class TheparistRegister extends Component {
     super(props);
     this.state = {
       name: "UserAccountTypes",
-      CodeName: "Therapist ",
+      CodeName: "Therapist",
       fields: {
         email: "",
         password: "",
@@ -35,9 +35,10 @@ class TheparistRegister extends Component {
   }
 
   componentDidMount = async () => {
+    debugger
     var data = await this.props.fetchCategoryName(this.state.name);
     let courseData;
-
+debugger
     if (this.props.categoryName) {
       courseData = this.props.categoryName.filter(
         (item) => item.CodeName == this.state.CodeName

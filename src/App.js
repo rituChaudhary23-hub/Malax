@@ -9,7 +9,7 @@ import HomePage from "./Components/HomePage";
 import Login from "./Containers/Login/Login";
 import Register from "./Containers/Register/ClientRegister/Register";
 import ForgotPassword from "./Containers/ForgotPassword/ForgotPassword";
-import ResetPassword from "./Containers/ResetPassword/ResetPassword"
+import ResetPassword from "./Containers/ResetPassword/ResetPassword";
 import ClientProfile from "./Containers/ClientProfile/ClientProfile";
 import ServiceDetail from "./Containers/Service/ServiceDetail/ServiceDetail";
 import UpdateClientProfile from "./Containers/ClientProfile/UpdateClientProfile";
@@ -35,8 +35,8 @@ class App extends Component {
             <Route component={Register} path="/register" />
             <Route exact component={Login} path="/" />
             <Route component={ForgotPassword} path="/forgot-password" />
-            
-            <Route component={ResetPassword} path="/reset-password"/>
+
+            <Route component={ResetPassword} path="/reset-password" />
 
             <Route
               path="/client-profile"
