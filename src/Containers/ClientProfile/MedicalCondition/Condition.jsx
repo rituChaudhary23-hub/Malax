@@ -463,7 +463,7 @@ class Condition extends Component {
                                   Knees
                                 </span>
                               </label>
-                            </div>
+                            </div> 
 
                             <div className="form-check form-check-inline">
                               <label>

@@ -42,7 +42,7 @@ class App extends Component {
               path="/client-profile"
               component={ClientProfile}
               // isAuthenticated={isAuthenticated}
-              // isLoading={loading}
+              // isLoading={loading} 
             />
 
             <Route path="/confirm-email" component={ConfirmEmail} />

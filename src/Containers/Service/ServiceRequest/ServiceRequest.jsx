@@ -3,8 +3,6 @@ import { Button } from "semantic-ui-react";
 import { Dropdown, Form, Input } from "semantic-ui-react-form-validator";
 import { DateInput } from "semantic-ui-calendar-react";
 import { withRouter } from "react-router";
-import TimePicker from "react-time-picker";
-
 import { fetchClientAppointment } from "../../../redux/actions/clientSchedule.action";
 import {
   fetchCategoryName,
@@ -17,15 +15,30 @@ import { toast } from "../../../Components/Toast/Toast";
 class ServiceRequest extends Component {
   golbalID = 0;
   dropVal: any;
+  dropValcode: any;
   dropvalState: any;
+  dropvaltime: any;
+  dropvalMassage: any;
+  dropvalLocation: any;
+  dropvalLocType: any;
+  datalist:[];
   constructor(props) {
     super(props);
     this.state = {
+
+      str_code:'',
+      name: "ZipCode",
       abcGender: {
         name: "Gender",
       },
       abc: {
         name: "LocationType",
+      },
+      abcMassage: {
+        name: "MassageType",
+      },
+      abcLocation: {
+        name: "GeneralLocation",
       },
       abcState: {
         name: "State",
@@ -39,7 +52,6 @@ class ServiceRequest extends Component {
         clientId: 0,
         therapistId: 0,
         massageType: "",
-        doc_number: "",
         city: "",
         streetAddress: "",
         serviceDate: "",
@@ -65,20 +77,73 @@ class ServiceRequest extends Component {
 
   componentDidMount = async () => {
     debugger;
+    var data = await this.props.fetchCategoryName(this.state.name);
+    if (data != false) {
+      this.dropValcode = data.data.Data.globalCodeData;
+      this.datalist=data.data.Data.globalCodeData;
+      console.log('myresponse_data++++++++++++++++++', this.datalist)
+    //    for(var i=0;i<this.datalist.length;i++){
+    //     this.state.str_code=this.datalist[i].CodeName
+    //     // this.state.fields.zipCode=this.datalist[0].GlobalCodeId
+    //     // this.state.fields.zipCode=this.datalist[1].GlobalCodeId
+    //     // this.state.fields.zipCode=this.datalist[2].GlobalCodeId
+    //     console.log('id inserted ======= ',this.state.fields.zipCode)
+          
+    // }
+ 
+    }
+    //state
     var _state = await this.props.fetchCategoryName(this.state.abcState.name);
-
     if (_state) {
       debugger;
       this.dropvalState = _state.data.Data.globalCodeData;
     }
+    //gender
     var _gender = await this.props.fetchCategoryName(this.state.abcGender.name);
     if (_gender) {
       debugger;
-
       this.dropVal = _gender.data.Data.globalCodeData;
       console.log("dropVal", this.dropVal);
     }
     console.log("state", this.dropvalState);
+    //time-length
+    var _timeLength = await this.props.fetchCategoryName(
+      this.state.abcTime.name
+    );
+    if (_timeLength) {
+      debugger;
+      this.dropvaltime = _timeLength.data.Data.globalCodeData;
+      console.log("dropvaltime", this.dropvaltime);
+    }
+
+    //massage-type
+    var _massageType = await this.props.fetchCategoryName(
+      this.state.abcMassage.name
+    );
+    if (_massageType) {
+      debugger;
+      this.dropvalMassage = _massageType.data.Data.globalCodeData;
+      console.log("dropvalMassage", this.dropvalMassage);
+    }
+
+    //general-location
+    var _location = await this.props.fetchCategoryName(
+      this.state.abcLocation.name
+    );
+    if (_location) {
+      debugger;
+      this.dropvalLocation = _location.data.Data.globalCodeData;
+      console.log("dropvalLocation", this.dropvalLocation);
+    }
+
+    //loc-type
+
+    var _locType = await this.props.fetchCategoryName(this.state.abc.name);
+    if (_locType) {
+      debugger;
+      this.dropvalLocType = _locType.data.Data.globalCodeData;
+      console.log("dropvalLocType", this.dropvalLocType);
+    }
   };
 
   handleChangeDate = (event, { name, value }) => {
@@ -92,25 +157,30 @@ class ServiceRequest extends Component {
     });
   };
 
+   
+  //zipcode
+  abc =(e) => {
+    debugger
+    e.preventDefault()
+    console.log("abc---value-----", e);
+    console.log("-----ritu---------",this.state.str_code)
+ if(e.target.value=== this.state.str_code){
+alert('id mached done')
+}else{
+  alert('id not  mached done')
+}
+
+  };
+
   dropdownChange = (e, value) => {
     debugger;
-    // this.resetError(name);
-    // this.setState({ [name]: value1 });
     var InfoAs = e.target.outerText;
     var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
       .GlobalCodeId;
     this.state.fields.therapistGender = globalId;
-    // this.setState({ genderValue: value });
-
-    // this.setState((prevState) => {
-    //   let fields = Object.assign({}, prevState.fields);
-    //   fields[name] = value1;
-    //   return { fields: fields };
-    // });
   };
 
   //state
-
   selectState = (e) => {
     debugger;
     var InfoAs = e.target.outerText;
@@ -118,10 +188,52 @@ class ServiceRequest extends Component {
     var globalState = this.dropvalState.filter((x) => x.CodeName == InfoAs)[0]
       .GlobalCodeId;
     this.state.fields.state = globalState;
-    // this.setState({ state: data.value }, () => {
-    //   console.log("locationType----------", data.value);
-    // });
   };
+
+  //time-length
+  selectTimeLength = (e, data) => {
+    debugger;
+    var InfoAs = e.target.outerText;
+    debugger;
+    var globaltimeLength = this.dropvaltime.filter(
+      (x) => x.CodeName == InfoAs
+    )[0].GlobalCodeId;
+    this.state.fields.timelength = globaltimeLength;
+  };
+
+  //massage-type
+  selectMassageType = (e) => {
+    debugger;
+    var InfoAs = e.target.outerText;
+    debugger;
+    var globalMassageType = this.dropvalMassage.filter(
+      (x) => x.CodeName == InfoAs
+    )[0].GlobalCodeId;
+    this.state.fields.massageType = globalMassageType;
+  };
+
+  //general-location
+  selectLocation = (e) => {
+    debugger;
+    var InfoAs = e.target.outerText;
+    debugger;
+    var globalLocation = this.dropvalLocation.filter(
+      (x) => x.CodeName == InfoAs
+    )[0].GlobalCodeId;
+    this.state.fields.generallocation = globalLocation;
+  };
+
+  //location-type
+  selectLocType = (e) => {
+    debugger;
+    var InfoAs = e.target.outerText;
+    debugger;
+    var globalLocType = this.dropvalLocType.filter(
+      (x) => x.CodeName == InfoAs
+    )[0].GlobalCodeId;
+    this.state.fields.locationType = globalLocType;
+  };
+
   //location-type
   locType = (e, data) => {
     console.log(data.value);
@@ -137,34 +249,8 @@ class ServiceRequest extends Component {
     });
   };
 
-  //time-length
-  selectTimeLength = (e, data) => {
-    console.log(data.value);
-    console.log("---------e-------", e);
-    var InfoAs = e.target.outerText;
-    debugger;
-    var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
-      .GlobalCodeId;
-    this.state.fields.timelength = globalId;
-    this.setState({ timelength: data.value }, () => {
-      console.log("timelength----------", data.value);
-    });
-  };
-  //zipcode
-  abc = async (e) => {
-    console.log("-------zipcode -----------", e);
-    this.state.zipCode = e;
-    var data = {
-      zipCode: this.state.zipCode,
-    };
-    this.state.fields.zipCodeId = e;
-    var res = await this.props.fetchValidateZip(data);
-    if ((res = true)) {
-      toast.success("Available");
-    } else {
-      toast.error("Not Available to this area");
-    }
-  };
+
+
 
   setFormValue(field, e) {
     let fields = this.state.fields;
@@ -221,14 +307,25 @@ class ServiceRequest extends Component {
     return formIsValid;
   };
 
+  //time-to
   onChangeToTime = (time) => {
     debugger;
     // this.setState({ time });
     this.state.fields.to = time.target.value;
   };
 
+  //time-from
+  onChangeFromTime = (time) => {
+    debugger;
+    this.state.fields.from = time.target.value;
+  };
+
   render() {
     const { submitting } = this.props;
+    console.log("$$$$$$$$eeeeee$$",this.state.zipCode)
+    console.log("$$$$$$!!!!$$eeeeee$$",this.state.fields.city)
+
+
 
     const timeLengthOptions = [
       { key: "m", text: "20 minutes", value: "20 minutes" },
@@ -236,12 +333,11 @@ class ServiceRequest extends Component {
       { key: "k", text: "60 minutes", value: "60 minutes" },
     ];
     const massageOptions = [
-      { key: "r", text: "Relaxation", value: "relaxation" },
-      { key: "r", text: "Relax", value: "relax" },
+      { key: "r", text: "Relaxation", value: "Relaxation" },
     ];
 
     const locationOptions = [
-      { key: "g", text: "Town-Heights", value: "Town-Heights" },
+      { key: "g", text: " Town - Heights", value: " Town - Heights" },
       { key: "s", text: "Location 2", value: "Location 2" },
       { key: "s", text: "Location 3", value: "Location 3" },
     ];
@@ -316,14 +412,12 @@ class ServiceRequest extends Component {
                             <div className="form-group">
                               <Input
                                 className="form-control date"
-                                // value="this.state.fields.to"
                                 step="900"
                                 id="time"
                                 fullWidth={true}
                                 name="time"
                                 type="time"
                                 onChange={this.onChangeToTime}
-                                //   margin={"normal"}
                               />
                             </div>
                           </div>
@@ -333,8 +427,11 @@ class ServiceRequest extends Component {
                               <input
                                 type="time"
                                 className="form-control date"
-                                value={this.state.fields.from}
                                 step="900"
+                                id="time"
+                                fullWidth={true}
+                                name="time"
+                                onChange={this.onChangeFromTime}
                               />
                             </div>
                           </div>
@@ -345,22 +442,11 @@ class ServiceRequest extends Component {
                               <label for="usr" className="chkBox">
                                 Time length{" "}
                               </label>
-                              {/* <Dropdown
-                                options={timeLengthOptions}
-                                selection
-                                name="time"
-                                // onChange={this.dropdownChange}
-                                value={this.state.fields.timelength}
-                                validators={["required"]}
-                                errorMessages={["this field is required"]}
-                              /> */}
                               <Dropdown
                                 options={timeLengthOptions}
                                 selection
                                 placeholder="Select TimeLength"
-                                onChange={(e, data) =>
-                                  this.selectTimeLength(e, data)
-                                }
+                                onChange={this.selectTimeLength}
                               />
                               <span style={{ color: "red" }}>
                                 {this.state.errors["timelength"]}
@@ -377,11 +463,9 @@ class ServiceRequest extends Component {
                               <Dropdown
                                 options={massageOptions}
                                 selection
-                                // onChange={this.dropdownChange}
-
-                                value={this.state.fields.massageType}
-                                validators={["required"]}
-                                errorMessages={["this field is required"]}
+                                onChange={this.selectMassageType}
+                                // validators={["required"]}
+                                // errorMessages={["this field is required"]}
                               />
                             </div>
                           </div>
@@ -392,14 +476,7 @@ class ServiceRequest extends Component {
                               <label for="usr" className="chkBox">
                                 Therapist gender preference{" "}
                               </label>
-                              {/* <Dropdown
-                                options={genderOptions}
-                                selection
-                               onChange={this.dropdownChange}
-                               value={this.state.fields.therapistGender}
-                                validators={["required"]}
-                                errorMessages={["this field is required"]}
-                              /> */}
+                              {/*                          
                               <Dropdown
                                 name="info"
                                 type="submit"
@@ -411,6 +488,12 @@ class ServiceRequest extends Component {
                                 onChange={this.dropdownChange}
                                 simple
                                 item
+                              /> */}
+                              <Dropdown
+                                options={genderOptions}
+                                selection
+                                placeholder="Select"
+                                onChange={this.dropdownChange}
                               />
                             </div>
                           </div>
@@ -425,10 +508,10 @@ class ServiceRequest extends Component {
                                 className="form-control"
                                 options={locationOptions}
                                 selection
-                                // onChange={this.dropdownChange}
-                                value={this.state.fields.generallocation}
-                                validators={["required"]}
-                                errorMessages={["this field is required"]}
+                                onChange={this.selectLocation}
+                                // value={this.state.fields.generallocation}
+                                // validators={["required"]}
+                                // errorMessages={["this field is required"]}
                               />
                             </div>
                           </div>
@@ -495,27 +578,8 @@ class ServiceRequest extends Component {
                               <label for="usr" className="chkBox">
                                 State{" "}
                               </label>
-                              {/* <Dropdown
-                               
-                                name=""
-                                // onChange={this.dropdownChange}
-                                value={this.state.fields.state}
-                                validators={["required"]}
-                                errorMessages={["this field is required"]}
-                              />{" "} */}
-                              {/* <Dropdown
-                                options={stateOptions}
-                                selection
-                                placeholder="Select State"
-                                name="state"
-                                onChange={(e, data) =>
-                                  this.selectState(e, data)
-                                }
-                              />
-                              <span style={{ color: "red" }}>
-                                {this.state.errors["state"]}
-                              </span> */}
-                              <Dropdown
+                                  
+                           {/* <Dropdown
                                 name="info"
                                 type="submit"
                                 disabled={submitting}
@@ -526,6 +590,12 @@ class ServiceRequest extends Component {
                                 onChange={this.selectState}
                                 simple
                                 item
+                              /> */}
+                                <Dropdown
+                                options={stateOptions}
+                                selection
+                                placeholder="Select"
+                                onChange={this.selectState}
                               />
                             </div>
                           </div>
@@ -542,24 +612,27 @@ class ServiceRequest extends Component {
                                 fullWidth={true}
                                 name="zipCode"
                                 margin={"normal"}
+                            //  onChange={this.abc}
+                                // onChange={this.setFormValue.bind(this, "zipCode")}
+                                // value={this.state.zipCode}
                                 // onChange={this.setFormValue.bind(
                                 //   this,
                                 //   "zipCode"
                                 // )}
 
                                 onChange={(e) => {
-                                  this.abc(e.target.value);
+                                  this.abc(e);
                                 }}
-                                onKeyUp={this.setFormValue.bind(
-                                  this,
-                                  "zipCode"
-                                )}
+                                // onKeyUp={this.setFormValue.bind(
+                                //   this,
+                                //   "zipCode"
+                                // )}
                                 // value={this.state.fields.zipCode}
-                                validators={["required"]}
-                                errorMessages={[
-                                  "this field is required",
-                                  "Invalid Code",
-                                ]}
+                                // validators={["required"]}
+                                // errorMessages={[
+                                //   "this field is required",
+                                //   "Invalid Code",
+                                // ]}
                                 autoComplete="false"
                               />{" "}
                             </div>
@@ -576,7 +649,7 @@ class ServiceRequest extends Component {
                                 selection
                                 placeholder="Select Location Type"
                                 name="locationType"
-                                onChange={(e, data) => this.locType(e, data)}
+                                onChange={this.selectLocType}
 
                                 //  value={this.state.fields.locationType}
                                 // validators={["required"]}

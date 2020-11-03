@@ -1,7 +1,7 @@
 import { actionTypes } from "../actions/userList.action";
 
 const initialState = {
-  saveUser: [],
+  saveUser: {},
   forgotPassword: {},
   resetPassword: {},
 };

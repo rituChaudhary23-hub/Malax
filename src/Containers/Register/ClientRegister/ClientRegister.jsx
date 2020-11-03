@@ -27,7 +27,6 @@ class ClientRegister extends Component {
         firstName: "",
         lastName: "",
         zipCodeId: "",
-
         marketId: 0,
         accountTypeId: 0,
       },
@@ -58,8 +57,8 @@ class ClientRegister extends Component {
     if (this.handleValidation()) {
       this.state.fields.accountTypeId = this.golbalID;
       var res = await this.props.userDetail(this.state.fields);
-      var resw1= await this.props.fetchValidateZip(this.state.zipCode)
-      if (res == true&& resw1==true) {
+      // var resw1= await this.props.fetchValidateZip(this.state.zipCode)
+      if (res == true) {
         this.props.history.push("/confirm-email");
       } else {
       }
@@ -153,11 +152,12 @@ class ClientRegister extends Component {
     // this.props.fetchValidateZip(this.state.zipCode)
   }
   abc(e) {
+    debugger
     this.state.zipCode = e;
     var data = {
       zipCode: this.state.zipCode,
     };
-    this.state.fields.zipCodeId = e;
+    this.state.fields.zipCodeId = this.state.zipCode;
     this.props.fetchValidateZip(data);
   }
   handleSignupKeyup(field, e) {

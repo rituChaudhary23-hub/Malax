@@ -16,7 +16,6 @@ const globalCategory = (data) => {
 };
 //validate-zip
 const validateZip = (data) => {
-  ;
   console.log("*******", data);
   // var zipData = {
   //   zipCode: data,
