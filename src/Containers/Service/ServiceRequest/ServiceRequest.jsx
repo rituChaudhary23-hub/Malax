@@ -21,12 +21,11 @@ class ServiceRequest extends Component {
   dropvalMassage: any;
   dropvalLocation: any;
   dropvalLocType: any;
-  datalist:[];
+  datalist: [];
   constructor(props) {
     super(props);
     this.state = {
-
-      str_code:'',
+      str_code: "",
       name: "ZipCode",
       abcGender: {
         name: "Gender",
@@ -76,44 +75,26 @@ class ServiceRequest extends Component {
   }
 
   componentDidMount = async () => {
-    debugger;
     var data = await this.props.fetchCategoryName(this.state.name);
     if (data != false) {
       this.dropValcode = data.data.Data.globalCodeData;
-      this.datalist=data.data.Data.globalCodeData;
-      console.log('myresponse_data++++++++++++++++++', this.datalist)
-    //    for(var i=0;i<this.datalist.length;i++){
-    //     this.state.str_code=this.datalist[i].CodeName
-    //     // this.state.fields.zipCode=this.datalist[0].GlobalCodeId
-    //     // this.state.fields.zipCode=this.datalist[1].GlobalCodeId
-    //     // this.state.fields.zipCode=this.datalist[2].GlobalCodeId
-    //     console.log('id inserted ======= ',this.state.fields.zipCode)
-          
-    // }
- 
     }
     //state
     var _state = await this.props.fetchCategoryName(this.state.abcState.name);
     if (_state) {
-      debugger;
       this.dropvalState = _state.data.Data.globalCodeData;
     }
     //gender
     var _gender = await this.props.fetchCategoryName(this.state.abcGender.name);
     if (_gender) {
-      debugger;
       this.dropVal = _gender.data.Data.globalCodeData;
-      console.log("dropVal", this.dropVal);
     }
-    console.log("state", this.dropvalState);
     //time-length
     var _timeLength = await this.props.fetchCategoryName(
       this.state.abcTime.name
     );
     if (_timeLength) {
-      debugger;
       this.dropvaltime = _timeLength.data.Data.globalCodeData;
-      console.log("dropvaltime", this.dropvaltime);
     }
 
     //massage-type
@@ -121,9 +102,7 @@ class ServiceRequest extends Component {
       this.state.abcMassage.name
     );
     if (_massageType) {
-      debugger;
       this.dropvalMassage = _massageType.data.Data.globalCodeData;
-      console.log("dropvalMassage", this.dropvalMassage);
     }
 
     //general-location
@@ -131,24 +110,19 @@ class ServiceRequest extends Component {
       this.state.abcLocation.name
     );
     if (_location) {
-      debugger;
       this.dropvalLocation = _location.data.Data.globalCodeData;
-      console.log("dropvalLocation", this.dropvalLocation);
     }
 
     //loc-type
 
     var _locType = await this.props.fetchCategoryName(this.state.abc.name);
     if (_locType) {
-      debugger;
       this.dropvalLocType = _locType.data.Data.globalCodeData;
-      console.log("dropvalLocType", this.dropvalLocType);
     }
   };
 
   handleChangeDate = (event, { name, value }) => {
     this.resetError("serviceDate");
-
     this.setState({ [name]: value });
     this.setState((prevState) => {
       let fields = Object.assign({}, prevState.fields);
@@ -157,23 +131,18 @@ class ServiceRequest extends Component {
     });
   };
 
-   
   //zipcode
-  abc =(e) => {
-    debugger
-    e.preventDefault()
-    console.log("abc---value-----", e);
-    console.log("-----ritu---------",this.state.str_code)
- if(e.target.value=== this.state.str_code){
-alert('id mached done')
-}else{
-  alert('id not  mached done')
-}
-
+  abc = (e) => {
+    e.preventDefault();
+    var _zip = this.dropValcode.find((x) => x.CodeName == e.target.value);
+    if (_zip != undefined || _zip != null) {
+      this.state.fields.zipCode = _zip.GlobalCodeId;
+    } else {
+      toast.error("Not matched zipcode");
+    }
   };
 
   dropdownChange = (e, value) => {
-    debugger;
     var InfoAs = e.target.outerText;
     var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
       .GlobalCodeId;
@@ -182,9 +151,7 @@ alert('id mached done')
 
   //state
   selectState = (e) => {
-    debugger;
     var InfoAs = e.target.outerText;
-    debugger;
     var globalState = this.dropvalState.filter((x) => x.CodeName == InfoAs)[0]
       .GlobalCodeId;
     this.state.fields.state = globalState;
@@ -192,9 +159,7 @@ alert('id mached done')
 
   //time-length
   selectTimeLength = (e, data) => {
-    debugger;
     var InfoAs = e.target.outerText;
-    debugger;
     var globaltimeLength = this.dropvaltime.filter(
       (x) => x.CodeName == InfoAs
     )[0].GlobalCodeId;
@@ -203,9 +168,7 @@ alert('id mached done')
 
   //massage-type
   selectMassageType = (e) => {
-    debugger;
     var InfoAs = e.target.outerText;
-    debugger;
     var globalMassageType = this.dropvalMassage.filter(
       (x) => x.CodeName == InfoAs
     )[0].GlobalCodeId;
@@ -214,9 +177,7 @@ alert('id mached done')
 
   //general-location
   selectLocation = (e) => {
-    debugger;
     var InfoAs = e.target.outerText;
-    debugger;
     var globalLocation = this.dropvalLocation.filter(
       (x) => x.CodeName == InfoAs
     )[0].GlobalCodeId;
@@ -225,9 +186,7 @@ alert('id mached done')
 
   //location-type
   selectLocType = (e) => {
-    debugger;
     var InfoAs = e.target.outerText;
-    debugger;
     var globalLocType = this.dropvalLocType.filter(
       (x) => x.CodeName == InfoAs
     )[0].GlobalCodeId;
@@ -236,21 +195,12 @@ alert('id mached done')
 
   //location-type
   locType = (e, data) => {
-    console.log(data.value);
-    // this.state.fields.zipCode
-    console.log("---------e-------", e);
     var InfoAs = e.target.outerText;
-    debugger;
     var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
       .GlobalCodeId;
     this.state.fields.locationType = globalId;
-    this.setState({ locationType: data.value }, () => {
-      console.log("locationType----------", data.value);
-    });
+    this.setState({ locationType: data.value }, () => {});
   };
-
-
-
 
   setFormValue(field, e) {
     let fields = this.state.fields;
@@ -261,14 +211,11 @@ alert('id mached done')
   //appointment-submit
   submitRequest = async (e) => {
     e.preventDefault();
-    debugger;
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
-    debugger;
     if (this.validate()) {
       var res = await this.props.fetchClientAppointment(this.state.fields);
       if (res == true) {
-        console.log("res--------", res);
         this.props.history.push("/payment");
       } else {
       }
@@ -280,6 +227,7 @@ alert('id mached done')
     errors[field] = "";
     this.setState({ errors });
   };
+
   hasError = (value) => {
     let errors = this.state.errors;
     if (errors[value] !== "") {
@@ -292,6 +240,7 @@ alert('id mached done')
   cancel = () => {
     window.location.href = "/client-profile";
   };
+
   validate = () => {
     // let errors = {};
     let fields = this.state.fields;
@@ -309,24 +258,16 @@ alert('id mached done')
 
   //time-to
   onChangeToTime = (time) => {
-    debugger;
-    // this.setState({ time });
     this.state.fields.to = time.target.value;
   };
 
   //time-from
   onChangeFromTime = (time) => {
-    debugger;
     this.state.fields.from = time.target.value;
   };
 
   render() {
     const { submitting } = this.props;
-    console.log("$$$$$$$$eeeeee$$",this.state.zipCode)
-    console.log("$$$$$$!!!!$$eeeeee$$",this.state.fields.city)
-
-
-
     const timeLengthOptions = [
       { key: "m", text: "20 minutes", value: "20 minutes" },
       { key: "k", text: "40 minutes", value: "40 minutes" },
@@ -370,6 +311,7 @@ alert('id mached done')
                   <div className="thrprofileDes">
                     <Form
                       ref="form"
+                      autoComplete="off"
                       onSubmit={this.submitRequest}
                       onError={this.validate}
                     >
@@ -378,13 +320,14 @@ alert('id mached done')
                           <div className="col-sm-12">
                             <div className="form-group">
                               <label for="usr" className="chkBox">
-                                Date ashu{" "}
+                                Date{" "}
                               </label>
 
                               <DateInput
                                 className="form-control date"
                                 id="date"
                                 fullWidth={true}
+                                placeholder="Service Date"
                                 name="date"
                                 value={this.state.fields.serviceDate}
                                 dateFormat={"YYYY-MM-DD"}
@@ -416,6 +359,7 @@ alert('id mached done')
                                 id="time"
                                 fullWidth={true}
                                 name="time"
+                                placeholder="Time to"
                                 type="time"
                                 onChange={this.onChangeToTime}
                               />
@@ -463,6 +407,7 @@ alert('id mached done')
                               <Dropdown
                                 options={massageOptions}
                                 selection
+                                placeholder="Select type of Massage"
                                 onChange={this.selectMassageType}
                                 // validators={["required"]}
                                 // errorMessages={["this field is required"]}
@@ -476,23 +421,10 @@ alert('id mached done')
                               <label for="usr" className="chkBox">
                                 Therapist gender preference{" "}
                               </label>
-                              {/*                          
-                              <Dropdown
-                                name="info"
-                                type="submit"
-                                disabled={submitting}
-                                className="dropNav"
-                                text="Please Select"
-                                options={genderOptions}
-                                // value={this.state.genderValue}
-                                onChange={this.dropdownChange}
-                                simple
-                                item
-                              /> */}
                               <Dropdown
                                 options={genderOptions}
                                 selection
-                                placeholder="Select"
+                                placeholder="Select Gender"
                                 onChange={this.dropdownChange}
                               />
                             </div>
@@ -508,6 +440,7 @@ alert('id mached done')
                                 className="form-control"
                                 options={locationOptions}
                                 selection
+                                placeholder="Select General Location"
                                 onChange={this.selectLocation}
                                 // value={this.state.fields.generallocation}
                                 // validators={["required"]}
@@ -525,6 +458,7 @@ alert('id mached done')
                                 className="form-control textArea"
                                 rows="4"
                                 id="comment"
+                                placeholder="Enter your Addresas"
                                 name="address"
                                 onChange={this.setFormValue.bind(
                                   this,
@@ -555,8 +489,10 @@ alert('id mached done')
                                 id="city"
                                 fullWidth={true}
                                 name="city"
+                                autoComplete="off"
                                 margin={"normal"}
                                 type="city"
+                                placeholder="Enter your City"
                                 onChange={this.setFormValue.bind(this, "city")}
                                 value={this.state.fields.city}
                                 validators={[
@@ -578,23 +514,10 @@ alert('id mached done')
                               <label for="usr" className="chkBox">
                                 State{" "}
                               </label>
-                                  
-                           {/* <Dropdown
-                                name="info"
-                                type="submit"
-                                disabled={submitting}
-                                className="dropNav"
-                                text="Please Select"
-                                options={stateOptions}
-                                // value={this.state.genderValue}
-                                onChange={this.selectState}
-                                simple
-                                item
-                              /> */}
-                                <Dropdown
+                              <Dropdown
                                 options={stateOptions}
                                 selection
-                                placeholder="Select"
+                                placeholder="Select State"
                                 onChange={this.selectState}
                               />
                             </div>
@@ -611,28 +534,11 @@ alert('id mached done')
                                 id="zip code"
                                 fullWidth={true}
                                 name="zipCode"
+                                placeholder="Enter Your Zipcode"
                                 margin={"normal"}
-                            //  onChange={this.abc}
-                                // onChange={this.setFormValue.bind(this, "zipCode")}
-                                // value={this.state.zipCode}
-                                // onChange={this.setFormValue.bind(
-                                //   this,
-                                //   "zipCode"
-                                // )}
-
-                                onChange={(e) => {
+                                onBlur={(e) => {
                                   this.abc(e);
                                 }}
-                                // onKeyUp={this.setFormValue.bind(
-                                //   this,
-                                //   "zipCode"
-                                // )}
-                                // value={this.state.fields.zipCode}
-                                // validators={["required"]}
-                                // errorMessages={[
-                                //   "this field is required",
-                                //   "Invalid Code",
-                                // ]}
                                 autoComplete="false"
                               />{" "}
                             </div>

@@ -3,18 +3,18 @@ import { toast } from "../../Components/Toast/Toast";
 import { startLoading, stopLoading } from "./loading.action";
 
 export const actionTypes = {
-  SAVE_PERSONAL_INFO: "SAVE_PERSONAL_INFO",
+  SAVE_APPOINTMENTS: "SAVE_APPOINTMENTS",
 };
 
-export function saveUserPhone(data) {
+export function saveAppointment(data) {
   return {
-    type: actionTypes.SAVE_USER_PHONE,
+    type: actionTypes.SAVE_APPOINTMENTS,
     data: data,
   };
 }
 
 
-//add personal info
+//request-service
 export function fetchClientAppointment(data) {
   return (dispatch, getState) => {
     dispatch(startLoading());
@@ -40,6 +40,37 @@ export function fetchClientAppointment(data) {
       });
   };
 }
+
+//get-scheduled-services
+
+export function fetchScheduledAppointment(data) {
+  debugger
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientScheduleService.getClientAppointments(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          dispatch(saveAppointment(data));
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+
+
 
 //add-payment-info
 export function fetchPaymentDetails(data) {

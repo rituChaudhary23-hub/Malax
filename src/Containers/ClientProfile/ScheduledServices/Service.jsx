@@ -1,12 +1,31 @@
 import React, { Component } from "react";
 import { Table, Search, Pagination, Button, Modal } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { fetchScheduledAppointment } from "../../../redux/actions/clientSchedule.action";
 
-class Service extends Component {
+class ServiceAppointment extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      fields: {
+        clientScheduleId: 0,
+        clientId: 0,
+      },
+    };
   }
+
+  componentDidMount = async (data) => {
+
+    //  data = {
+    //   clientId: this.props.user.Data.ClientId,
+    // };
+    // this.state.fields.clientId=data
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
+    this.props.fetchScheduledAppointment(this.state.fields);
+  };
 
   render() {
     return (
@@ -84,6 +103,7 @@ class Service extends Component {
                 </div>
               </div>
             </div>
+            
           </div>
         </div>
       </section>
@@ -91,4 +111,20 @@ class Service extends Component {
   }
 }
 
-export default Service;
+const mapStateToProps = (state) => {
+  console.log("--------------state",state)
+  return {
+    user: state.user.user,
+
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchScheduledAppointment: (data) => dispatch(fetchScheduledAppointment(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ServiceAppointment)
+);

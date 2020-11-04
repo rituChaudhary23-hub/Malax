@@ -10,6 +10,12 @@ const addAppointment = (data) => {
   );
 };
 
+//get-scheduled-services
+const getClientAppointments = (data) => {
+  debugger;
+  return fetch("post", `${API_HOST}/ClientScheduleAPI/GetAppointments`, data);
+};
+
 //payment-details
 const addPaymentInfo = (data) => {
   return fetch(
@@ -22,4 +28,5 @@ const addPaymentInfo = (data) => {
 export const ClientScheduleService = {
   addAppointment,
   addPaymentInfo,
+  getClientAppointments,
 };

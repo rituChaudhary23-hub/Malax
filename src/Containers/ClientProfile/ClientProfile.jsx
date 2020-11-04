@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Header from "../../Components/Shared/Header";
 import { Tab } from "semantic-ui-react";
-import Service from "./ScheduledServices/Service";
+import ServiceAppointment from "./ScheduledServices/Service";
 import ProfileMain from "./ClientProfileMain";
 const panes = [
   {
@@ -16,7 +16,7 @@ const panes = [
     menuItem: "Scheduled Services",
     render: () => (
       <Tab.Pane attached={false}>
-        <Service />
+        <ServiceAppointment />
       </Tab.Pane>
     ),
   },

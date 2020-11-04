@@ -1,17 +1,17 @@
 import { actionTypes } from "../actions/clientSchedule.action";
 
 const initialState = {
-  saveLoc: {},
+  getAppointment: {},
 };
 
 const clientScheduleReducer = (state = initialState, action) => {
   console.log(action);
   switch (action.type) {
-  
-    case actionTypes.SAVE_LOCATION:
+    
+    case actionTypes.SAVE_APPOINTMENTS:
       return {
         ...state,
-        saveLoc: action.data,
+        getAppointment: action.data,
       };
 
     default:
