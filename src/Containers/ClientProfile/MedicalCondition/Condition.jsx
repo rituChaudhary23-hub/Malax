@@ -1,14 +1,23 @@
+/* eslint-disable no-unused-expressions */
 import React, { Component } from "react";
 import { Form, TextArea, Button } from "semantic-ui-react";
 import { Field } from "redux-form";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import { fetchCategoryName } from "../../../redux/actions/global.action";
 import { fetchUserMedicalCondition } from "../../../redux/actions/client.action";
 
 class Condition extends Component {
+  dropVal: any;
+  // _data=['rgerg','regergerg','ergerg'];
+  _data: any;
   constructor(props) {
     super(props);
     this.state = {
+      name: "MedicalConditions",
+      abc: {
+        name: "MedicalConditionsAreas",
+      },
       fields: {
         clientMedicalConditionId: 0,
         clientId: 0,
@@ -22,6 +31,23 @@ class Condition extends Component {
       },
     };
   }
+
+  componentWillMount = async () => {
+    debugger;
+    var data = await this.props.fetchCategoryName(this.state.name);
+    debugger;
+    if (data != false) {
+      this.dropVal = data.data.Data.globalCodeData;
+    }
+    console.log("dropVal condiiton", this.dropVal);
+    this._data = [];
+    this.dropVal.forEach((element) => {
+      this._data.push({ checkBox: element.CodeName });
+    });
+    console.log("Mydata", this._data);
+  };
+
+
   back() {
     window.location.href = "/update-client-profile";
   }
@@ -37,34 +63,13 @@ class Condition extends Component {
         alert(count);
       }
     }
-
-    // onSelectPermissions = (e, title, id) => {
-    //   let permissions = [...this.state.permissions];
-    //   if (e.target.checked) {
-    //     permissions.push(id);
-    //     this.setState({ permissions: permissions });
-    //   } else {
-    //     for (var i = 0; i < permissions.length; i++) {
-    //       if (permissions[i] == id) {
-    //         permissions.splice(i, 1);
-    //       }
-    //     }
-    //     this.setState({ permissions: permissions });
-    //   }
-    // };
-
-    // var fields = "input[name='list']".serializeArray();
-    // if (fields.length == 0) {
-    //   alert("nothing selected");
-    //   // cancel submit
-    //   return false;
-    // } else {
-    //   alert(fields.length + " items selected");
-    // }
   };
 
   render() {
+    debugger;
     const { submitting } = this.props;
+    console.log("----Checkbox----",this._data)
+
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -91,23 +96,28 @@ class Condition extends Component {
                             onSubmit={this.saveCondition}
                             onError={this.handleValidation}
                           >
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  name="list"
-                                  id="chk_red"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red"
-                                >
-                                  Arthritis
-                                </span>
-                              </label>
-                            </div>
-                            <div className="form-check form-check-inline">
+                              {this._data &&
+                                this._data.forEach((element) => {
+                                debugger;
+                                  <div className="form-check form-check-inline">
+                                    <label>
+                                      <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        name="list"
+                                        id="chk_red"
+                                        // value={element.checkBox}
+                                      />
+                                      <span
+                                        className="form-check-label"
+                                        for="chk_red"
+                                      >
+                                        {element.checkBox}
+                                      </span>
+                                    </label>
+                                  </div>;
+                                })}
+                            {/* <div className="form-check form-check-inline">
                               <label>
                                 <input
                                   className="form-check-input"
@@ -344,7 +354,7 @@ class Condition extends Component {
                                   None of the above
                                 </span>
                               </label>
-                            </div>
+                            </div> */}
                           </Form>
                         </div>
 
@@ -463,7 +473,7 @@ class Condition extends Component {
                                   Knees
                                 </span>
                               </label>
-                            </div> 
+                            </div>
 
                             <div className="form-check form-check-inline">
                               <label>
@@ -542,6 +552,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchUserMedicalCondition: (data) =>
       dispatch(fetchUserMedicalCondition(data)),
+    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
   };
 };
 

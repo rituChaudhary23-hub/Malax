@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Search, Pagination, Button, Modal } from "semantic-ui-react";
+import { Table, Search, Pagination, Button, Modal, ItemMeta } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
@@ -17,17 +17,13 @@ class ServiceAppointment extends Component {
   }
 
   componentDidMount = async (data) => {
-
-    //  data = {
-    //   clientId: this.props.user.Data.ClientId,
-    // };
-    // this.state.fields.clientId=data
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
     this.props.fetchScheduledAppointment(this.state.fields);
   };
 
   render() {
+    console.log("----------ritu------",this.props.getAppointment.data);
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -48,56 +44,24 @@ class ServiceAppointment extends Component {
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                      <Table.Row>
-                        <Table.Cell>07-20-2020</Table.Cell>
-                        <Table.Cell>11:00 Am</Table.Cell>
-                        <Table.Cell>New York, NY 10001</Table.Cell>
+                    {this.props.getAppointment.data && this.props.getAppointment.data.Data.AllClientAppointments.map((item, index) => (
+                      <Table.Row key={index}>                     
+                        <Table.Cell>
+                          {item.ServiceDate}
+                        </Table.Cell>
+                        <Table.Cell>{item.From}</Table.Cell>
+                        <Table.Cell>
+                       {item.StreetAddress} ,{item.ZipCode}
+                        </Table.Cell>
                         <Table.Cell>John Warner</Table.Cell>
                         <Table.Cell>
                           <Link to="/theparist-detail"> Requested</Link>
                         </Table.Cell>
                         <Table.Cell>EDIT/DELETE</Table.Cell>
                       </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>07-20-2020</Table.Cell>
-                        <Table.Cell>11:00 Am</Table.Cell>
-                        <Table.Cell>New York, NY 10001</Table.Cell>
-                        <Table.Cell>John Warner</Table.Cell>
-                        <Table.Cell>
-                          <Link to="/theparist-detail"> Requested</Link>
-                        </Table.Cell>
-                        <Table.Cell>EDIT/DELETE</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>07-20-2020</Table.Cell>
-                        <Table.Cell>11:00 Am</Table.Cell>
-                        <Table.Cell>New York, NY 10001</Table.Cell>
-                        <Table.Cell>John Warner</Table.Cell>
-                        <Table.Cell>
-                          <Link to="/theparist-detail"> Requested</Link>
-                        </Table.Cell>
-                        <Table.Cell>EDIT/DELETE</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>07-20-2020</Table.Cell>
-                        <Table.Cell>11:00 Am</Table.Cell>
-                        <Table.Cell>New York, NY 10001</Table.Cell>
-                        <Table.Cell>John Warner</Table.Cell>
-                        <Table.Cell>
-                          <Link to="/theparist-detail"> Requested</Link>
-                        </Table.Cell>
-                        <Table.Cell>EDIT/DELETE</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>07-20-2020</Table.Cell>
-                        <Table.Cell>11:00 Am</Table.Cell>
-                        <Table.Cell>New York, NY 10001</Table.Cell>
-                        <Table.Cell>John Warner</Table.Cell>
-                        <Table.Cell>
-                          <Link to="/theparist-detail"> Requested</Link>
-                        </Table.Cell>
-                        <Table.Cell>EDIT/DELETE</Table.Cell>
-                      </Table.Row>
+                       ))}
+                     
+             
                     </Table.Body>
                   </Table>
                 </div>
@@ -115,6 +79,7 @@ const mapStateToProps = (state) => {
   console.log("--------------state",state)
   return {
     user: state.user.user,
+    getAppointment:state.clientScheduleReducer.getAppointment
 
   };
 };
