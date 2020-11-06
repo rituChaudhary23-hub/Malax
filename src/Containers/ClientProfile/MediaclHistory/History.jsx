@@ -48,6 +48,7 @@ class History extends Component {
     var data1 = this.props.user.Data.ClientId;
     this.state.clientId = data1;
     this.props.getUserHistory(data1);
+    
   };
 
   setFormValue(field, e) {

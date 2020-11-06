@@ -13,6 +13,7 @@ export const actionTypes = {
   SAVE_CONSENT: "SAVE_CONSENT",
   SAVE_LOCATION: "SAVE_LOCATION",
   SAVE_USER_IMAGE: "SAVE_USER_IMAGE",
+  SAVE_CONDITION_DATA:"SAVE_CONDITION_DATA"
 };
 
 export function saveUserId(data) {
@@ -82,6 +83,13 @@ export function saveInfo(data) {
   };
 }
 
+
+export function saveConditionData(data) {
+  return {
+    type: actionTypes.SAVE_CONDITION_DATA,
+    data: data,
+  };
+}
 export function saveUserHistory(data) {
   return {
     type: actionTypes.SAVE_USER_HISTORY,
@@ -89,12 +97,6 @@ export function saveUserHistory(data) {
   };
 }
 
-export function saveUserCondition(data) {
-  return {
-    type: actionTypes.SAVE_USER_CONDITION,
-    data: data,
-  };
-}
 
 //get email id
 export function fetchUserEmail(data) {
@@ -407,16 +409,93 @@ export function fetchUserMedicalCondition(data) {
     let state = getState();
     return ClientService.medicalConditionApi(data, {
       jwt: state["persist"]["c_temp_user"]["token"],
+    }).then(async (data) => {
+      dispatch(stopLoading());
+      if (data.data.Success) {
+        toast.success(data["data"]["Message"]);
+
+        return true;
+      } else {
+        toast.error(data.data.Message);
+        return false;
+      }
+    });
+  };
+}
+
+
+//massage-prefernce
+export function fetchUserMassagePrefernce(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientService.addMassageApi(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    }).then(async (data) => {
+      dispatch(stopLoading());
+      if (data.data.Success) {
+        toast.success(data["data"]["Message"]);
+
+        return true;
+      } else {
+        toast.error(data.data.Message);
+        return false;
+      }
+    });
+  };
+}
+//get-medical-conditions'
+export function getConditionInfo(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientService.getMedicalCondition(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
     })
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          dispatch(saveUserCondition(data));
-          toast.success(data["data"]["Message"]);
+          debugger;
+           dispatch(saveConditionData(data));
+          // toast.success(data["data"]["Message"]);
 
           return true;
         } else {
-          toast.error(data.data.Message);
+          // toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+
+//get-massage-preferences
+
+export function getMassageInfo(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientService.getMassageSelected(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          debugger;
+          // dispatch(savePersonalInfo(data));
+          // toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          // toast.error(data.data.Message);
           return false;
         }
       })
@@ -453,7 +532,7 @@ export function fetchClientLoc(data) {
       })
       .catch((error) => {
         if (error) {
-          toast.error(error["data"]["data"]["Message"]);
+          toast.error(error["data"]["Message"]);
         }
         dispatch(stopLoading());
       });

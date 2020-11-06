@@ -5,16 +5,24 @@ import { Field } from "redux-form";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { fetchCategoryName } from "../../../redux/actions/global.action";
-import { fetchUserMedicalCondition } from "../../../redux/actions/client.action";
+import {
+  fetchUserMedicalCondition,
+  getConditionInfo,
+} from "../../../redux/actions/client.action";
 
 class Condition extends Component {
   dropVal: any;
-  // _data=['rgerg','regergerg','ergerg'];
+  dropvalArea: any;
   _data: any;
+  _areaData: any;
   constructor(props) {
     super(props);
     this.state = {
+      clientId: 0,
+
       name: "MedicalConditions",
+      mycheckbox_data: [],
+      areaCheckbox_data: [],
       abc: {
         name: "MedicalConditionsAreas",
       },
@@ -22,31 +30,58 @@ class Condition extends Component {
         clientMedicalConditionId: 0,
         clientId: 0,
         healthConcerns: "",
-        medicalConditionRequest: [
-          {
-            medicalConditionId: 0,
-          },
-        ],
+        medicalConditionRequest: [],
         actionBy: "",
       },
     };
   }
 
   componentWillMount = async () => {
+//get-condition
+var data1 = this.props.user.Data.ClientId;
+this.state.clientId = data1;
+this.props.getConditionInfo(data1);
+
+
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
     debugger;
     var data = await this.props.fetchCategoryName(this.state.name);
     debugger;
     if (data != false) {
       this.dropVal = data.data.Data.globalCodeData;
     }
-    console.log("dropVal condiiton", this.dropVal);
     this._data = [];
     this.dropVal.forEach((element) => {
-      this._data.push({ checkBox: element.CodeName });
+      this._data.push({
+        checkBox: element.CodeName,
+        GlobalCodeId: element.GlobalCodeId,
+      });
     });
-    console.log("Mydata", this._data);
-  };
+    var data_check = this._data;
+    this.setState({
+      mycheckbox_data: data_check,
+    });
 
+    //areas checkbox
+    var _areaCheck = await this.props.fetchCategoryName(this.state.abc.name);
+    if (_areaCheck) {
+      this.dropvalArea = _areaCheck.data.Data.globalCodeData;
+    }
+    this._areaData = [];
+    this.dropvalArea.forEach((element) => {
+      this._areaData.push({
+        checkBox: element.CodeName,
+        GlobalCodeId: element.GlobalCodeId,
+      });
+    });
+    var areaData_check = this._areaData;
+    this.setState({
+      areaCheckbox_data: areaData_check,
+    });
+
+
+  };
 
   back() {
     window.location.href = "/update-client-profile";
@@ -59,16 +94,34 @@ class Condition extends Component {
     for (var i = 0; i < inputElems.length; i++) {
       if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
         count++;
-
-        alert(count);
+        this.props.fetchUserMedicalCondition(this.state.fields);
       }
     }
   };
 
+  setFormValue(field, e) {
+    let fields = this.state.fields;
+    fields[field] = e.target.value;
+    this.setState({ fields });
+  }
+
+  //medical-condition
+  medicalCondition = (e) => {
+    this.state.fields.medicalConditionRequest.push({
+      medicalConditionId: parseInt(e.target.id),
+    });
+  };
+
+  medicalAreaCondition = (e) => {
+    this.state.fields.medicalConditionRequest.push({
+      medicalConditionId: parseInt(e.target.id),
+    });
+  };
+
   render() {
-    debugger;
     const { submitting } = this.props;
-    console.log("----Checkbox----",this._data)
+    this._areaData = this.state.areaCheckbox_data;
+  console.log("get-condition",this.props.MedicalCondition)
 
     return (
       <section className="therapistProDes">
@@ -93,268 +146,38 @@ class Condition extends Component {
                           <Form
                             ref="form"
                             autocomplete="off"
-                            onSubmit={this.saveCondition}
+                            // onSubmit={this.saveCondition}
                             onError={this.handleValidation}
                           >
-                              {this._data &&
-                                this._data.forEach((element) => {
-                                debugger;
-                                  <div className="form-check form-check-inline">
+                            {/* {this.props.MedicalCondition.data && this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses || this.state.mycheckbox_data && */}
+                           
+                            {this.state.mycheckbox_data &&
+                           
+                              this.state.mycheckbox_data.map((item, index) => {
+                                return (
+                                  <div
+                                    key={index}
+                                    className="form-check form-check-inline"
+                                  >
                                     <label>
                                       <input
                                         className="form-check-input"
                                         type="checkbox"
                                         name="list"
-                                        id="chk_red"
-                                        // value={element.checkBox}
+                                        id={item.GlobalCodeId}
+                                        value={item.checkBox}
+                                        onChange={this.medicalCondition}
                                       />
                                       <span
                                         className="form-check-label"
                                         for="chk_red"
                                       >
-                                        {element.checkBox}
+                                        {item.checkBox}
                                       </span>
                                     </label>
-                                  </div>;
-                                })}
-                            {/* <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  name="list"
-                                  id="chk_green"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_green"
-                                >
-                                  Bursitis
-                                </span>
-                              </label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_green1"
-                                  name="list"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_blue"
-                                >
-                                  Headaches
-                                </span>
-                              </label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red1"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red1"
-                                >
-                                  Swollen joints
-                                </span>
-                              </label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_green2"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_green1"
-                                >
-                                  Fibromyalgia
-                                </span>
-                              </label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_blue1"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_blue1"
-                                >
-                                  High blood pressure
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red2"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Low blood pressure
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red3"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Warts
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red4"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Stroke
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red5"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Chest pain
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red6"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Seizures / convulsions
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red7"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Constipation
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red8"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Vericose veins
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red9"
-                                />{" "}
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Cancer
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red12"
-                                />{" "}
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Skin conditions
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_red22"
-                                  name="list"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  None of the above
-                                </span>
-                              </label>
-                            </div> */}
+                                  </div>
+                                );
+                              })}
                           </Form>
                         </div>
 
@@ -363,134 +186,28 @@ class Condition extends Component {
                         </h5>
                         <div className="thrChkBox graybg">
                           <Form>
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_redd"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red"
-                                >
-                                  Head / Neck
-                                </span>
-                              </label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_green9"
-                                  name="list"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_green"
-                                >
-                                  Arms
-                                </span>
-                              </label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_blue9"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_blue"
-                                >
-                                  Shoulders
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_blue11"
-                                />{" "}
-                                <span
-                                  className="form-check-label"
-                                  for="chk_blue11"
-                                >
-                                  Hands
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_bluee"
-                                  name="list"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Hips
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_bluue"
-                                />{" "}
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Legs
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_bblue"
-                                />{" "}
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  Knees
-                                </span>
-                              </label>
-                            </div>
-
-                            <div className="form-check form-check-inline">
-                              <label>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="chk_blue15"
-                                  name="list"
-                                />
-                                <span
-                                  className="form-check-label"
-                                  for="chk_red2"
-                                >
-                                  None of the above
-                                </span>
-                              </label>
-                            </div>
+                            {this._areaData &&
+                              this._areaData.map((item, index) => {
+                                return (
+                                  <div className="form-check form-check-inline">
+                                    <label>
+                                      <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id={item.GlobalCodeId}
+                                        value={item.checkBox}
+                                        onChange={this.medicalAreaCondition}
+                                      />
+                                      <span
+                                        className="form-check-label"
+                                        for="chk_red"
+                                      >
+                                        {item.checkBox}
+                                      </span>
+                                    </label>
+                                  </div>
+                                );
+                              })}
                           </Form>
                         </div>
 
@@ -505,6 +222,13 @@ class Condition extends Component {
                                   className="form-control textArea"
                                   rows="6"
                                   id="comment"
+                                  value={this.state.fields.healthConcerns}
+                                  placeholder=" Any other health concerns"
+                                  onChange={this.setFormValue.bind(
+                                    this,
+                                    "healthConcerns"
+                                  )}
+                                  autoComplete="false"
                                 ></textarea>
                               </div>
                             </div>
@@ -544,7 +268,8 @@ class Condition extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    saveConsent: state.clientReducer.saveConsent,
+    user: state.user.user,
+    MedicalCondition:state.clientReducer.saveCondition
   };
 };
 
@@ -553,6 +278,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchUserMedicalCondition: (data) =>
       dispatch(fetchUserMedicalCondition(data)),
     fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+    getConditionInfo: (data) => dispatch(getConditionInfo(data)),
   };
 };
 
