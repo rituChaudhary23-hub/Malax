@@ -5,7 +5,10 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { fetchCategoryName } from "../../../redux/actions/global.action";
 
-import { fetchUserMassagePrefernce } from "../../../redux/actions/client.action";
+import {
+  fetchUserMassagePrefernce,
+  getMassageInfo,
+} from "../../../redux/actions/client.action";
 
 class Massage extends Component {
   dropVal: any;
@@ -15,8 +18,10 @@ class Massage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      clientId: 0,
       name: "TypePerferred",
       mycheckbox_data: [],
+      myStatus: [],
       abc: {
         name: "Gender",
       },
@@ -37,6 +42,11 @@ class Massage extends Component {
   }
 
   componentWillMount = async () => {
+    var data2 = this.props.user.Data.ClientId;
+    this.state.clientId = data2;
+    var res = await this.props.getMassageInfo(data2);
+
+    //fields data
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
 
@@ -63,11 +73,26 @@ class Massage extends Component {
       this._data.push({
         checkBox: element.CodeName,
         GlobalCodeId: element.GlobalCodeId,
+        status: false,
       });
     });
-    console.log("Mydata", this._data);
+    // console.log("Mydata", this._data);
+    // var data_check = this._data;
+    // console.log("------data new----", data_check);
+
     var data_check = this._data;
-    console.log("------data new----", data_check);
+    data_check.forEach((element) => {
+      // this.props.massageRes.data.Data.TypePerferred.forEach(
+      //   (ele) => {
+      //     debugger
+      //     if (ele.globalCodeId == element.GlobalCodeId) {
+      //       debugger;
+      //       element.status = true;
+      //     }
+      //   }
+      // );
+    });
+
     this.setState({
       mycheckbox_data: data_check,
     });
@@ -78,11 +103,24 @@ class Massage extends Component {
   };
 
   MassageSelected = (e) => {
-    console.log("$$$$$---", e.target.value);
-    console.log("ID----", e.target.id);
-    this.state.fields.typePerferred.push({
-      globalCodeId: parseInt(e.target.id),
-    });
+    debugger;
+    console.log("check_value", e.target.checked);
+    this.state.mycheckbox_data.filter(
+      (x) => x.GlobalCodeId == parseInt(e.target.id)
+    )[0].status = e.target.checked;
+    this.setState({ myStatus: this.state.mycheckbox_data });
+    if (e.target.checked == true) {
+      this.state.fields.typePerferred.push({
+        globalCodeId: parseInt(e.target.id),
+      });
+    }
+    //  document.getElementById(e.target.id).checked = e.target.checked;
+    if (e.target.checked == false) {
+      document.getElementById(e.target.id).removeAttribute("checked");
+    } else {
+      document.getElementById(e.target.id).setAttribute("checked", "true");
+    }
+    console.log("asdsdadd", this.state.mycheckbox_data);
   };
 
   saveMassage = () => {
@@ -121,6 +159,7 @@ class Massage extends Component {
   }
 
   render() {
+    console.log("Massage-info-----------", this.props.massageRes);
     console.log("mycheckbox_data", this.state.mycheckbox_data);
     const genderOptions = [
       { key: "u", text: "Male", value: "Male" },
@@ -162,6 +201,7 @@ class Massage extends Component {
                                 id={item.GlobalCodeId}
                                 value={item.checkBox}
                                 onChange={this.MassageSelected}
+                                checked={item.status}
                               />
                               <span className="form-check-label" for="chk_red">
                                 {item.checkBox}
@@ -200,23 +240,33 @@ class Massage extends Component {
                         <h5>Goals</h5>
                         <TextArea
                           placeholder="Write your Goals"
+                          type="Text"
+                          // value={
+                          //   this.props.massageRes.data &&
+                          //   this.props.massageRes.data.Data
+                          //     ? this.props.massageRes.data.Data.Goals
+                          //     : this.state.fields.goals
+                          // }
                           value={this.state.fields.goals}
-                          onChange={this.setFormValue.bind(
-                            this,
-                            "goals"
-                          )}
+                          onChange={this.setFormValue.bind(this, "goals")}
                         />
                       </div>
                       <div>
                         {" "}
                         <h5>General information for therapist</h5>
-                        <TextArea placeholder="" 
-                        value = {this.state.fields.informationForTherapist}
-                        onChange={this.setFormValue.bind(
-                          this,"informationForTherapist"
-                        )}
+                        <TextArea
+                          placeholder=""
+                          value={
+                            this.props.massageRes.data
+                              ? this.props.massageRes.data.Data
+                                  .InformationForTherapist
+                              : this.state.fields.informationForTherapist
+                          }
+                          onChange={this.setFormValue.bind(
+                            this,
+                            "informationForTherapist"
+                          )}
                         />
-                      
                       </div>
                     </div>
                   </div>
@@ -258,12 +308,14 @@ class Massage extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
+    massageRes: state.clientReducer.saveMassage,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+    getMassageInfo: (data) => dispatch(getMassageInfo(data)),
     fetchUserMassagePrefernce: (data) =>
       dispatch(fetchUserMassagePrefernce(data)),
   };

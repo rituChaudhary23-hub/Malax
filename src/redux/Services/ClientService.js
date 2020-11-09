@@ -75,6 +75,7 @@ const getMedicalCondition = (data) => {
   );
 };
 
+
 //get-massage-pref
 const getMassageSelected = (data) => {
   debugger

@@ -19,9 +19,11 @@ class Condition extends Component {
     super(props);
     this.state = {
       clientId: 0,
-
+      myStatus: [],
+      myAreaStatus:[],
       name: "MedicalConditions",
       mycheckbox_data: [],
+      my_checkBox: false,
       areaCheckbox_data: [],
       abc: {
         name: "MedicalConditionsAreas",
@@ -37,12 +39,13 @@ class Condition extends Component {
   }
 
   componentWillMount = async () => {
-//get-condition
-var data1 = this.props.user.Data.ClientId;
-this.state.clientId = data1;
-this.props.getConditionInfo(data1);
+    //get-condition
+    debugger;
+    var data1 = this.props.user.Data.ClientId;
+    this.state.clientId = data1;
+    var res = await this.props.getConditionInfo(data1);
 
-
+    //fields data
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
     debugger;
@@ -56,9 +59,20 @@ this.props.getConditionInfo(data1);
       this._data.push({
         checkBox: element.CodeName,
         GlobalCodeId: element.GlobalCodeId,
+        status: false,
       });
     });
     var data_check = this._data;
+    data_check.forEach((element) => {
+      this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses.forEach(
+        (ele) => {
+          if (ele.MedicalConditionId == element.GlobalCodeId) {
+            debugger;
+            element.status = true;
+          }
+        }
+      );
+    });
     this.setState({
       mycheckbox_data: data_check,
     });
@@ -73,14 +87,30 @@ this.props.getConditionInfo(data1);
       this._areaData.push({
         checkBox: element.CodeName,
         GlobalCodeId: element.GlobalCodeId,
+        status: false,
       });
     });
+
+
     var areaData_check = this._areaData;
+    areaData_check.forEach((element) => {
+      this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses.forEach(
+        (ele) => {
+          if (ele.MedicalConditionId == element.GlobalCodeId) {
+            debugger;
+            element.status = true;
+          }
+        }
+      );
+    });
+
     this.setState({
       areaCheckbox_data: areaData_check,
     });
 
-
+    debugger;
+    console.log("mydata", this.state.mycheckbox_data);
+    // this.setState({status})
   };
 
   back() {
@@ -94,9 +124,12 @@ this.props.getConditionInfo(data1);
     for (var i = 0; i < inputElems.length; i++) {
       if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
         count++;
-        this.props.fetchUserMedicalCondition(this.state.fields);
+        alert(count)
       }
+    
     }
+    this.props.fetchUserMedicalCondition(this.state.fields);
+
   };
 
   setFormValue(field, e) {
@@ -107,22 +140,52 @@ this.props.getConditionInfo(data1);
 
   //medical-condition
   medicalCondition = (e) => {
-    this.state.fields.medicalConditionRequest.push({
-      medicalConditionId: parseInt(e.target.id),
-    });
+    debugger;
+    console.log("check_value", e.target.checked);
+    this.state.mycheckbox_data.filter(
+      (x) => x.GlobalCodeId == parseInt(e.target.id)
+    )[0].status = e.target.checked;
+    this.setState({ myStatus: this.state.mycheckbox_data });
+    if (e.target.checked == true) {
+      this.state.fields.medicalConditionRequest.push({
+        medicalConditionId: parseInt(e.target.id),
+        
+      });
+    }
+    //  document.getElementById(e.target.id).checked = e.target.checked;
+    if (e.target.checked == false) {
+      document.getElementById(e.target.id).removeAttribute("checked");
+    } else {
+      document.getElementById(e.target.id).setAttribute("checked", "true");
+    }
+    console.log("asdsdadd", this.state.mycheckbox_data);
   };
 
   medicalAreaCondition = (e) => {
-    this.state.fields.medicalConditionRequest.push({
-      medicalConditionId: parseInt(e.target.id),
-    });
+    this._areaData.filter(
+      (x) => x.GlobalCodeId == parseInt(e.target.id)
+    )[0].status = e.target.checked;
+    this.setState({myAreaStatus:this._areaData})
+    if(e.target.checked==true){
+      this.state.fields.medicalConditionRequest.push({
+        medicalConditionId: parseInt(e.target.id),
+      });
+    }
+    if (e.target.checked == false) {
+      document.getElementById(e.target.id).removeAttribute("checked");
+    } else {
+      document.getElementById(e.target.id).setAttribute("checked", "true");
+    }
+    console.log("areaaaa-----------", this._areaData);
+  
   };
 
   render() {
     const { submitting } = this.props;
     this._areaData = this.state.areaCheckbox_data;
-  console.log("get-condition",this.props.MedicalCondition)
-
+    console.log("get-condition", this.props.MedicalCondition);
+    console.log("ritu******", this.state.mycheckbox_data);
+    console.log("Ashu$$$$$$$$----", this.state.myStatus);
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -146,13 +209,9 @@ this.props.getConditionInfo(data1);
                           <Form
                             ref="form"
                             autocomplete="off"
-                            // onSubmit={this.saveCondition}
                             onError={this.handleValidation}
                           >
-                            {/* {this.props.MedicalCondition.data && this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses || this.state.mycheckbox_data && */}
-                           
                             {this.state.mycheckbox_data &&
-                           
                               this.state.mycheckbox_data.map((item, index) => {
                                 return (
                                   <div
@@ -167,7 +226,9 @@ this.props.getConditionInfo(data1);
                                         id={item.GlobalCodeId}
                                         value={item.checkBox}
                                         onChange={this.medicalCondition}
+                                        checked={item.status}
                                       />
+
                                       <span
                                         className="form-check-label"
                                         for="chk_red"
@@ -197,6 +258,7 @@ this.props.getConditionInfo(data1);
                                         id={item.GlobalCodeId}
                                         value={item.checkBox}
                                         onChange={this.medicalAreaCondition}
+                                        checked={item.status}
                                       />
                                       <span
                                         className="form-check-label"
@@ -269,7 +331,7 @@ this.props.getConditionInfo(data1);
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
-    MedicalCondition:state.clientReducer.saveCondition
+    MedicalCondition: state.clientReducer.saveCondition,
   };
 };
 

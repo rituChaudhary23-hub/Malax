@@ -265,7 +265,7 @@ class PersonalInfo extends Component {
                                           : this.state.fields.birthDate
                                       }
                                       // value={this.state.fields.birthDate}
-                                      dateFormat={"YYYY-MM-DD"}
+                                      dateFormat={"MM-DD-YYYY"}
                                       maxDate={maxdate}
                                       onChange={this.handleChangeDate}
                                     />

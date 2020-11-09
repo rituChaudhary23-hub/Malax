@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Table, Search, Pagination, Button, Modal, ItemMeta } from "semantic-ui-react";
+import {
+  Table,
+  Search,
+  Pagination,
+  Button,
+  Modal,
+  ItemMeta,
+} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
@@ -23,7 +30,7 @@ class ServiceAppointment extends Component {
   };
 
   render() {
-    console.log("----------ritu------",this.props.getAppointment.data);
+    console.log("----------ritu------", this.props.getAppointment.data);
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -44,30 +51,36 @@ class ServiceAppointment extends Component {
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                    {this.props.getAppointment.data && this.props.getAppointment.data.Data.AllClientAppointments.map((item, index) => (
-                      <Table.Row key={index}>                     
-                        <Table.Cell>
-                          {item.ServiceDate}
-                        </Table.Cell>
-                        <Table.Cell>{item.From}</Table.Cell>
-                        <Table.Cell>
-                       {item.StreetAddress} ,{item.ZipCode}
-                        </Table.Cell>
-                        <Table.Cell>John Warner</Table.Cell>
-                        <Table.Cell>
-                          <Link to="/theparist-detail"> Requested</Link>
-                        </Table.Cell>
-                        <Table.Cell>EDIT/DELETE</Table.Cell>
-                      </Table.Row>
-                       ))}
-                     
-             
+                      {this.props.getAppointment.data &&
+                        this.props.getAppointment.data.Data.AllClientAppointments.map(
+                          (item, index) => (
+                            <Table.Row key={index}>
+                              <Table.Cell>{item.ServiceDate}</Table.Cell>
+                              <Table.Cell>{item.From}</Table.Cell>
+                              <Table.Cell>
+                                {item.StreetAddress} ,{item.ZipCode}
+                              </Table.Cell>
+                              <Table.Cell>None</Table.Cell>
+                              <Table.Cell>
+                                <Link to="/theparist-detail">
+                                  {" "}
+                                  {item.Status.CodeName}
+                                </Link>
+                              </Table.Cell>
+                              <Table.Cell>
+                                <Button>Edit</Button>
+                              </Table.Cell>
+                              <Table.Cell>
+                                <Button>DELETE</Button>
+                              </Table.Cell>
+                            </Table.Row>
+                          )
+                        )}
                     </Table.Body>
                   </Table>
                 </div>
               </div>
             </div>
-            
           </div>
         </div>
       </section>
@@ -76,17 +89,17 @@ class ServiceAppointment extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("--------------state",state)
+  console.log("--------------state", state);
   return {
     user: state.user.user,
-    getAppointment:state.clientScheduleReducer.getAppointment
-
+    getAppointment: state.clientScheduleReducer.getAppointment,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchScheduledAppointment: (data) => dispatch(fetchScheduledAppointment(data)),
+    fetchScheduledAppointment: (data) =>
+      dispatch(fetchScheduledAppointment(data)),
   };
 };
 

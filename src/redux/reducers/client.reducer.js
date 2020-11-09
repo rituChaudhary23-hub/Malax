@@ -10,9 +10,9 @@ const initialState = {
   saveData: {},
   saveMedicalData: {},
   saveConsent: {},
-  saveLoc: {},  saveImage: {},
-  
-
+  saveLoc: {},
+  saveImage: {},
+  saveMassage: {},
 };
 
 const clientReducer = (state = initialState, action) => {
@@ -49,6 +49,13 @@ const clientReducer = (state = initialState, action) => {
         ...state,
         saveCondition: action.data,
       };
+
+    case actionTypes.SAVE_MASSAGE_DATA:
+      return {
+        ...state,
+        saveMassage: action.data,
+      };
+
     case actionTypes.SAVE_PERSONAL_INFO:
       return {
         ...state,
@@ -71,12 +78,12 @@ const clientReducer = (state = initialState, action) => {
         ...state,
         saveLoc: action.data,
       };
-      case actionTypes.SAVE_USER_IMAGE:
-        return {
-          ...state,
-          saveImage: action.data,
-        };
-  
+    case actionTypes.SAVE_USER_IMAGE:
+      return {
+        ...state,
+        saveImage: action.data,
+      };
+
     default:
       return state;
   }

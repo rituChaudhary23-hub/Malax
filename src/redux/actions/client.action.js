@@ -13,7 +13,8 @@ export const actionTypes = {
   SAVE_CONSENT: "SAVE_CONSENT",
   SAVE_LOCATION: "SAVE_LOCATION",
   SAVE_USER_IMAGE: "SAVE_USER_IMAGE",
-  SAVE_CONDITION_DATA:"SAVE_CONDITION_DATA"
+  SAVE_CONDITION_DATA:"SAVE_CONDITION_DATA",
+  SAVE_MASSAGE_DATA:"SAVE_MASSAGE_DATA"
 };
 
 export function saveUserId(data) {
@@ -90,6 +91,14 @@ export function saveConditionData(data) {
     data: data,
   };
 }
+
+export function saveMassageData(data) {
+  return {
+    type: actionTypes.SAVE_MASSAGE_DATA,
+    data: data,
+  };
+}
+
 export function saveUserHistory(data) {
   return {
     type: actionTypes.SAVE_USER_HISTORY,
@@ -467,12 +476,12 @@ export function getConditionInfo(data) {
           return false;
         }
       })
-      .catch((error) => {
-        if (error) {
-          toast.error(error["data"]["Message"]);
-        }
-        dispatch(stopLoading());
-      });
+      // .catch((error) => {
+      //   if (error) {
+      //     toast.error(error["data"]["Message"]);
+      //   }
+      //   dispatch(stopLoading());
+      // });
   };
 }
 
@@ -490,7 +499,7 @@ export function getMassageInfo(data) {
         dispatch(stopLoading());
         if (data.data.Success) {
           debugger;
-          // dispatch(savePersonalInfo(data));
+        dispatch(saveMassageData(data));
           // toast.success(data["data"]["Message"]);
 
           return true;
