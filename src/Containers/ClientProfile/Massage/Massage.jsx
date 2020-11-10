@@ -186,7 +186,7 @@ class Massage extends Component {
         <section className="therapistProDes">
           <div className="card">
             <div className="card-body">
-              <div className="tab-pane container-fluid" id="preferences">
+              <div className="tab-pane" id="preferences">
                 <h5 className="my-3">Type perferred</h5>
                 <div className="thrChkBox graybg">
                   <form>
@@ -212,34 +212,37 @@ class Massage extends Component {
                       })}
                   </form>
                 </div>
-                <div className="container">
+                
                   <div className="row">
                     <div className="col-sm-12 mt-5">
-                      <div>
+                      <div className="mb-3">
                         <h5>Therapist gender preference</h5>
                         <Dropdown
                           options={genderOptions}
+                          className="form-control"
                           selection
                           placeholder="Select Gender"
                           onChange={this.dropdownChange}
                         />
                       </div>
 
-                      <div>
+                      <div className="mb-3">
                         <h5>Frequency</h5>
                         <Dropdown
                           options={FrequencyOptions}
+                          className="form-control"
                           selection
                           value={this.state.frequency}
                           onChange={this.changeFrequency}
                         />
                       </div>
 
-                      <div>
+                      <div className="mb-3">
                         {" "}
                         <h5>Goals</h5>
                         <TextArea
                           placeholder="Write your Goals"
+                          className="form-control"
                           type="Text"
                           // value={
                           //   this.props.massageRes.data &&
@@ -251,11 +254,12 @@ class Massage extends Component {
                           onChange={this.setFormValue.bind(this, "goals")}
                         />
                       </div>
-                      <div>
+                      <div className="mb-3">
                         {" "}
                         <h5>General information for therapist</h5>
                         <TextArea
                           placeholder=""
+                          className="form-control"
                           value={
                             this.props.massageRes.data
                               ? this.props.massageRes.data.Data
@@ -270,8 +274,8 @@ class Massage extends Component {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="container-fluid">
+              
+               
                   <div className="row">
                     <div className="col-sm-12">
                       <div className="text-right">
@@ -293,7 +297,7 @@ class Massage extends Component {
                       </div>
                     </div>
                   </div>
-                </div>{" "}
+               
               </div>{" "}
             </div>
           </div>

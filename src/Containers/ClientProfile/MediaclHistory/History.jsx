@@ -117,8 +117,8 @@ class History extends Component {
           <div className="card-body">
             <div className="scheduledServices">
               <div className="row">
-                <div className="col-sm-12">
-                  <div className="col-sm-12 my-5">
+         
+                  <div className="col-sm-12 mb-5">
                     <p>
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                       Duis tempus sed turpis cras quam ac tortor tempus amet.
@@ -137,10 +137,10 @@ class History extends Component {
                           onError={this.handleValidation}
                         >
                           <div
-                            className="tab-pane container-fluid"
+                            className="tab-pane "
                             id="Personal"
                           >
-                            <div className="container">
+                           
                               <div className="row">
                                 <div className="col-sm-12">
                                   <div className="form-group">
@@ -436,8 +436,7 @@ class History extends Component {
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className="container-fluid">
+                          
                               <div className="row">
                                 <div className="col-sm-12">
                                   <div className="text-right">
@@ -462,12 +461,12 @@ class History extends Component {
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          
                         </Form>
                       </div>
                     </div>
                   </div>
-                </div>
+              
               </div>
             </div>
           </div>

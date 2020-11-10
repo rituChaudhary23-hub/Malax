@@ -143,3 +143,40 @@ header {
   position: relative;
   top: 20%;
 }
+.ui.form .twelve.wide.field {
+  width: 100%!important;
+}
+.ui.segment {
+  position: relative;
+  background: #fff;
+  box-shadow:transparent;
+  margin: 1rem 0;
+  padding: 1em 1em;
+  border-radius: .28571429rem;
+  border: 0px solid rgba(34,36,38,.15);
+}
+.ui.input>input {
+  border: 0px solid rgba(34,36,38,.15);
+  transition: box-shadow .1s ease,border-color .1s ease;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+}
+.ui.form input[type=text]{
+  padding: 6px 0; 
+  background: transparent;
+  border: 0px solid rgba(34,36,38,.15);
+}
+.ui.form input[type=tel]{
+  padding: 6px 0; 
+  background: transparent;
+  border: 0px solid rgba(34,36,38,.15); 
+}
+// .ui.form input[type=time]{
+//   padding: 6px 0; 
+//   background: transparent;
+//   border: 0px solid rgba(34,36,38,.15);  
+// }
+.form-check-inline .form-check-input {
+  opacity: 0;
+}

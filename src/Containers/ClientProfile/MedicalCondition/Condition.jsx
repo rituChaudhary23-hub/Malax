@@ -192,8 +192,8 @@ class Condition extends Component {
           <div className="card-body">
             <div className="scheduledServices">
               <div className="row">
-                <div className="col-sm-12">
-                  <div className="col-sm-12 my-5">
+                
+                  <div className="col-sm-12 mb-5">
                     <p>
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                       Duis tempus // sed turpis cras quam ac tortor tempus amet.
@@ -202,9 +202,10 @@ class Condition extends Component {
                       quis nunc, tempus maecenas enim.
                     </p>
                   </div>
+                  <div className="col-sm-12"> 
                   <div className="card">
                     <div className="card-body">
-                      <div className="tab-pane container-fluid" id="conditions">
+                      <div className="tab-pane" id="conditions">
                         <div className="thrChkBox graybg">
                           <Form
                             ref="form"
@@ -273,7 +274,7 @@ class Condition extends Component {
                           </Form>
                         </div>
 
-                        <div className="container">
+                       
                           <div className="row">
                             <div className="col-sm-12 mt-5">
                               <div className="form-group">
@@ -316,10 +317,10 @@ class Condition extends Component {
                           </Button>
                         </div>
                       </div>{" "}
-                    </div>
+                   
                   </div>
                 </div>
-              </div>
+                </div>
             </div>
           </div>
         </div>
