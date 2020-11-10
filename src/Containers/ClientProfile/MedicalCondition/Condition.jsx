@@ -119,14 +119,20 @@ class Condition extends Component {
 
   saveCondition = () => {
     debugger;
+    this.state.fields.medicalConditionRequest = [];
     var inputElems = document.getElementsByTagName("input"),
       count = 0;
     for (var i = 0; i < inputElems.length; i++) {
       if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
         count++;
-        alert(count)
+        debugger;
+        this.state.fields.medicalConditionRequest.push({
+          medicalConditionId: parseInt(inputElems[i].id),
+          
+        });
+        //alert(count)
       }
-    
+
     }
     this.props.fetchUserMedicalCondition(this.state.fields);
 

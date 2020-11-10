@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { fetchScheduledAppointment } from "../../../redux/actions/clientSchedule.action";
+import EditAppointment from "../../../Components/Shared/AppointmentServiceModal/EditAppointment";
+import DeleteAppointment from "../../../Components/Shared/AppointmentServiceModal/DeleteAppointment";
 
 class ServiceAppointment extends Component {
   constructor(props) {
@@ -20,6 +22,10 @@ class ServiceAppointment extends Component {
         clientScheduleId: 0,
         clientId: 0,
       },
+      editService: false,
+      deleteService: false,
+      editServiceId: "",
+      userInfo:{}
     };
   }
 
@@ -29,6 +35,23 @@ class ServiceAppointment extends Component {
     this.props.fetchScheduledAppointment(this.state.fields);
   };
 
+  editAppointment = (data) => {
+    debugger;
+    console.log("data--", data);
+    console.log("Id------",data.ClientScheduleId)
+    this.setState({ editServiceId: data.ClientScheduleId, editService: true });
+    this.setState({userInfo:data})
+    console.log("editServiceId",this.state.editServiceId)
+  };
+  close = () => {
+    this.setState({ editService: false });
+  };
+  closee = () => {
+    this.setState({ deleteService: false });
+  };
+  deleteAppointment = () => {
+    this.setState({ deleteService: true });
+  };
   render() {
     console.log("----------ritu------", this.props.getAppointment.data);
     return (
@@ -68,18 +91,36 @@ class ServiceAppointment extends Component {
                                 </Link>
                               </Table.Cell>
                               <Table.Cell>
-                                <Button>Edit</Button>
+                                <Button
+                                  onClick={() => this.editAppointment(item)}
+                                >
+                                  Edit
+                                </Button>
                               </Table.Cell>
                               <Table.Cell>
-                                <Button>DELETE</Button>
+                                <Button
+                                  onClick={() => this.deleteAppointment(item.ClientScheduleId)}
+                                >
+                                  DELETE
+                                </Button>
                               </Table.Cell>
                             </Table.Row>
                           )
                         )}
+                      {this.props.item == 0 && <td>No record</td>}
                     </Table.Body>
                   </Table>
                 </div>
               </div>
+              <EditAppointment
+                editModal={this.state.editService}
+                toggle={this.close}
+                userDetail={this.state.userInfo}
+              />
+              <DeleteAppointment
+                deleteModal={this.state.deleteService}
+                toggle={this.closee}
+              />
             </div>
           </div>
         </div>

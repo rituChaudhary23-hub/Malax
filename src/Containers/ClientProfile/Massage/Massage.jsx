@@ -13,6 +13,7 @@ import {
 class Massage extends Component {
   dropVal: any;
   _data: any;
+  FrequencyOptions= [];
   dropvalFrequency: any;
   dropvalGender: any;
   constructor(props) {
@@ -28,6 +29,7 @@ class Massage extends Component {
       abcFrequency: {
         name: "Frequency",
       },
+      selectedFreq:"",
       fields: {
         clientMassagePreferencesId: 0,
         clientId: 0,
@@ -42,11 +44,13 @@ class Massage extends Component {
   }
 
   componentWillMount = async () => {
+    debugger
     var data2 = this.props.user.Data.ClientId;
     this.state.clientId = data2;
     var res = await this.props.getMassageInfo(data2);
 
     //fields data
+ 
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
 
@@ -65,6 +69,15 @@ class Massage extends Component {
     );
     if (_frequency != false) {
       this.dropvalFrequency = _frequency.data.Data.globalCodeData;
+      this.dropvalFrequency.forEach(element => {
+        this.FrequencyOptions.push({
+          text:element.CodeName,
+          value:element.GlobalCodeId
+        })
+      });
+
+   
+      console.log("text-----",   this.FrequencyOptions)
     }
 
     console.log("dropVal condiiton", this.dropVal);
@@ -92,7 +105,8 @@ class Massage extends Component {
       //   }
       // );
     });
-
+    this.setState({selectedFreq: this.props.massageRes.data.Data.FrequencyId});
+    this.setState();
     this.setState({
       mycheckbox_data: data_check,
     });
@@ -142,12 +156,17 @@ class Massage extends Component {
     this.state.fields.therapistGenderId = globalId;
   };
 
-  changeFrequency = (e) => {
+  changeFrequency = (e, { value }) => {
     debugger;
 
-    var infoFrequency = e.target.outerText;
+    var infoFrequency = value ;
+
+    this.setState({
+      selectedFreq:infoFrequency
+     })
+     console.log("selected drop down value===============",   this.state.selectedFreq)
     var globalFrequencyId = this.dropvalFrequency.filter(
-      (y) => y.CodeName == infoFrequency
+      (y) => y.GlobalCodeId == infoFrequency
     )[0].GlobalCodeId;
     this.state.fields.frequencyId = globalFrequencyId;
   };
@@ -159,18 +178,19 @@ class Massage extends Component {
   }
 
   render() {
-    console.log("Massage-info-----------", this.props.massageRes);
+    console.log("Massage-info-----------",  this.props.massageRes.data);
     console.log("mycheckbox_data", this.state.mycheckbox_data);
+    console.log('my state', this.state);
     const genderOptions = [
       { key: "u", text: "Male", value: "Male" },
       { key: "j", text: "Female", value: "Female" },
     ];
 
-    const FrequencyOptions = [
-      { key: "m", text: "Daily", value: "Daily" },
-      { key: "k", text: "Weekly", value: "Weekly" },
-      { key: "k", text: "Monthly", value: "Monthly" },
-    ];
+    // const FrequencyOptions = [
+    //   { key: "m", text: "Daily", value: "4011" },
+    //   { key: "k", text: "Weekly", value: "4010" },
+    //   { key: "k", text: "Monthly", value: "4012" },
+    // ];
     return (
       <div>
         <div>
@@ -228,10 +248,15 @@ class Massage extends Component {
                       <div>
                         <h5>Frequency</h5>
                         <Dropdown
-                          options={FrequencyOptions}
+                       className='abc'
+                        //  defaultValue={this.state.selectedFreq}
+                          options={this.FrequencyOptions}
                           selection
-                          value={this.state.frequency}
+                          // selected={this.state.selectedFreq}
+                           value={this.state.selectedFreq}
                           onChange={this.changeFrequency}
+                        
+                         
                         />
                       </div>
 
