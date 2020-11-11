@@ -25,8 +25,28 @@ const addPaymentInfo = (data) => {
   );
 };
 
+//delete appointment
+const deleteAppointment = (data) => {
+  return fetch(
+    "post",
+    `${API_HOST}/ClientScheduleAPI/DeleteAppointments`,
+    data
+  );
+};
+
+const getServiceDetails = (data) => {
+  return fetch(
+    "post",
+    `${API_HOST}/ClientScheduleAPI/GetServiceDetail`,
+    data
+  );
+};
+
+
+
 export const ClientScheduleService = {
   addAppointment,
-  addPaymentInfo,
+  addPaymentInfo,getServiceDetails,
   getClientAppointments,
+  deleteAppointment
 };

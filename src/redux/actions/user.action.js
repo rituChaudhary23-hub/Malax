@@ -71,17 +71,15 @@ export function loginUser(data, value) {
        
         toast.success(user.data.Message);
         dispatch(loginUserSuccess(user["data"]));
-          let { accountType} = user["data"];
-        if (accountType === 0) {
+      
         dispatch(
           loginUserPersist({ token: user["data"]["Token"] })
           )
-        } else {
+     
           dispatch(
             loginUserPersist({ token: user["data"]["Token"] })
           );
-        // history.push("/theparist-profile");
-        }
+      
       return true
         } else {
           toast.error(user.data.Message);

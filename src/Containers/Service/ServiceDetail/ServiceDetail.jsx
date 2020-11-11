@@ -1,13 +1,25 @@
 import React, { Component } from "react";
 import Header from "../../../Components/Shared/Header";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
 import { Table, Modal, Label, Button } from "semantic-ui-react";
 import CancelService from "../../../Components/Shared/CancelService/CancelService";
 import ScheduledService from "../../../Components/Shared/ScheduledServiceModal/ScheduledService";
+import {fetchServiceDetails} from "../../../redux/actions/clientSchedule.action"
 
 class ServiceDetail extends Component {
   constructor(props) {
     super(props);
-    this.state = { cancelModal: false, service: false };
+    this.state = { cancelModal: false, service: false ,
+    
+    fields:{
+            clientScheduleId: 0,
+        clientId: 0,
+        status: 0
+     
+    }
+    
+    };
   }
   back() {
     window.location.href = "/client-profile";
@@ -24,7 +36,18 @@ class ServiceDetail extends Component {
   closeCancelModal = () => {
     this.setState({ cancelModal: false });
   };
+
+componentDidMount=()=>{
+  var data1 = this.props.user.Data.ClientId;
+  this.state.fields.clientId = data1;
+debugger
+  var data2=this.props.getAppointment.Data.AllClientAppointments.ClientScheduleId
+  this.state.fields.clientScheduleId=data2
+  this.props.fetchServiceDetails(this.state.fields)
+}
+
   render() {
+    console.log(" getAppointment------",this.props.getAppointment.data)
     return (
       <div>
         <Header />
@@ -145,4 +168,20 @@ class ServiceDetail extends Component {
   }
 }
 
-export default ServiceDetail;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+    getAppointment: state.clientScheduleReducer.getAppointment,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchServiceDetails: (data) =>
+      dispatch(fetchServiceDetails(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ServiceDetail)
+);

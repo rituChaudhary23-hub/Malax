@@ -11,7 +11,7 @@ export function saveAppointment(data) {
     type: actionTypes.SAVE_APPOINTMENTS,
     data: data,
   };
-}
+} 
 
 
 //request-service
@@ -82,6 +82,63 @@ export function fetchPaymentDetails(data) {
           dispatch(stopLoading());
           if (data.data.Success) {
           //   dispatch(saveAppointment(data));
+            toast.success(data["data"]["Message"]);
+  
+            return true;
+          } else {
+            toast.error(data.data.Message);
+            return false;
+          }
+        })
+        .catch((error) => {
+          if (error) {
+            toast.error(error["data"]["Message"]);
+          }
+          dispatch(stopLoading());
+        });
+    };
+  }
+
+
+  //delete-appointment-action
+  export function fetchDeleteAppointment(data) {
+    return (dispatch, getState) => {
+      dispatch(startLoading());
+      let state = getState();
+      return ClientScheduleService.deleteAppointment(data, {})
+        .then(async (data) => {
+          dispatch(stopLoading());
+          if (data.data.Success) {
+          //   dispatch(saveAppointment(data));
+            toast.success(data["data"]["Message"]);
+  
+            return true;
+          } else {
+            toast.error(data.data.Message);
+            return false;
+          }
+        })
+        .catch((error) => {
+          if (error) {
+            toast.error(error["data"]["Message"]);
+          }
+          dispatch(stopLoading());
+        });
+    };
+  }
+
+
+
+  //get-service-details
+  
+  export function fetchServiceDetails(data) {
+    return (dispatch, getState) => {
+      dispatch(startLoading());
+      let state = getState();
+      return ClientScheduleService.getServiceDetails(data, {})
+        .then(async (data) => {
+          dispatch(stopLoading());
+          if (data.data.Success) {
             toast.success(data["data"]["Message"]);
   
             return true;

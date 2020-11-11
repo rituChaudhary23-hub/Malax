@@ -158,9 +158,7 @@ class Massage extends Component {
 
   changeFrequency = (e, { value }) => {
     debugger;
-
     var infoFrequency = value ;
-
     this.setState({
       selectedFreq:infoFrequency
      })

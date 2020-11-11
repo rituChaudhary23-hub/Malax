@@ -7,6 +7,8 @@ import {
   Modal,
   ItemMeta,
 } from "semantic-ui-react";
+import { listDateFormat } from "../../../utils/dateFormat";
+
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
@@ -25,7 +27,9 @@ class ServiceAppointment extends Component {
       editService: false,
       deleteService: false,
       editServiceId: "",
-      userInfo:{}
+      deleteId:"",
+      userInfo:{},
+      userInfoDelete:{}
     };
   }
 
@@ -44,13 +48,21 @@ class ServiceAppointment extends Component {
     console.log("editServiceId",this.state.editServiceId)
   };
   close = () => {
+    
     this.setState({ editService: false });
   };
-  closee = () => {
+  closee = async() => {
+    debugger
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
+   var ddd = await this.props.fetchScheduledAppointment(this.state.fields);
     this.setState({ deleteService: false });
   };
-  deleteAppointment = () => {
-    this.setState({ deleteService: true });
+  deleteAppointment = (data) => {
+    console.log("data--", data);
+    console.log("Id------",data.ClientScheduleId)
+    this.setState({ deleteId: data.ClientScheduleId, deleteService: true });
+    this.setState({userInfoDelete:data})
   };
   render() {
     console.log("----------ritu------", this.props.getAppointment.data);
@@ -78,7 +90,11 @@ class ServiceAppointment extends Component {
                         this.props.getAppointment.data.Data.AllClientAppointments.map(
                           (item, index) => (
                             <Table.Row key={index}>
-                              <Table.Cell>{item.ServiceDate}</Table.Cell>
+                              <Table.Cell>
+                                {listDateFormat(item.ServiceDate).convertToDateTime}
+                              
+                                {/* {listDateFormat(item.ServiceDate).convertToDateTime} */}
+                              </Table.Cell>
                               <Table.Cell>{item.From}</Table.Cell>
                               <Table.Cell>
                                 {item.StreetAddress} ,{item.ZipCode}
@@ -120,6 +136,8 @@ class ServiceAppointment extends Component {
               <DeleteAppointment
                 deleteModal={this.state.deleteService}
                 toggle={this.closee}
+                userDetail={this.state.userInfoDelete}
+
               />
             </div>
           </div>

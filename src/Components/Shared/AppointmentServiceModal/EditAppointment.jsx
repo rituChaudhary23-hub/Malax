@@ -2,16 +2,14 @@ import React, { Component, Fragment } from "react";
 import { Modal } from "react-bootstrap";
 import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
-
 import { Button, Input, Form } from "semantic-ui-react";
 
 import { connect } from "react-redux";
 import { fetchScheduledAppointment } from "../../../redux/actions/clientSchedule.action";
-
-import { getMassageInfo } from "../../../redux/actions/client.action";
-
+import { listDateFormat } from "../../../utils/dateFormat";
 
 class EditAppointment extends Component {
+  userDetail: any;
   constructor(props) {
     super(props);
     this.state = {
@@ -19,7 +17,8 @@ class EditAppointment extends Component {
         clientScheduleId: 0,
         clientId: 0,
       },
-      time:""
+      time: "",
+      address: "",
     };
   }
 
@@ -28,19 +27,27 @@ class EditAppointment extends Component {
     fields[field] = e.target.value;
     this.setState({ fields });
   }
-  changeTime=(e)=>{
-console.log("change-time-------",e.target.value)
-this.setState({time:e.target.value})
-  }
 
-  editAppointment=()=>{
-this.props.fetchScheduledAppointment()
-  }
+  changeTime = (e) => {
+    this.state.time = e.target.value;
+    this.props.userDetail.From = this.state.time;
+    this.setState({ time: this.props.userDetail.From });
+  };
+
+
+  updateAddress = (e) => {
+    this.state.address = e.target.value;
+    this.props.userDetail.StreetAddress = this.state.address;
+    this.setState({ address: this.props.userDetail.StreetAddress });
+  };
+  editAppointment = () => {
+    this.props.fetchScheduledAppointment(this.state.fields);
+  };
 
   render() {
     const { submitting } = this.props;
-    let {userDetail} = this.props;
-    console.log("data-new---------",userDetail)
+    this.userDetail = this.props.userDetail;
+    console.log("data-new---------", this.userDetail);
     return (
       <Fragment>
         <Form autoComplete="off">
@@ -67,7 +74,12 @@ this.props.fetchScheduledAppointment()
                 </div>
                 <div className="col-lg-8 col-md-6 col-5 mb-4">
                   <div className="modCon">
-                    <input type="date" class="form-control" id="date" value={userDetail.ServiceDate}
+                    <input
+                      type="date"
+                      name="date"
+                      className="login-form-textfield form-control"
+                      id="date"
+                      value={listDateFormat(this.userDetail.ServiceDate).convertToDateTime}
                     />
                   </div>
                 </div>
@@ -83,15 +95,15 @@ this.props.fetchScheduledAppointment()
                     fullWidth={true}
                     name="time"
                     type="time"
-                    value={userDetail.From}
-                    onChange={(e)=>this.changeTime(e)}
-
+                    value={this.userDetail.From}
+                    onChange={this.changeTime}
                   />
                 </div>
                 <div className="col-lg-4 col-md-6 col-6">
-                <div className="modCon">
-                  <h6>Address</h6>
-                </div>   </div>
+                  <div className="modCon">
+                    <h6>Address</h6>
+                  </div>{" "}
+                </div>
                 <div className="col-lg-8 col-md-6 col-6">
                   <textarea
                     className="form-control textArea"
@@ -99,9 +111,8 @@ this.props.fetchScheduledAppointment()
                     id="comment"
                     placeholder="Enter your Addresas"
                     name="address"
-                    onChange={this.setFormValue.bind(this, "streetAddress")}
-                    value={userDetail.StreetAddress}
-                  
+                    onChange={this.updateAddress}
+                    value={this.userDetail.StreetAddress}
                     autoComplete="false"
                   ></textarea>
                 </div>
@@ -113,7 +124,7 @@ this.props.fetchScheduledAppointment()
                 className="btn btn-primary register mr-4"
                 onClick={this.editAppointment}
               >
-             Update
+                Update
               </Button>
               <button
                 color="gray"
@@ -139,7 +150,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchScheduledAppointment: (data) => dispatch(fetchScheduledAppointment(data)),
+    fetchScheduledAppointment: (data) =>
+      dispatch(fetchScheduledAppointment(data)),
   };
 };
 

@@ -6,20 +6,19 @@ import { withRouter } from "react-router";
 import { Button, Input, Form } from "semantic-ui-react";
 
 import { connect } from "react-redux";
-import { fetchUpdateEmail } from "../../../redux/actions/client.action";
+import { fetchDeleteAppointment,fetchScheduledAppointment } from "../../../redux/actions/clientSchedule.action";
 
 class DeleteAppointment extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fields: {
-        userId: 0,
-        fieldType: "e",
-        value: "",
+        clientScheduleId: 0,
+        clientId: 0,
+        actionBy: "",
       },
     };
   }
-
 
   setFormValue(field, e) {
     let fields = this.state.fields;
@@ -27,8 +26,24 @@ class DeleteAppointment extends Component {
     this.setState({ fields });
   }
 
+  deleteUser = async (data) => {
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
+    var data = this.props.userDetail;
+
+    this.state.fields.clientScheduleId = data;
+
+    var aa = await this.props.fetchDeleteAppointment(this.state.fields);
+    this.props.toggle();
+    // this.props.fetchScheduledAppointment(data1)
+  };
+
   render() {
     const { submitting } = this.props;
+    console.log("------user", this.props.user);
+    let { userDetail } = this.props;
+    console.log("---this.props.userDetail---", userDetail);
+    console.log("data---delete",this.props.userDetail)
 
     return (
       <Fragment>
@@ -48,18 +63,18 @@ class DeleteAppointment extends Component {
               <div className="row">
                 <div className="col-sm-12">
                   <p className="confirmation">
-                  Are you sure you want to Delete the Scheduled Service.
+                    Are you sure you want to Delete the Scheduled Service.
                   </p>
                 </div>
-                       </div>
+              </div>
             </Modal.Body>
             <Modal.Footer>
               <Button
                 type="submit"
                 className="btn btn-primary register mr-4"
-                onClick={this.UpdateEmail}
+                onClick={this.deleteUser}
               >
-             Delete
+                Delete
               </Button>
               <button
                 color="gray"
@@ -86,7 +101,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUpdateEmail: (data) => dispatch(fetchUpdateEmail(data)),
+    fetchDeleteAppointment: (data) => dispatch(fetchDeleteAppointment(data)),
+    fetchScheduledAppointment:(data)=>dispatch(fetchScheduledAppointment(data))
   };
 };
 

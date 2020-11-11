@@ -64,6 +64,10 @@ class Payment extends Component {
       return false;
     }
   };
+
+  back=()=>{
+    window.location.href="/client-profile"
+  }
   submitPayment = (e) => {
     if (!this.validate()) {
       return;
@@ -307,6 +311,7 @@ class Payment extends Component {
                               <Button
                                 className="btn btn-primary"
                                 data-dismiss="modal"
+                                onClick={this.back}
                               >
                                 Complete
                               </Button>
