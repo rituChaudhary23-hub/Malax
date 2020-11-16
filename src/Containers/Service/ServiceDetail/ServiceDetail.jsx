@@ -41,8 +41,8 @@ componentDidMount=()=>{
   var data1 = this.props.user.Data.ClientId;
   this.state.fields.clientId = data1;
 debugger
-  var data2=this.props.getAppointment.Data.AllClientAppointments.ClientScheduleId
-  this.state.fields.clientScheduleId=data2
+  // var data2=this.props.getAppointment.Data.AllClientAppointments.ClientScheduleId
+  // this.state.fields.clientScheduleId=data2
   this.props.fetchServiceDetails(this.state.fields)
 }
 

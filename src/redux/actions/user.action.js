@@ -1,7 +1,6 @@
 import { UserService } from "../Services/UserService";
 import { toast } from "../../Components/Toast/Toast";
 import { startLoading, stopLoading } from "./loading.action";
-import { history } from "../../store/history";
 import {
   loginUserPersist,
   logoutUserPersist,
@@ -13,7 +12,6 @@ export const actionTypes = {
   LOGIN_USER_SUCCESS: "LOGIN_USER_SUCCESS",
   LOGIN_USER_ERROR: "LOGIN_USER_ERROR",
   LOGIN_USER_RESET: "LOGIN_USER_RESET",
-
 };
 
 /*
@@ -41,7 +39,6 @@ export function loginUserSuccess(user) {
   };
 }
 
-
 /** logout user */
 export function logoutUser() {
   return (dispatch) => {
@@ -51,36 +48,30 @@ export function logoutUser() {
 }
 
 export function loginUser(data, value) {
-  
   return (dispatch, getState) => {
     dispatch(startLoading());
     return UserService.login(data)
       .then(async (user) => {
-        
-        if(user.data.Success){
-        console.log("response", user.data.Data.Token);
-        dispatch(
-           loginUserTempPersist({ token: user["data"]["Data"]["Token"] })
-        );
-        
-     console.log("saveduser", JSON.stringify(data))
-          sessionStorage.setItem("savedUser", user.data.Data.Token);
-        
-        dispatch(stopLoading());
-        console.log("DDD", user["data"]);
-       
-        toast.success(user.data.Message);
-        dispatch(loginUserSuccess(user["data"]));
-      
-        dispatch(
-          loginUserPersist({ token: user["data"]["Token"] })
-          )
-     
+        if (user.data.Success) {
+          console.log("response", user.data.Data.Token);
           dispatch(
-            loginUserPersist({ token: user["data"]["Token"] })
+            loginUserTempPersist({ token: user["data"]["Data"]["Token"] })
           );
-      
-      return true
+
+          console.log("saveduser", JSON.stringify(data));
+          sessionStorage.setItem("savedUser", user.data.Data.Token);
+
+          dispatch(stopLoading());
+          console.log("DDD", user["data"]);
+
+          toast.success(user.data.Message);
+          dispatch(loginUserSuccess(user["data"]));
+
+          dispatch(loginUserPersist({ token: user["data"]["Token"] }));
+
+          dispatch(loginUserPersist({ token: user["data"]["Token"] }));
+
+          return true;
         } else {
           toast.error(user.data.Message);
           dispatch(stopLoading());
@@ -88,7 +79,7 @@ export function loginUser(data, value) {
         }
       })
       .catch((error) => {
-        return false
+        return false;
         console.log("ERROR", error);
         if (error) {
           // toast.error(error["data"]["Message"]);
