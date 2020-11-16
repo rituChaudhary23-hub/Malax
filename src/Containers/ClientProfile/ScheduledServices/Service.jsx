@@ -34,13 +34,14 @@ class ServiceAppointment extends Component {
   }
 
   componentDidMount = async (data) => {
+    //debugger
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
     this.props.fetchScheduledAppointment(this.state.fields);
   };
 
   editAppointment = (data) => {
-    debugger;
+    //debugger;
     console.log("data--", data);
     console.log("Id------",data.ClientScheduleId)
     this.setState({ editServiceId: data.ClientScheduleId, editService: true });
@@ -52,7 +53,7 @@ class ServiceAppointment extends Component {
     this.setState({ editService: false });
   };
   closee = async() => {
-    debugger
+    //debugger
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
    var ddd = await this.props.fetchScheduledAppointment(this.state.fields);
@@ -65,7 +66,7 @@ class ServiceAppointment extends Component {
     this.setState({userInfoDelete:data})
   };
   render() {
-    console.log("----------ritu------", this.props.getAppointment.data);
+    console.log("----------ritu------", this.props.getAppointment.token);
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -86,12 +87,12 @@ class ServiceAppointment extends Component {
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                      {this.props.getAppointment.data &&
-                        this.props.getAppointment.data.Data.AllClientAppointments.map(
+                      {this.props.getAppointment.token &&
+                        this.props.getAppointment.token.Data.ClientAppointment.map(
                           (item, index) => (
                             <Table.Row key={index}>
                               <Table.Cell>
-                                {listDateFormat(item.ServiceDate).convertToDateTime}
+                                {listDateFormat(item.ServiceDate)}
                               
                                 {/* {listDateFormat(item.ServiceDate).convertToDateTime} */}
                               </Table.Cell>

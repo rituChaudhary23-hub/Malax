@@ -13,7 +13,7 @@ export const history = createBrowserHistory();
 const persistConfig = {
   key: "root",
   storage: storage,
-  whitelist: ["persist", "user"]
+  whitelist: ["persist", "user","clientScheduleReducer"]
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

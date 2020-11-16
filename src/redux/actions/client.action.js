@@ -109,7 +109,7 @@ export function saveUserHistory(data) {
 
 //get email id
 export function fetchUserEmail(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -140,7 +140,7 @@ export function fetchUserEmail(data) {
 
 //update email
 export function fetchUpdateEmail(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -151,7 +151,7 @@ export function fetchUpdateEmail(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
+          //debugger;
           dispatch(saveUserPhone(data.data));
           toast.success(data["data"]["Message"]);
 
@@ -172,7 +172,7 @@ export function fetchUpdateEmail(data) {
 
 //get user phone
 export function fetchUserPhone(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -202,7 +202,7 @@ export function fetchUserPhone(data) {
 
 //consent agreement forms
 export function fetchConsentForm(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -212,7 +212,7 @@ export function fetchConsentForm(data) {
     })
       .then(async (data) => {
         dispatch(stopLoading());
-        debugger;
+        //debugger;
         if (data.data.Success) {
           toast.success(data["data"]["Message"]);
 
@@ -233,7 +233,7 @@ export function fetchConsentForm(data) {
 
 //get-consent-form
 export function getConsentForm(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -243,7 +243,7 @@ export function getConsentForm(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
+          //debugger;
           dispatch(saveConsent(data));
           // toast.success(data["data"]["Message"]);
 
@@ -294,7 +294,7 @@ export function fetchUserInfo(data) {
 
 //get-personal info
 export function getUserInfo(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -304,7 +304,7 @@ export function getUserInfo(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
+          //debugger;
           dispatch(savePersonalInfo(data));
           // toast.success(data["data"]["Message"]);
 
@@ -324,7 +324,7 @@ export function getUserInfo(data) {
 }
 //add-medical-history
 export function fetchUserHistory(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -355,7 +355,7 @@ export function fetchUserHistory(data) {
 
 //get-medical-history
 export function getUserHistory(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -365,7 +365,7 @@ export function getUserHistory(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
+          //debugger;
           dispatch(saveMedicalInfo(data));
           // toast.success(data["data"]["Message"]);
 
@@ -385,7 +385,7 @@ export function getUserHistory(data) {
 }
 //image-upload
 export function fetchIdentityImage(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -412,7 +412,7 @@ export function fetchIdentityImage(data) {
 }
 //medical-conditions
 export function fetchUserMedicalCondition(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -435,7 +435,7 @@ export function fetchUserMedicalCondition(data) {
 
 //massage-prefernce
 export function fetchUserMassagePrefernce(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -456,7 +456,7 @@ export function fetchUserMassagePrefernce(data) {
 }
 //get-medical-conditions'
 export function getConditionInfo(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -466,7 +466,7 @@ export function getConditionInfo(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
+          //debugger;
            dispatch(saveConditionData(data));
           // toast.success(data["data"]["Message"]);
 
@@ -488,7 +488,7 @@ export function getConditionInfo(data) {
 //get-massage-preferences
 
 export function getMassageInfo(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -498,7 +498,7 @@ export function getMassageInfo(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
+          //debugger;
         dispatch(saveMassageData(data));
           // toast.success(data["data"]["Message"]);
 
@@ -519,7 +519,7 @@ export function getMassageInfo(data) {
 
 //client-loc
 export function fetchClientLoc(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -529,7 +529,7 @@ export function fetchClientLoc(data) {
     })
       .then(async (data) => {
         dispatch(stopLoading());
-        debugger;
+        //debugger;
         if (data.data.Success) {
           toast.success(data["data"]["Message"]);
 
@@ -550,7 +550,7 @@ export function fetchClientLoc(data) {
 
 //get-client-loc
 export function getLocation(data) {
-  debugger;
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -560,7 +560,7 @@ export function getLocation(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
+          //debugger;
           dispatch(saveLocation(data));
           // toast.success(data["data"]["Message"]);
 
@@ -581,7 +581,7 @@ export function getLocation(data) {
 
 //tab change
 export function tabIndex(data) {
-  debugger;
+  //debugger;
 
   if (data > 0) {
     return data;

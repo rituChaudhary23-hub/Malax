@@ -5,13 +5,14 @@ const initialState = {
 };
 
 const clientScheduleReducer = (state = initialState, action) => {
+  debugger
   console.log(action);
   switch (action.type) {
     
     case actionTypes.SAVE_APPOINTMENTS:
       return {
         ...state,
-        getAppointment: action.data,
+        getAppointment: action.data ,
       };
 
     default:

@@ -6,6 +6,7 @@ const initialState = {
 };
 
 const user = (state = initialState, action) => {
+  //debugger
   switch (action.type) {
     case actionTypes.LOGIN_USER_SUCCESS:
       return {

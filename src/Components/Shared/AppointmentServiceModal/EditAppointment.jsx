@@ -6,7 +6,7 @@ import { Button, Input, Form } from "semantic-ui-react";
 
 import { connect } from "react-redux";
 import { fetchScheduledAppointment } from "../../../redux/actions/clientSchedule.action";
-import { listDateFormat } from "../../../utils/dateFormat";
+import { listDateFormat, listDateFormat_sample } from "../../../utils/dateFormat";
 
 class EditAppointment extends Component {
   userDetail: any;
@@ -18,6 +18,7 @@ class EditAppointment extends Component {
         clientId: 0,
       },
       time: "",
+      date:"",
       address: "",
     };
   }
@@ -40,9 +41,24 @@ class EditAppointment extends Component {
     this.props.userDetail.StreetAddress = this.state.address;
     this.setState({ address: this.props.userDetail.StreetAddress });
   };
-  editAppointment = () => {
-    this.props.fetchScheduledAppointment(this.state.fields);
+  editAppointment = async() => {
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
+    var data = this.props.userDetail.ClientScheduleId;
+
+    this.state.fields.clientScheduleId = data;
+
+    var aa = await this.props.fetchScheduledAppointment(this.state.fields);
+    this.props.toggle();
+    
   };
+
+  updateDate=(e)=>{
+console.log("ashu-----", e.target.value)
+this.state.date = e.target.value;
+this.props.userDetail.ServiceDate = this.state.date;
+this.setState({ date: this.props.userDetail.ServiceDate });
+  }
 
   render() {
     const { submitting } = this.props;
@@ -79,7 +95,8 @@ class EditAppointment extends Component {
                       name="date"
                       className="login-form-textfield form-control"
                       id="date"
-                      value={listDateFormat(this.userDetail.ServiceDate).convertToDateTime}
+                      onChange={this.updateDate}
+                      value={listDateFormat_sample(this.userDetail.ServiceDate)}
                     />
                   </div>
                 </div>

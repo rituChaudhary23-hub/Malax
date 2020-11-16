@@ -44,7 +44,7 @@ class Massage extends Component {
   }
 
   componentWillMount = async () => {
-    debugger
+    //debugger
     var data2 = this.props.user.Data.ClientId;
     this.state.clientId = data2;
     var res = await this.props.getMassageInfo(data2);
@@ -89,22 +89,13 @@ class Massage extends Component {
         status: false,
       });
     });
-    // console.log("Mydata", this._data);
-    // var data_check = this._data;
-    // console.log("------data new----", data_check);
-
+   
     var data_check = this._data;
     data_check.forEach((element) => {
-      // this.props.massageRes.data.Data.TypePerferred.forEach(
-      //   (ele) => {
-      //     debugger
-      //     if (ele.globalCodeId == element.GlobalCodeId) {
-      //       debugger;
-      //       element.status = true;
-      //     }
-      //   }
-      // );
+    
     });
+    //debugger
+    if(this.props.massageRes.data)
     this.setState({selectedFreq: this.props.massageRes.data.Data.FrequencyId});
     this.setState();
     this.setState({
@@ -117,7 +108,7 @@ class Massage extends Component {
   };
 
   MassageSelected = (e) => {
-    debugger;
+    //debugger;
     console.log("check_value", e.target.checked);
     this.state.mycheckbox_data.filter(
       (x) => x.GlobalCodeId == parseInt(e.target.id)
@@ -138,7 +129,7 @@ class Massage extends Component {
   };
 
   saveMassage = () => {
-    debugger;
+    //debugger;
     var inputElems = document.getElementsByTagName("input"),
       count = 0;
     for (var i = 0; i < inputElems.length; i++) {
@@ -149,7 +140,7 @@ class Massage extends Component {
     }
   };
   dropdownChange = (e, value) => {
-    debugger;
+    //debugger;
     var InfoAs = e.target.outerText;
     var globalId = this.dropvalGender.filter((x) => x.CodeName == InfoAs)[0]
       .GlobalCodeId;
@@ -157,7 +148,7 @@ class Massage extends Component {
   };
 
   changeFrequency = (e, { value }) => {
-    debugger;
+    //debugger;
     var infoFrequency = value ;
     this.setState({
       selectedFreq:infoFrequency

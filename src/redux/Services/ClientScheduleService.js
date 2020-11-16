@@ -12,7 +12,7 @@ const addAppointment = (data) => {
 
 //get-scheduled-services
 const getClientAppointments = (data) => {
-  debugger;
+  //debugger;
   return fetch("post", `${API_HOST}/ClientScheduleAPI/GetAppointments`, data);
 };
 

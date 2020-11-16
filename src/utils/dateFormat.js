@@ -34,6 +34,7 @@ export function copyTextToClipboard(text) {
 }
 
 export const listDateFormat = date => {
+  debugger
   let newDAte = new Date(date);
   let parsedDate = newDAte.toLocaleDateString("default", {
     year: "numeric",
@@ -61,6 +62,26 @@ export const listDateFormat_csv = date => {
     day: "numeric"
   });
   return parsedDate;
+};
+export const listDateFormat_sample = date => {
+  debugger
+  if(date != undefined){
+  let newDAte = date.split('T')[0];
+  // let parsedDate = newDAte.toLocaleDateString("default", {
+  //   year: "numeric",
+  //   month: "short",
+  //   day: "numeric"
+  // });
+  return newDAte;
+  } else {
+    let newDAte = new Date(date);
+    let parsedDate = newDAte.toLocaleDateString("default", {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
+  return parsedDate
+  }
 };
 
 function parseDateFormat(date) {

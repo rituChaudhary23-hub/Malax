@@ -40,7 +40,7 @@ class Condition extends Component {
 
   componentWillMount = async () => {
     //get-condition
-    debugger;
+    //debugger;
     var data1 = this.props.user.Data.ClientId;
     this.state.clientId = data1;
     var res = await this.props.getConditionInfo(data1);
@@ -48,9 +48,9 @@ class Condition extends Component {
     //fields data
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
-    debugger;
+    //debugger;
     var data = await this.props.fetchCategoryName(this.state.name);
-    debugger;
+    //debugger;
     if (data != false) {
       this.dropVal = data.data.Data.globalCodeData;
     }
@@ -67,7 +67,7 @@ class Condition extends Component {
       this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses.forEach(
         (ele) => {
           if (ele.MedicalConditionId == element.GlobalCodeId) {
-            debugger;
+            //debugger;
             element.status = true;
           }
         }
@@ -97,7 +97,7 @@ class Condition extends Component {
       this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses.forEach(
         (ele) => {
           if (ele.MedicalConditionId == element.GlobalCodeId) {
-            debugger;
+            //debugger;
             element.status = true;
           }
         }
@@ -108,7 +108,7 @@ class Condition extends Component {
       areaCheckbox_data: areaData_check,
     });
 
-    debugger;
+    //debugger;
     console.log("mydata", this.state.mycheckbox_data);
     // this.setState({status})
   };
@@ -118,14 +118,14 @@ class Condition extends Component {
   }
 
   saveCondition = () => {
-    debugger;
+    //debugger;
     this.state.fields.medicalConditionRequest = [];
     var inputElems = document.getElementsByTagName("input"),
       count = 0;
     for (var i = 0; i < inputElems.length; i++) {
       if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
         count++;
-        debugger;
+        //debugger;
         this.state.fields.medicalConditionRequest.push({
           medicalConditionId: parseInt(inputElems[i].id),
           
@@ -146,7 +146,7 @@ class Condition extends Component {
 
   //medical-condition
   medicalCondition = (e) => {
-    debugger;
+    //debugger;
     console.log("check_value", e.target.checked);
     this.state.mycheckbox_data.filter(
       (x) => x.GlobalCodeId == parseInt(e.target.id)
@@ -198,8 +198,8 @@ class Condition extends Component {
           <div className="card-body">
             <div className="scheduledServices">
               <div className="row">
-                <div className="col-sm-12">
-                  <div className="col-sm-12 my-5">
+                
+                  <div className="col-sm-12 mb-5">
                     <p>
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                       Duis tempus // sed turpis cras quam ac tortor tempus amet.
@@ -208,9 +208,10 @@ class Condition extends Component {
                       quis nunc, tempus maecenas enim.
                     </p>
                   </div>
+                  <div className="col-sm-12"> 
                   <div className="card">
                     <div className="card-body">
-                      <div className="tab-pane container-fluid" id="conditions">
+                      <div className="tab-pane" id="conditions">
                         <div className="thrChkBox graybg">
                           <Form
                             ref="form"
@@ -279,7 +280,7 @@ class Condition extends Component {
                           </Form>
                         </div>
 
-                        <div className="container">
+                       
                           <div className="row">
                             <div className="col-sm-12 mt-5">
                               <div className="form-group">
@@ -322,10 +323,10 @@ class Condition extends Component {
                           </Button>
                         </div>
                       </div>{" "}
-                    </div>
+                   
                   </div>
                 </div>
-              </div>
+                </div>
             </div>
           </div>
         </div>

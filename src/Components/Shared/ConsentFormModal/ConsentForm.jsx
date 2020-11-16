@@ -28,7 +28,7 @@ class Consent extends Component {
   }
 
   componentDidMount = async (e, data1) => {
-    debugger;
+    //debugger;
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
     // this.state.fields.consentFormStatus = e.target.checked;
@@ -39,7 +39,7 @@ class Consent extends Component {
     //   ? this.props.saveConsent.data.Data.MCF
     //   : consentFormStatus;
     if (this.state.fields.consentFormStatus==true) {
-      debugger;
+      //debugger;
       this.state.fields.consentFormStatus = this.props.saveConsent.data.Data.MCF;
       //  if(this.props.saveConsent.data.Data.MCF==true)
       // document.getElementById("abc123").checked = true;
@@ -47,7 +47,7 @@ class Consent extends Component {
   };
 
   agreed = (e) => {
-    debugger;
+    //debugger;
     // eslint-disable-next-line react/no-direct-mutation-state
     // e.preventDefault();
     // if(e.target.checked==true){

@@ -40,7 +40,7 @@ class ServiceDetail extends Component {
 componentDidMount=()=>{
   var data1 = this.props.user.Data.ClientId;
   this.state.fields.clientId = data1;
-debugger
+//debugger
   // var data2=this.props.getAppointment.Data.AllClientAppointments.ClientScheduleId
   // this.state.fields.clientScheduleId=data2
   this.props.fetchServiceDetails(this.state.fields)
@@ -172,7 +172,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.user.user,
     getAppointment: state.clientScheduleReducer.getAppointment,
-  };
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {

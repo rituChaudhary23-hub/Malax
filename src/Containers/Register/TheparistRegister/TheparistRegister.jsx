@@ -35,10 +35,10 @@ class TheparistRegister extends Component {
   }
 
   componentDidMount = async () => {
-    debugger
+    //debugger
     var data = await this.props.fetchCategoryName(this.state.name);
     let courseData;
-debugger
+//debugger
     if (this.props.categoryName) {
       courseData = this.props.categoryName.filter(
         (item) => item.CodeName == this.state.CodeName

@@ -149,6 +149,9 @@
 }
 
 .therapistProDes {
+	h5{
+	    margin: 0 0 12px 0;
+	}
 		.card {
 		    border: none;
 			padding-top: 10px;
@@ -312,6 +315,13 @@
 					}
 					
 				}
+				.seduledServices{
+					.card{
+					  .card-body{
+						padding:0px;
+					  }
+					}
+				  }
 			}
 		}
 
@@ -385,8 +395,8 @@
 		.thrprofileDes {
 			.form-group {
 					.form-control {
-						background: #F3F6F9;
-						height: 50px;
+						background:transparent;
+						height: 40px;
 						position:relative;
 					}
 					.textArea {
@@ -465,7 +475,7 @@
 						}
 					}
 					.form-check-label {
-						padding: 0 0 0 10px;
+						padding: 0 0 0 23px;
 					    font-size: 20px;
 					    font-weight: 600;
 						&:after,&:before{

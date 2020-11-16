@@ -1,20 +1,22 @@
 import { ClientScheduleService } from "../Services/ClientScheduleService";
 import { toast } from "../../Components/Toast/Toast";
 import { startLoading, stopLoading } from "./loading.action";
+import {
+  dummy
+} from "./persist.action";
 
 export const actionTypes = {
   SAVE_APPOINTMENTS: "SAVE_APPOINTMENTS",
-  SERVICE_DETAIL_SUCCESS:"SERVICE_DETAIL_SUCCESS"
+  SERVICE_DETAIL_SUCCESS: "SERVICE_DETAIL_SUCCESS",
 };
 
 export function saveAppointment(data) {
-  debugger
+  //debugger;
   return {
     type: actionTypes.SAVE_APPOINTMENTS,
     data: data,
   };
-} 
-
+}
 
 export function serviceSuccess(data) {
   console.log("USER", data);
@@ -33,7 +35,7 @@ export function fetchClientAppointment(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-        //   dispatch(saveAppointment(data));
+       
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -54,22 +56,21 @@ export function fetchClientAppointment(data) {
 //get-scheduled-services
 
 export function fetchScheduledAppointment(data) {
-  debugger
+  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
     return ClientScheduleService.getClientAppointments(data, {
-      jwt: state["persist"]["c_temp_user"]["token"]  
-
+      jwt: state["persist"]["c_temp_user"]["token"],
     })
 
-  
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger
+          debugger;
           dispatch(saveAppointment(data));
           // dispatch(serviceSuccess(data["data"]));
+          dispatch(dummy({ token: data["data"]}));
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -87,88 +88,85 @@ export function fetchScheduledAppointment(data) {
   };
 }
 
-
-
 //add-payment-info
 export function fetchPaymentDetails(data) {
-    return (dispatch, getState) => {
-      dispatch(startLoading());
-      let state = getState();
-      return ClientScheduleService.addPaymentInfo(data, {})
-        .then(async (data) => {
-          dispatch(stopLoading());
-          if (data.data.Success) {
-          //   dispatch(saveAppointment(data));
-            toast.success(data["data"]["Message"]);
-  
-            return true;
-          } else {
-            toast.error(data.data.Message);
-            return false;
-          }
-        })
-        .catch((error) => {
-          if (error) {
-            toast.error(error["data"]["Message"]);
-          }
-          dispatch(stopLoading());
-        });
-    };
-  }
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientScheduleService.addPaymentInfo(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+      
+          toast.success(data["data"]["Message"]);
 
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
 
-  //delete-appointment-action
-  export function fetchDeleteAppointment(data) {
-    return (dispatch, getState) => {
-      dispatch(startLoading());
-      let state = getState();
-      return ClientScheduleService.deleteAppointment(data, {})
-        .then(async (data) => {
-          dispatch(stopLoading());
-          if (data.data.Success) {
-          //   dispatch(saveAppointment(data));
-            toast.success(data["data"]["Message"]);
-  
-            return true;
-          } else {
-            toast.error(data.data.Message);
-            return false;
-          }
-        })
-        .catch((error) => {
-          if (error) {
-            toast.error(error["data"]["Message"]);
-          }
-          dispatch(stopLoading());
-        });
-    };
-  }
+//delete-appointment-action
+export function fetchDeleteAppointment(data) {
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientScheduleService.deleteAppointment(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+      
+          toast.success(data["data"]["Message"]);
 
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
 
+//get-service-details
 
-  //get-service-details
-  
-  export function fetchServiceDetails(data) {
-    return (dispatch, getState) => {
-      dispatch(startLoading());
-      let state = getState();
-      return ClientScheduleService.getServiceDetails(data, {})
-        .then(async (data) => {
-          dispatch(stopLoading());
-          if (data.data.Success) {
-            toast.success(data["data"]["Message"]);
-           
-            return true;
-          } else {
-            toast.error(data.data.Message);
-            return false;
-          }
-        })
-        .catch((error) => {
-          if (error) {
-            toast.error(error["data"]["Message"]);
-          }
-          dispatch(stopLoading());
-        });
-    };
-  }
+export function fetchServiceDetails(data) {
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientScheduleService.getServiceDetails(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
