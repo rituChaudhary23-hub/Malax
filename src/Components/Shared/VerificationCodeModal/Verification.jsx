@@ -15,10 +15,10 @@ class Verification extends Component {
       },
     };
   }
-  verifyPhone = () => {
+  verifyPhone = async () => {
     var data = this.props.user.Data.UserId;
     this.state.fields.userId = data;
-    this.props.fetchUpdateEmail(this.state.fields);
+   var res = await this.props.fetchUpdateEmail(this.state.fields);
     this.props.toggle();
   };
 
@@ -27,7 +27,9 @@ class Verification extends Component {
     fields[field] = e.target.value;
     this.setState({ fields });
   }
-
+  close=()=>{
+   this.props.toggle()
+  }
   render() {
     return (
       <Fragment>

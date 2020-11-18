@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  Table,
-  Search,
-  Pagination,
-  Button,
-  Modal,
-  ItemMeta,
-} from "semantic-ui-react";
+import { Table, Button } from "semantic-ui-react";
 import { listDateFormat } from "../../../utils/dateFormat";
 
 import { Link } from "react-router-dom";
@@ -27,46 +20,37 @@ class ServiceAppointment extends Component {
       editService: false,
       deleteService: false,
       editServiceId: "",
-      deleteId:"",
-      userInfo:{},
-      userInfoDelete:{}
+      deleteId: "",
+      userInfo: {},
+      userInfoDelete: {},
     };
   }
 
   componentDidMount = async (data) => {
-    //debugger
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
     this.props.fetchScheduledAppointment(this.state.fields);
   };
 
   editAppointment = (data) => {
-    //debugger;
-    console.log("data--", data);
-    console.log("Id------",data.ClientScheduleId)
     this.setState({ editServiceId: data.ClientScheduleId, editService: true });
-    this.setState({userInfo:data})
-    console.log("editServiceId",this.state.editServiceId)
+    this.setState({ userInfo: data });
   };
   close = () => {
-    
     this.setState({ editService: false });
+    this.props.fetchScheduledAppointment(this.state.fields);
   };
-  closee = async() => {
-    //debugger
+  closee = async () => {
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
-   var ddd = await this.props.fetchScheduledAppointment(this.state.fields);
+    var ddd = await this.props.fetchScheduledAppointment(this.state.fields);
     this.setState({ deleteService: false });
   };
   deleteAppointment = (data) => {
-    console.log("data--", data);
-    console.log("Id------",data.ClientScheduleId)
     this.setState({ deleteId: data.ClientScheduleId, deleteService: true });
-    this.setState({userInfoDelete:data})
+    this.setState({ userInfoDelete: data });
   };
   render() {
-    console.log("----------ritu------", this.props.getAppointment.token);
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -87,13 +71,15 @@ class ServiceAppointment extends Component {
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                      {this.props.getAppointment.token &&
-                        this.props.getAppointment.token.Data.ClientAppointment.map(
+                      {this.props.getAppointment.token != null &&
+                        this.props.getAppointment.token.Data
+                          .AllClientAppointments &&
+                        this.props.getAppointment.token.Data.AllClientAppointments.map(
                           (item, index) => (
                             <Table.Row key={index}>
                               <Table.Cell>
                                 {listDateFormat(item.ServiceDate)}
-                              
+
                                 {/* {listDateFormat(item.ServiceDate).convertToDateTime} */}
                               </Table.Cell>
                               <Table.Cell>{item.From}</Table.Cell>
@@ -102,7 +88,12 @@ class ServiceAppointment extends Component {
                               </Table.Cell>
                               <Table.Cell>None</Table.Cell>
                               <Table.Cell>
-                                <Link to="/theparist-detail">
+                                <Link
+                                  to={
+                                    "/theparist-detail?sid=" +
+                                    item.ClientScheduleId
+                                  }
+                                >
                                   {" "}
                                   {item.Status.CodeName}
                                 </Link>
@@ -116,7 +107,11 @@ class ServiceAppointment extends Component {
                               </Table.Cell>
                               <Table.Cell>
                                 <Button
-                                  onClick={() => this.deleteAppointment(item.ClientScheduleId)}
+                                  onClick={() =>
+                                    this.deleteAppointment(
+                                      item.ClientScheduleId
+                                    )
+                                  }
                                 >
                                   DELETE
                                 </Button>
@@ -138,7 +133,6 @@ class ServiceAppointment extends Component {
                 deleteModal={this.state.deleteService}
                 toggle={this.closee}
                 userDetail={this.state.userInfoDelete}
-
               />
             </div>
           </div>
@@ -149,7 +143,6 @@ class ServiceAppointment extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("--------------state", state);
   return {
     user: state.user.user,
     getAppointment: state.clientScheduleReducer.getAppointment,

@@ -12,7 +12,6 @@ const addAppointment = (data) => {
 
 //get-scheduled-services
 const getClientAppointments = (data) => {
-  //debugger;
   return fetch("post", `${API_HOST}/ClientScheduleAPI/GetAppointments`, data);
 };
 
@@ -35,18 +34,23 @@ const deleteAppointment = (data) => {
 };
 
 const getServiceDetails = (data) => {
+  return fetch("post", `${API_HOST}/ClientScheduleAPI/GetServiceDetail`, data);
+};
+
+const getServiceStatus = (data) => {
+  debugger
   return fetch(
     "post",
-    `${API_HOST}/ClientScheduleAPI/GetServiceDetail`,
+    `${API_HOST}/ClientScheduleAPI/GetServiceDetailStatus`,
     data
   );
 };
 
-
-
 export const ClientScheduleService = {
   addAppointment,
-  addPaymentInfo,getServiceDetails,
+  addPaymentInfo,
+  getServiceDetails,
   getClientAppointments,
-  deleteAppointment
+  deleteAppointment,
+  getServiceStatus,
 };

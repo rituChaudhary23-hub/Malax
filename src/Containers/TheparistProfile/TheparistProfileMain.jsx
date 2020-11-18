@@ -4,7 +4,9 @@ import Verification from "../../Components/Shared/VerificationCodeModal/Verifica
 import UpdateEmail from "../../Components/Shared/UpdateEmailModal/UpdateEmail";
 import Consent from "../../Components/Shared/ConsentFormModal/ConsentForm";
 import Agreement from "../../Components/Shared/AgreementModal/Agreement";
-import Image from "../../Components/Shared/ImageModal/Image";
+import TherapistCurrentImage from "../../Components/Shared/TherapistCurrentImage";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
 import icon1 from "../../assets/images/icon1.png";
 import icon2 from "../../assets/images/icon2.png";
 import icon3 from "../../assets/images/icon3.png";
@@ -12,11 +14,16 @@ import icon4 from "../../assets/images/icon4.png";
 import icon5 from "../../assets/images/icon5.png";
 import icon6 from "../../assets/images/icon6.png";
 import Payment from "../../Components/Shared/PayInfoModal/Payment";
+import { fetchUserPhone } from "../../redux/actions/client.action";
+
 
 class TheparistProfileMain extends Component {
+  phone;
   constructor(props) {
+    
     super(props);
     this.state = {
+      phone:"",
       modal1: false,
       phoneModal: false,
       consentFormModal: false,
@@ -25,19 +32,37 @@ class TheparistProfileMain extends Component {
       payModal: false,
     };
   }
-
+  componentDidMount =  (data) => {
+    data = {
+      userId: this.props.user.Data.UserId,
+    };
+    // var data1 = this.props.user.Data.ClientId;
+    // this.state.fields.clientId = data1;
+    this.props.fetchUserPhone(data);
+    // this.phone = sessionStorage.getItem("value");
+  };
   showModal = () => {
     this.setState({ modal1: true });
-  };
-  showPhoneModal = () => {
-    this.setState({ phoneModal: true });
   };
   closeModal = () => {
     this.setState({ modal1: false });
   };
-  closePhoneModal = () => {
+
+  showPhoneModal = () => {
+    this.setState({ phoneModal: true });
+  };
+
+
+  closePhoneModal = async () => {
+    debugger
+    var data = {
+      userId: this.props.user.Data.UserId,
+    };
+    var res = await this.props.fetchUserPhone(data);
+    debugger
     this.setState({ phoneModal: false });
   };
+
   ShowconsentModal = () => {
     this.setState({ consentFormModal: true });
   };
@@ -92,7 +117,7 @@ class TheparistProfileMain extends Component {
                           </div>
                         </li>
                         <li>
-                          <p>therapist@aol.com</p>
+                        <p> {this.props.user.Data.Email}</p>
                         </li>
                         <li>
                           <Button
@@ -113,10 +138,14 @@ class TheparistProfileMain extends Component {
                           </div>
                         </li>
                         <li>
-                          <p>Not yet confirmed</p>
+                          <p>
+                             {this.props.saveashu.data && this.props.saveashu.data.Data
+                              ? this.props.saveashu.data.Data.PhoneNumber
+                              : "Not Yet Confirmed"}
+                              </p>
                         </li>
                         <li>
-                          <Button
+                        <Button
                             type="button"
                             className="btn btn-sm"
                             onClick={() => this.showPhoneModal()}
@@ -242,6 +271,7 @@ class TheparistProfileMain extends Component {
               </div>
             </div>
           </section>
+   
           <UpdateEmail modal={this.state.modal1} toggle={this.closeModal} />
           <Verification
             Verifymodal={this.state.phoneModal}
@@ -255,7 +285,7 @@ class TheparistProfileMain extends Component {
             agreemodal={this.state.agreementModal}
             toggle={this.closeagreeModal}
           />
-          <Image
+          <TherapistCurrentImage
             imagemodal={this.state.imageModal}
             toggle={this.closeImageModal}
           />
@@ -266,4 +296,22 @@ class TheparistProfileMain extends Component {
   }
 }
 
-export default TheparistProfileMain;
+
+const mapStateToProps = (state) => {
+  console.log("phone state----",state)
+  return {
+    formVal: state.form,
+    user: state.user.user,
+    saveashu: state.clientReducer.saveashu,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserPhone: (data) => dispatch(fetchUserPhone(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(TheparistProfileMain)
+);

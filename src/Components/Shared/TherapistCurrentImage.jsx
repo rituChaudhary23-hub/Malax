@@ -1,15 +1,15 @@
 import React, { Component, Fragment } from "react";
 import { Modal } from "react-bootstrap";
-import { fetchIdentityImage } from "../../../redux/actions/client.action";
+import { fetchTherapistIdentityImage } from "../../redux/actions/therapist.action";
 import { withRouter } from "react-router";
-import { fetchCategoryName } from "../../../redux/actions/global.action";
+import { fetchCategoryName } from "../../redux/actions/global.action";
 
 import { connect } from "react-redux";
 
-class ClientIdentityImage extends Component {
+class TherapistCurrentImage extends Component {
   golbalID = 0;
   dropVal: any;
-  clientImage:any;
+  therapistImage:any;
   constructor(props) {
     super(props);
     this.state = {
@@ -17,11 +17,11 @@ class ClientIdentityImage extends Component {
       isFileValid: false,
       isFormSubmitted: false,
       fields: {
-        clientIdentityId: 0,
-        clientId: 0,
+        therapistIdentityId: 0,
+        therapistId: 0,
         imagesType: "",
-        clientImage: "",
-        clientImageTypeId: 0,
+        therapistImage: "",
+        therapistImageTypeId: 0,
         actionBy: "",
       },
     };
@@ -45,7 +45,7 @@ var _sts = this;
       console.log('file', upload.target.result);
           var base64 = upload.target.result.split(',')[1]
      _sts.setState({
-      clientImage:base64
+        therapistImage:base64
      })
     };
     reader.readAsDataURL(file);
@@ -74,13 +74,13 @@ var _sts = this;
     var InfoAs = e.target.outerText;
     var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
       .GlobalCodeId;
-    this.state.fields.clientImageTypeId = globalId;
-    var data1 = this.props.user.Data.ClientId;
-    this.state.fields.clientId = data1;
-    this.state.fields.clientImage=this.state.clientImage;
+    this.state.fields.therapistImageTypeId = globalId;
+    var data1 = this.props.user.Data.TherapistId;
+    this.state.fields.therapistId = data1;
+    this.state.fields.therapistImage=this.state.therapistImage;
     await this.setState({ isFormSubmitted: true });
 
-    var res = await this.props.fetchIdentityImage(this.state.fields);
+    var res = await this.props.fetchTherapistIdentityImage(this.state.fields);
     if (res == true) {
       this.props.toggle();
     } else {
@@ -91,7 +91,7 @@ var _sts = this;
     return (
       <Fragment>
         <Modal
-          show={this.props.imageIdentitymodal}
+          show={this.props.imagemodal}
           onHide={this.props.toggle}
           size="lg"
           className="custom-modal"
@@ -99,7 +99,7 @@ var _sts = this;
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Upload Photo ID</Modal.Title>
+            <Modal.Title>Upload Photo ID ritu</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="row">
@@ -131,7 +131,7 @@ var _sts = this;
                   <img src={this.props.selectedEditdapps.image} />
                 )} */}
               </div>
-              <img src={"data:image/jpeg;base64,"+ this.state.fields.clientImage} />
+              <img src={"data:image/jpeg;base64,"+ this.state.fields.therapistImage} />
             </div>
           </Modal.Body>
           <Modal.Footer>
@@ -139,10 +139,10 @@ var _sts = this;
               color="blue"
               type="submit"
               className="btn btn-sm btn-primary"
-              //  disabled={this.state.fields.consentFormStatus}
+            
               onClick={this.uploadImage}
             >
-              IDPhoto
+              CurrentPhoto
             </button>
 
             <button
@@ -169,9 +169,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchIdentityImage: (data) => dispatch(fetchIdentityImage(data)),
+    fetchTherapistIdentityImage: (data) => dispatch(fetchTherapistIdentityImage(data)),
     fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ClientIdentityImage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TherapistCurrentImage));

@@ -1,19 +1,33 @@
 import { ClientScheduleService } from "../Services/ClientScheduleService";
 import { toast } from "../../Components/Toast/Toast";
 import { startLoading, stopLoading } from "./loading.action";
-import {
-  dummy
-} from "./persist.action";
+import { dummy } from "./persist.action";
 
 export const actionTypes = {
   SAVE_APPOINTMENTS: "SAVE_APPOINTMENTS",
   SERVICE_DETAIL_SUCCESS: "SERVICE_DETAIL_SUCCESS",
+  SAVE_SERVICE_DETAIL: "SAVE_SERVICE_DETAIL",
+  SAVE_SERVICE_STATUS:"SAVE_SERVICE_STATUS"
 };
 
 export function saveAppointment(data) {
-  //debugger;
   return {
     type: actionTypes.SAVE_APPOINTMENTS,
+    data: data,
+  };
+}
+
+export function saveServiceDetail(data) {
+  return {
+    type: actionTypes.SAVE_SERVICE_DETAIL,
+    data: data,
+  };
+}
+
+
+export function saveServiceStatus(data) {
+  return {
+    type: actionTypes.SAVE_SERVICE_STATUS,
     data: data,
   };
 }
@@ -35,7 +49,6 @@ export function fetchClientAppointment(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-       
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -56,7 +69,7 @@ export function fetchClientAppointment(data) {
 //get-scheduled-services
 
 export function fetchScheduledAppointment(data) {
-  //debugger;
+  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -70,7 +83,7 @@ export function fetchScheduledAppointment(data) {
           debugger;
           dispatch(saveAppointment(data));
           // dispatch(serviceSuccess(data["data"]));
-          dispatch(dummy({ token: data["data"]}));
+          dispatch(dummy({ token: data["data"] }));
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -81,7 +94,7 @@ export function fetchScheduledAppointment(data) {
       })
       .catch((error) => {
         if (error) {
-          toast.error(error["data"]["Message"]);
+          //          toast.error(error["data"]["Message"]);
         }
         dispatch(stopLoading());
       });
@@ -97,7 +110,6 @@ export function fetchPaymentDetails(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-      
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -124,7 +136,6 @@ export function fetchDeleteAppointment(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-      
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -143,7 +154,6 @@ export function fetchDeleteAppointment(data) {
 }
 
 //get-service-details
-
 export function fetchServiceDetails(data) {
   return (dispatch, getState) => {
     dispatch(startLoading());
@@ -154,6 +164,8 @@ export function fetchServiceDetails(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
+          dispatch(saveServiceDetail(data.data));
+      
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -170,3 +182,38 @@ export function fetchServiceDetails(data) {
       });
   };
 }
+
+
+//get-service-status
+
+
+
+export function fetchServiceStatus(data) {
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientScheduleService.getServiceStatus(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          dispatch(saveServiceStatus(data.data));
+      
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+

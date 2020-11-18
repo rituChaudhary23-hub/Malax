@@ -3,10 +3,15 @@ import { Modal } from "react-bootstrap";
 import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
 import { Button, Input, Form } from "semantic-ui-react";
-
 import { connect } from "react-redux";
-import { fetchScheduledAppointment } from "../../../redux/actions/clientSchedule.action";
-import { listDateFormat, listDateFormat_sample } from "../../../utils/dateFormat";
+import {
+  fetchScheduledAppointment,
+  fetchClientAppointment,
+} from "../../../redux/actions/clientSchedule.action";
+import {
+  listDateFormat,
+  listDateFormat_sample,
+} from "../../../utils/dateFormat";
 
 class EditAppointment extends Component {
   userDetail: any;
@@ -17,9 +22,13 @@ class EditAppointment extends Component {
         clientScheduleId: 0,
         clientId: 0,
       },
-      time: "",
-      date:"",
-      address: "",
+      request: {
+        clientScheduleId: 0,
+        clientId: 0,
+        from: "",
+        serviceDate: "",
+        streetAddress: "",
+      },
     };
   }
 
@@ -30,40 +39,46 @@ class EditAppointment extends Component {
   }
 
   changeTime = (e) => {
-    this.state.time = e.target.value;
-    this.props.userDetail.From = this.state.time;
-    this.setState({ time: this.props.userDetail.From });
+    this.setState({ request: { ...this.state.request, from: e.target.value } });
   };
-
 
   updateAddress = (e) => {
-    this.state.address = e.target.value;
-    this.props.userDetail.StreetAddress = this.state.address;
-    this.setState({ address: this.props.userDetail.StreetAddress });
+    this.setState({
+      request: { ...this.state.request, streetAddress: e.target.value },
+    });
   };
-  editAppointment = async() => {
+  editAppointment = async () => {
+    if (this.state.request.streetAddress == "") {
+      this.state.request.streetAddress = this.userDetail.StreetAddress;
+    }
+    if (this.state.request.serviceDate == "") {
+      this.state.request.serviceDate = this.userDetail.ServiceDate;
+    }
+    if (this.state.request.from == "") {
+      this.state.request.from = this.userDetail.From;
+    }
+    var data2 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data2;
     var data1 = this.props.user.Data.ClientId;
-    this.state.fields.clientId = data1;
+    this.state.request.clientId = data1;
     var data = this.props.userDetail.ClientScheduleId;
-
-    this.state.fields.clientScheduleId = data;
-
-    var aa = await this.props.fetchScheduledAppointment(this.state.fields);
+    this.state.request.clientScheduleId = data;
+    var res = await this.props.fetchClientAppointment(this.state.request);
     this.props.toggle();
-    
+    this.props.fetchScheduledAppointment(this.state.fields);
   };
 
-  updateDate=(e)=>{
-console.log("ashu-----", e.target.value)
-this.state.date = e.target.value;
-this.props.userDetail.ServiceDate = this.state.date;
-this.setState({ date: this.props.userDetail.ServiceDate });
-  }
+  updateDate = (e) => {
+    debugger
+    this.state.request.serviceDate = e.target.value;
+    this.props.userDetail.ServiceDate = this.state.request.serviceDate;
+    this.setState({ serviceDate: this.props.userDetail.ServiceDate });
+  };
 
   render() {
     const { submitting } = this.props;
     this.userDetail = this.props.userDetail;
-    console.log("data-new---------", this.userDetail);
+
     return (
       <Fragment>
         <Form autoComplete="off">
@@ -169,6 +184,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchScheduledAppointment: (data) =>
       dispatch(fetchScheduledAppointment(data)),
+    fetchClientAppointment: (data) => dispatch(fetchClientAppointment(data)),
   };
 };
 

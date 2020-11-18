@@ -110,9 +110,13 @@ class Consent extends Component {
 
               <div className="col-sm-12 mt-4">
                 <div className="form-check form-check-inline">
+                  
+                  
+                  
                   <input
-                    className="form-check-input"
-                    type="checkbox"
+                    // className="form-check-input"
+                    className="input"
+                    type="CheckBox"
                     id="abc123"
                     //  value={ this.state.fields.consentFormStatus}
                     onChange={this.agreed}

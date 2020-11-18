@@ -5,20 +5,21 @@ import { connect } from "react-redux";
 import { Table, Modal, Label, Button } from "semantic-ui-react";
 import CancelService from "../../../Components/Shared/CancelService/CancelService";
 import ScheduledService from "../../../Components/Shared/ScheduledServiceModal/ScheduledService";
-import {fetchServiceDetails} from "../../../redux/actions/clientSchedule.action"
+import { fetchServiceDetails,fetchServiceStatus } from "../../../redux/actions/clientSchedule.action";
+
 
 class ServiceDetail extends Component {
   constructor(props) {
     super(props);
-    this.state = { cancelModal: false, service: false ,
-    
-    fields:{
-            clientScheduleId: 0,
+    this.state = {
+      cancelModal: false,
+      service: false,
+
+      fields: {
+        clientScheduleId: 0,
         clientId: 0,
-        status: 0
-     
-    }
-    
+        status: 0,
+      },
     };
   }
   back() {
@@ -37,17 +38,22 @@ class ServiceDetail extends Component {
     this.setState({ cancelModal: false });
   };
 
-componentDidMount=()=>{
-  var data1 = this.props.user.Data.ClientId;
-  this.state.fields.clientId = data1;
-//debugger
-  // var data2=this.props.getAppointment.Data.AllClientAppointments.ClientScheduleId
-  // this.state.fields.clientScheduleId=data2
-  this.props.fetchServiceDetails(this.state.fields)
-}
+  componentDidMount = () => {
+    debugger;
+    var data1 = this.props.user.Data.ClientId;
+    this.state.fields.clientId = data1;
+    var data2 = parseInt(this.props.location.search.split("=")[1]);
+    var stats = this.props.getAppointment.token.Data.AllClientAppointments.filter(
+      (x) => x.ClientScheduleId == data2
+    )[0].Status.GlobalCodeId;
+    this.state.fields.clientScheduleId = data2;
+    this.state.fields.status = stats;
+    this.props.fetchServiceDetails(this.state.fields);
+    this.props.fetchServiceStatus(this.state.fields)
+  };
 
   render() {
-    console.log(" getAppointment------",this.props.getAppointment.data)
+    console.log(" getAppointment------", this.props.getAppointment);
     return (
       <div>
         <Header />
@@ -59,11 +65,32 @@ componentDidMount=()=>{
                 <div className="col-sm-12">
                   <div className="serDetDes">
                     <p>
-                      30 minutes Relaxation on 10th of september between 10 am -
-                      12 am.
+                     
+                      {this.props.getServiceDetails.Data.Timelength}
+                      {""}
+                      &nbsp;
+                      {this.props.getServiceDetails.Data.MassageType} &nbsp; on
+                      &nbsp;
+                      {this.props.getServiceDetails.Data.ServiceDate} &nbsp;
+                      between &nbsp;
+                      {this.props.getServiceDetails.Data.To} &nbsp;
+                      {""}
+                      {""}- &nbsp;
+                      {this.props.getServiceDetails.Data.From}
                     </p>
-                    <p>Male client with therapist male only.</p>
-                    <p>At home in the town - Heights area.</p>
+                    <p>
+                     
+                      {this.props.getServiceDetails.Data.ClientGender}
+                      &nbsp;Client with therapist &nbsp;
+                      {this.props.getServiceDetails.Data.TherapistGender}&nbsp;
+                      only.
+                    </p>
+                    <p>
+                      {/* At home in the town - Heights area. */}
+                      {this.props.getServiceDetails.Data.LocationType}&nbsp;in the &nbsp;
+                      {this.props.getServiceDetails.Data.GeneralLocation}&nbsp;Area
+                      
+                      </p>
                   </div>
 
                   <br></br>
@@ -73,7 +100,11 @@ componentDidMount=()=>{
                         <div className="row">
                           <div className="col-sm-8">
                             <div className="thisSer">
-                              <h5>This service has not been scheduled yet.</h5>
+                              <h5>
+                                This service has not been scheduled yet.
+{/* {this.props.getServiceStatus.Data.Message} */}
+
+                              </h5>
                             </div>
                           </div>
                           <div className="col-sm-4 text-right">
@@ -169,16 +200,19 @@ componentDidMount=()=>{
 }
 
 const mapStateToProps = (state) => {
+  console.log("Service--Detail", state);
   return {
     user: state.user.user,
     getAppointment: state.clientScheduleReducer.getAppointment,
-    };
+    getServiceStatus:state.clientScheduleReducer.getServiceStatus,
+    getServiceDetails: state.clientScheduleReducer.getServiceDetails,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchServiceDetails: (data) =>
-      dispatch(fetchServiceDetails(data)),
+    fetchServiceDetails: (data) => dispatch(fetchServiceDetails(data)),
+    fetchServiceStatus:(data)=> dispatch(fetchServiceStatus(data))
   };
 };
 
