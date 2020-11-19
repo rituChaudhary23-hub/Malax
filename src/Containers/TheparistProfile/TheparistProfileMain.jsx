@@ -5,6 +5,7 @@ import UpdateEmail from "../../Components/Shared/UpdateEmailModal/UpdateEmail";
 import Consent from "../../Components/Shared/ConsentFormModal/ConsentForm";
 import Agreement from "../../Components/Shared/AgreementModal/Agreement";
 import TherapistCurrentImage from "../../Components/Shared/TherapistCurrentImage";
+import TherapistImage from "../../Components/Shared/TherapistImage";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import icon1 from "../../assets/images/icon1.png";
@@ -16,30 +17,26 @@ import icon6 from "../../assets/images/icon6.png";
 import Payment from "../../Components/Shared/PayInfoModal/Payment";
 import { fetchUserPhone } from "../../redux/actions/client.action";
 
-
 class TheparistProfileMain extends Component {
   phone;
   constructor(props) {
-    
     super(props);
     this.state = {
-      phone:"",
+      phone: "",
       modal1: false,
       phoneModal: false,
       consentFormModal: false,
       agreementModal: false,
       imageModal: false,
       payModal: false,
+      idImageModal: false,
     };
   }
-  componentDidMount =  (data) => {
+  componentDidMount = (data) => {
     data = {
       userId: this.props.user.Data.UserId,
     };
-    // var data1 = this.props.user.Data.ClientId;
-    // this.state.fields.clientId = data1;
     this.props.fetchUserPhone(data);
-    // this.phone = sessionStorage.getItem("value");
   };
   showModal = () => {
     this.setState({ modal1: true });
@@ -52,14 +49,12 @@ class TheparistProfileMain extends Component {
     this.setState({ phoneModal: true });
   };
 
-
   closePhoneModal = async () => {
-    debugger
     var data = {
       userId: this.props.user.Data.UserId,
     };
     var res = await this.props.fetchUserPhone(data);
-    debugger
+
     this.setState({ phoneModal: false });
   };
 
@@ -82,6 +77,13 @@ class TheparistProfileMain extends Component {
   };
   closeImageModal = () => {
     this.setState({ imageModal: false });
+  };
+
+  ShowImageIdModal = () => {
+    this.setState({ idImageModal: true });
+  };
+  closeIdModal = () => {
+    this.setState({ idImageModal: false });
   };
 
   ShowPayModal = () => {
@@ -117,7 +119,7 @@ class TheparistProfileMain extends Component {
                           </div>
                         </li>
                         <li>
-                        <p> {this.props.user.Data.Email}</p>
+                          <p> {this.props.user.Data.Email}</p>
                         </li>
                         <li>
                           <Button
@@ -139,13 +141,14 @@ class TheparistProfileMain extends Component {
                         </li>
                         <li>
                           <p>
-                             {this.props.saveashu.data && this.props.saveashu.data.Data
+                            {this.props.saveashu.data &&
+                            this.props.saveashu.data.Data
                               ? this.props.saveashu.data.Data.PhoneNumber
                               : "Not Yet Confirmed"}
-                              </p>
+                          </p>
                         </li>
                         <li>
-                        <Button
+                          <Button
                             type="button"
                             className="btn btn-sm"
                             onClick={() => this.showPhoneModal()}
@@ -199,7 +202,7 @@ class TheparistProfileMain extends Component {
                           <Button
                             type="button"
                             className="btn btn-sm"
-                            onClick={() => this.ShowImageModal()}
+                            onClick={() => this.ShowImageIdModal()}
                           >
                             Upload ID photo
                           </Button>
@@ -271,7 +274,7 @@ class TheparistProfileMain extends Component {
               </div>
             </div>
           </section>
-   
+
           <UpdateEmail modal={this.state.modal1} toggle={this.closeModal} />
           <Verification
             Verifymodal={this.state.phoneModal}
@@ -286,8 +289,13 @@ class TheparistProfileMain extends Component {
             toggle={this.closeagreeModal}
           />
           <TherapistCurrentImage
-            imagemodal={this.state.imageModal}
+            currentImagemodal={this.state.imageModal}
             toggle={this.closeImageModal}
+          />
+
+          <TherapistImage
+            imageModal={this.state.idImageModal}
+            toggle={this.closeIdModal}
           />
           <Payment paymodal={this.state.payModal} toggle={this.closePayModal} />
         </div>
@@ -296,9 +304,8 @@ class TheparistProfileMain extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
-  console.log("phone state----",state)
+  console.log("phone state----", state);
   return {
     formVal: state.form,
     user: state.user.user,

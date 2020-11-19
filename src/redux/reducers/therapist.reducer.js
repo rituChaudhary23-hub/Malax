@@ -2,16 +2,17 @@ import { actionTypes } from "../actions/therapist.action";
 
 const initialState = {
 
-  saveImage: {},
+  saveIdentityImage: {},
 };
 
 const therapistReducer = (state = initialState, action) => {
+  debugger
   console.log(action);
   switch (action.type) {
     case actionTypes.SAVE_THERAPIST_IMAGE:
       return {
         ...state,
-        saveImage: action.data,
+        saveIdentityImage: action.data,
       };
 
     default:

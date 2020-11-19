@@ -95,7 +95,6 @@ class ProfileMain extends Component {
   }
 
   render() {
-   console.log('****Navi**********',this.props.saveashu.data)
     return (
       <div className="tab-content pistPro">
         <div id="TherapistProfile1" className="tab-pane active">

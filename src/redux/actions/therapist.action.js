@@ -23,6 +23,7 @@ export function fetchTherapistIdentityImage(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
+          debugger
           dispatch(saveTherapistImage(data));
           toast.success(data["data"]["Message"]);
 
@@ -35,6 +36,39 @@ export function fetchTherapistIdentityImage(data) {
       .catch((error) => {
         if (error) {
           toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+
+
+//consent-form-action
+
+export function fetchTherapistConsentForm(data) {
+debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+
+    let state = getState();
+    return TherapistService.therapistConsentForm(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
+      .then(async (data) => {
+        dispatch(stopLoading());
+       debugger;
+        if (data.data.Success) {
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["data"]["Message"]);
         }
         dispatch(stopLoading());
       });

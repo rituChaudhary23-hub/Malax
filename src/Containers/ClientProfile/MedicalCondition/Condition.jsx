@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-expressions */
+
 import React, { Component } from "react";
 import { Form, TextArea, Button } from "semantic-ui-react";
 import { Field } from "redux-form";
@@ -20,7 +20,7 @@ class Condition extends Component {
     this.state = {
       clientId: 0,
       myStatus: [],
-      myAreaStatus:[],
+      myAreaStatus: [],
       name: "MedicalConditions",
       mycheckbox_data: [],
       my_checkBox: false,
@@ -40,7 +40,6 @@ class Condition extends Component {
 
   componentWillMount = async () => {
     //get-condition
-    //debugger;
     var data1 = this.props.user.Data.ClientId;
     this.state.clientId = data1;
     var res = await this.props.getConditionInfo(data1);
@@ -48,9 +47,9 @@ class Condition extends Component {
     //fields data
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
-    //debugger;
+
     var data = await this.props.fetchCategoryName(this.state.name);
-    //debugger;
+
     if (data != false) {
       this.dropVal = data.data.Data.globalCodeData;
     }
@@ -67,7 +66,6 @@ class Condition extends Component {
       this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses.forEach(
         (ele) => {
           if (ele.MedicalConditionId == element.GlobalCodeId) {
-            //debugger;
             element.status = true;
           }
         }
@@ -91,13 +89,11 @@ class Condition extends Component {
       });
     });
 
-
     var areaData_check = this._areaData;
     areaData_check.forEach((element) => {
       this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses.forEach(
         (ele) => {
           if (ele.MedicalConditionId == element.GlobalCodeId) {
-            //debugger;
             element.status = true;
           }
         }
@@ -107,10 +103,6 @@ class Condition extends Component {
     this.setState({
       areaCheckbox_data: areaData_check,
     });
-
-    //debugger;
-    console.log("mydata", this.state.mycheckbox_data);
-    // this.setState({status})
   };
 
   back() {
@@ -118,24 +110,19 @@ class Condition extends Component {
   }
 
   saveCondition = () => {
-    //debugger;
     this.state.fields.medicalConditionRequest = [];
     var inputElems = document.getElementsByTagName("input"),
       count = 0;
     for (var i = 0; i < inputElems.length; i++) {
       if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
         count++;
-        //debugger;
+
         this.state.fields.medicalConditionRequest.push({
           medicalConditionId: parseInt(inputElems[i].id),
-          
         });
-        //alert(count)
       }
-
     }
     this.props.fetchUserMedicalCondition(this.state.fields);
-
   };
 
   setFormValue(field, e) {
@@ -146,8 +133,6 @@ class Condition extends Component {
 
   //medical-condition
   medicalCondition = (e) => {
-    //debugger;
-    console.log("check_value", e.target.checked);
     this.state.mycheckbox_data.filter(
       (x) => x.GlobalCodeId == parseInt(e.target.id)
     )[0].status = e.target.checked;
@@ -155,24 +140,21 @@ class Condition extends Component {
     if (e.target.checked == true) {
       this.state.fields.medicalConditionRequest.push({
         medicalConditionId: parseInt(e.target.id),
-        
       });
     }
-    //  document.getElementById(e.target.id).checked = e.target.checked;
     if (e.target.checked == false) {
       document.getElementById(e.target.id).removeAttribute("checked");
     } else {
       document.getElementById(e.target.id).setAttribute("checked", "true");
     }
-    console.log("asdsdadd", this.state.mycheckbox_data);
   };
 
   medicalAreaCondition = (e) => {
     this._areaData.filter(
       (x) => x.GlobalCodeId == parseInt(e.target.id)
     )[0].status = e.target.checked;
-    this.setState({myAreaStatus:this._areaData})
-    if(e.target.checked==true){
+    this.setState({ myAreaStatus: this._areaData });
+    if (e.target.checked == true) {
       this.state.fields.medicalConditionRequest.push({
         medicalConditionId: parseInt(e.target.id),
       });
@@ -182,33 +164,27 @@ class Condition extends Component {
     } else {
       document.getElementById(e.target.id).setAttribute("checked", "true");
     }
-    console.log("areaaaa-----------", this._areaData);
-  
   };
 
   render() {
     const { submitting } = this.props;
     this._areaData = this.state.areaCheckbox_data;
-    console.log("get-condition", this.props.MedicalCondition);
-    console.log("ritu******", this.state.mycheckbox_data);
-    console.log("Ashu$$$$$$$$----", this.state.myStatus);
     return (
       <section className="therapistProDes">
         <div className="card">
           <div className="card-body">
             <div className="scheduledServices">
               <div className="row">
-                
-                  <div className="col-sm-12 mb-5">
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Duis tempus // sed turpis cras quam ac tortor tempus amet.
-                      Dolor eget enim ultrices // dictum tempor pharetra. Id
-                      montes, non mattis viverra. Vel nibh arcu // venenatis leo
-                      quis nunc, tempus maecenas enim.
-                    </p>
-                  </div>
-                  <div className="col-sm-12"> 
+                <div className="col-sm-12 mb-5">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Duis tempus // sed turpis cras quam ac tortor tempus amet.
+                    Dolor eget enim ultrices // dictum tempor pharetra. Id
+                    montes, non mattis viverra. Vel nibh arcu // venenatis leo
+                    quis nunc, tempus maecenas enim.
+                  </p>
+                </div>
+                <div className="col-sm-12">
                   <div className="card">
                     <div className="card-body">
                       <div className="tab-pane" id="conditions">
@@ -280,53 +256,51 @@ class Condition extends Component {
                           </Form>
                         </div>
 
-                       
-                          <div className="row">
-                            <div className="col-sm-12 mt-5">
-                              <div className="form-group">
-                                <label for="usr" className="chkBox">
-                                  Any other health concerns{" "}
-                                </label>
-                                <textarea
-                                  className="form-control textArea"
-                                  rows="6"
-                                  id="comment"
-                                  value={this.state.fields.healthConcerns}
-                                  placeholder=" Any other health concerns"
-                                  onChange={this.setFormValue.bind(
-                                    this,
-                                    "healthConcerns"
-                                  )}
-                                  autoComplete="false"
-                                ></textarea>
-                              </div>
+                        <div className="row">
+                          <div className="col-sm-12 mt-5">
+                            <div className="form-group">
+                              <label for="usr" className="chkBox">
+                                Any other health concerns{" "}
+                              </label>
+                              <textarea
+                                className="form-control textArea"
+                                rows="6"
+                                id="comment"
+                                value={this.state.fields.healthConcerns}
+                                placeholder=" Any other health concerns"
+                                onChange={this.setFormValue.bind(
+                                  this,
+                                  "healthConcerns"
+                                )}
+                                autoComplete="false"
+                              ></textarea>
                             </div>
                           </div>
                         </div>
-                        <div className="text-right mt-5">
-                          <Button
-                            type="submit"
-                            className="btn btn-primary mr-4"
-                            data-dismiss="modal"
-                            disabled={submitting}
-                            onClick={this.saveCondition}
-                          >
-                            Save
-                          </Button>
-                          <Button
-                            type="button"
-                            className="btn btn-cancel"
-                            data-dismiss="modal"
-                            onClick={this.back}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </div>{" "}
-                   
+                      </div>
+                      <div className="text-right mt-5">
+                        <Button
+                          type="submit"
+                          className="btn btn-primary mr-4"
+                          data-dismiss="modal"
+                          disabled={submitting}
+                          onClick={this.saveCondition}
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          type="button"
+                          className="btn btn-cancel"
+                          data-dismiss="modal"
+                          onClick={this.back}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>{" "}
                   </div>
                 </div>
-                </div>
+              </div>
             </div>
           </div>
         </div>

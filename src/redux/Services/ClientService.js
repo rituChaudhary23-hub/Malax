@@ -15,18 +15,11 @@ const updateUserEmail = (data) => {
 
 //get user phone number
 const getUserPhone = (data) => {
-  // var data1={
-
-  //     userId: data
-
-  // }
   return fetch("post", `${API_HOST}/AuthAPI/GetUserPhoneNumber`, data);
 };
 
 //consent form
 const ConsentFormApi = (data) => {
-  console.log("user consent------------", data);
-  //debugger;
   return fetch("post", `${API_HOST}/ClientAPI/AddClientConsentForms`, data);
 };
 
@@ -53,8 +46,6 @@ const medicalConditionApi = (data) => {
 //add-massage-preferences
 
 const addMassageApi = (data) => {
-  console.log("user info------------", data);
-  //debugger;
   return fetch(
     "post",
     `${API_HOST}/ClientAPI/AddClientMassagePreferences`,
@@ -64,7 +55,6 @@ const addMassageApi = (data) => {
 
 //get-medical-condition
 const getMedicalCondition = (data) => {
-  //debugger
   var data1 = {
     clientId: data,
   };
@@ -78,7 +68,6 @@ const getMedicalCondition = (data) => {
 
 //get-massage-pref
 const getMassageSelected = (data) => {
-  //debugger
   var data1 = {
     clientId: data,
   };
@@ -107,8 +96,6 @@ const getMedicalInfo = (data) => {
 
 //get consent form
 const getConsentAgreement = (data) => {
-  console.log("user info------------", data);
-  //debugger;
   var data1 = {
     clientId: data,
   };
@@ -117,14 +104,10 @@ const getConsentAgreement = (data) => {
 
 //client-loc
 const addClientLoc = (data) => {
-  console.log("user info------------", data);
-  //debugger;
   return fetch("post", `${API_HOST}/ClientAPI/AddUpdateClientLocations`, data);
 };
 //get-loc
 const getClientLoc = (data) => {
-  console.log("user info------------", data);
-  //debugger;
   var data1 = {
     clientId: data,
   };
@@ -135,7 +118,6 @@ const getClientLoc = (data) => {
 
 const addImage = (data) => {
   console.log("user info------------", data);
-  //debugger;
   return fetch("post", `${API_HOST}/ClientAPI/AddClientIdentityImage`, data);
 };
 export const ClientService = {

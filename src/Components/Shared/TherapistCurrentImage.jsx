@@ -91,7 +91,7 @@ var _sts = this;
     return (
       <Fragment>
         <Modal
-          show={this.props.imagemodal}
+          show={this.props.currentImagemodal}
           onHide={this.props.toggle}
           size="lg"
           className="custom-modal"
@@ -99,7 +99,7 @@ var _sts = this;
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Upload Photo ID ritu</Modal.Title>
+            <Modal.Title>Upload Photo ID</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="row">
@@ -126,10 +126,6 @@ var _sts = this;
                   this.state.isFileValid === false && (
                     <p style={{ color: "red" }}>Please upload file</p>
                   )}
-
-                {/* {this.state.isFileValid && (
-                  <img src={this.props.selectedEditdapps.image} />
-                )} */}
               </div>
               <img src={"data:image/jpeg;base64,"+ this.state.fields.therapistImage} />
             </div>
