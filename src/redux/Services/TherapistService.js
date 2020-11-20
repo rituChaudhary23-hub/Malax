@@ -18,9 +18,22 @@ const addImage = (data) => {
   );
 };
 
+//get-image-api
+const getTherapistImage = (data) => {
+  debugger;
+  var identity={
+    therapistId: data
+  }
+  return fetch(
+    "post",
+    `${API_HOST}/TherapistAPI/GetTherapistIdentity`,
+    identity
+  );
+};
+
+
 //consent-form-api
 const therapistConsentForm = (data) => {
-  debugger
   return fetch(
     "post",
     `${API_HOST}/TherapistAPI/AddTherapistConsentForms`,
@@ -28,7 +41,21 @@ const therapistConsentForm = (data) => {
   );
 };
 
+//payment-api
+const therapistPaymentDetails = (data) => {
+  debugger;
+  return fetch(
+    "post",
+    `${API_HOST}/TherapistAPI​/AddTherapistPaymentInfo`,
+    data
+  );
+};
+
+
+
 export const TherapistService = {
   addImage,
+  getTherapistImage,
   therapistConsentForm,
+  therapistPaymentDetails,
 };

@@ -1,15 +1,20 @@
 import React, { Component, Fragment } from "react";
 import { Modal } from "react-bootstrap";
-import { fetchTherapistIdentityImage } from "../../redux/actions/therapist.action";
+import {
+  fetchTherapistIdentityImage,
+  getIdentityImage,
+} from "../../redux/actions/therapist.action";
 import { withRouter } from "react-router";
 import { fetchCategoryName } from "../../redux/actions/global.action";
+import { IMAGE_API_HOST } from "../../utils/config/constants/index";
 
 import { connect } from "react-redux";
 
 class TherapistCurrentImage extends Component {
+  currentImg: any;
   golbalID = 0;
   dropVal: any;
-  therapistImage:any;
+  therapistImage: any;
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +35,18 @@ class TherapistCurrentImage extends Component {
     var data = await this.props.fetchCategoryName(this.state.name);
     if (data != false) {
       this.dropVal = data.data.Data.globalCodeData;
+      //get-currentPhoto-globalID
+      var globalID = this.dropVal.filter((x) => x.CodeName == "CurrentPhoto")[0]
+        .GlobalCodeId;
     }
+     //get-image
+    var data1 = this.props.user.Data.TherapistId;
+    this.state.fields.therapistId = data1;
+    var aa = await this.props.getIdentityImage(data1);
+   
+    this.currentImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(
+      (x) => x.TherapistImageTypeId == globalID
+    )[0].TherapistImage;
   };
   close = () => {
     this.props.toggle();
@@ -40,26 +56,23 @@ class TherapistCurrentImage extends Component {
     e.preventDefault();
     var reader = new FileReader();
     var file = e.target.files[0];
-var _sts = this;
-    reader.onload = function(upload) {
-      console.log('file', upload.target.result);
-          var base64 = upload.target.result.split(',')[1]
-     _sts.setState({
-        therapistImage:base64
-     })
+    var _sts = this;
+    reader.onload = function (upload) {
+      var base64 = upload.target.result.split(",")[1];
+      _sts.setState({
+        therapistImage: base64,
+      });
     };
     reader.readAsDataURL(file);
-    console.log(this.state.image);
 
-   
     if (
       e.target.files[0].type === "image/jpeg" ||
       e.target.files[0].type === "image/png" ||
       e.target.files[0].type === "image/jpg"
     ) {
-      if (e.target.files[0].size <= 1000000) {       
-        var data1 = e.target.files[0].type
-        this.state.fields.imagesType=data1
+      if (e.target.files[0].size <= 1000000) {
+        var data1 = e.target.files[0].type;
+        this.state.fields.imagesType = data1;
         this.setState({ isFileValid: true });
       } else {
         alert("not suportes");
@@ -68,16 +81,17 @@ var _sts = this;
       alert("ok");
     }
   };
-  
+
   uploadImage = async (e, data) => {
     e.preventDefault();
     var InfoAs = e.target.outerText;
     var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
       .GlobalCodeId;
+
     this.state.fields.therapistImageTypeId = globalId;
     var data1 = this.props.user.Data.TherapistId;
     this.state.fields.therapistId = data1;
-    this.state.fields.therapistImage=this.state.therapistImage;
+    this.state.fields.therapistImage = this.state.therapistImage;
     await this.setState({ isFormSubmitted: true });
 
     var res = await this.props.fetchTherapistIdentityImage(this.state.fields);
@@ -88,6 +102,7 @@ var _sts = this;
   };
 
   render() {
+    console.log("currentImage--------", this.props.currentImage);
     return (
       <Fragment>
         <Modal
@@ -120,14 +135,22 @@ var _sts = this;
                   multiple
                   ref="fileInput"
                   onChange={this.onFileUploadChange}
-                
                 />
+
+                {/* ${BTC_ADDRESS_BTC}/${address} */}
+                {this.currentImg && <img src={this.currentImg} />}
                 {this.state.isFormSubmitted &&
                   this.state.isFileValid === false && (
                     <p style={{ color: "red" }}>Please upload file</p>
                   )}
               </div>
-              <img src={"data:image/jpeg;base64,"+ this.state.fields.therapistImage} />
+              {this.state.fields.therapistImage != "" && (
+                <img
+                  src={
+                    "data:image/jpeg;base64," + this.state.fields.therapistImage
+                  }
+                />
+              )}
             </div>
           </Modal.Body>
           <Modal.Footer>
@@ -135,19 +158,18 @@ var _sts = this;
               color="blue"
               type="submit"
               className="btn btn-sm btn-primary"
-            
               onClick={this.uploadImage}
             >
               CurrentPhoto
             </button>
 
             <button
-             color="grey"
-             type="button"
-             className="btn btn-sm btn-white"
-             onClick={this.close}
-           >
-             Cancel
+              color="grey"
+              type="button"
+              className="btn btn-sm btn-white"
+              onClick={this.close}
+            >
+              Cancel
             </button>
           </Modal.Footer>
         </Modal>
@@ -160,14 +182,19 @@ const mapStateToProps = (state) => {
     formVal: state.form,
     user: state.user.user,
     saveConsent: state.clientReducer.saveConsent,
+    currentImage: state.therapistReducer.saveIdentity,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchTherapistIdentityImage: (data) => dispatch(fetchTherapistIdentityImage(data)),
+    fetchTherapistIdentityImage: (data) =>
+      dispatch(fetchTherapistIdentityImage(data)),
+    getIdentityImage: (data) => dispatch(getIdentityImage(data)),
     fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TherapistCurrentImage));
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(TherapistCurrentImage)
+);

@@ -115,11 +115,18 @@ const getClientLoc = (data) => {
 };
 
 //upload-image
-
 const addImage = (data) => {
   console.log("user info------------", data);
   return fetch("post", `${API_HOST}/ClientAPI/AddClientIdentityImage`, data);
 };
+
+
+//get-uploaded-image
+const getClientImage = (data) => {
+  console.log("user info------------", data);
+  return fetch("post", `${API_HOST}/ClientAPI/GetClientIdentityImage`, data);
+};
+
 export const ClientService = {
   getUserEmail,
   getMedicalInfo,
@@ -127,6 +134,7 @@ export const ClientService = {
   getConsentAgreement,
   getClientLoc,
   addClientLoc,
+  getClientImage, 
   getUserInfo,
   updateUserEmail,
   getUserPhone,

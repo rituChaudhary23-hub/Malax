@@ -238,10 +238,8 @@ class Massage extends Component {
                         <h5>Frequency</h5>
                         <Dropdown
                        className='abc'
-                        //  defaultValue={this.state.selectedFreq}
                           options={this.FrequencyOptions}
                           selection
-                          // selected={this.state.selectedFreq}
                            value={this.state.selectedFreq}
                           onChange={this.changeFrequency}
                         

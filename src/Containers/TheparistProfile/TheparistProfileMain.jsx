@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { Table, Search, Pagination, Button, Modal } from "semantic-ui-react";
 import Verification from "../../Components/Shared/VerificationCodeModal/Verification";
 import UpdateEmail from "../../Components/Shared/UpdateEmailModal/UpdateEmail";
-import Consent from "../../Components/Shared/ConsentFormModal/ConsentForm";
+import TherapistConsentForm from "../../Components/Shared/TherapistConsentForm"
 import Agreement from "../../Components/Shared/AgreementModal/Agreement";
 import TherapistCurrentImage from "../../Components/Shared/TherapistCurrentImage";
+import TherapistAgreement from "../../Components/Shared/TherapistAgreementForm"
 import TherapistImage from "../../Components/Shared/TherapistImage";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
@@ -280,11 +281,11 @@ class TheparistProfileMain extends Component {
             Verifymodal={this.state.phoneModal}
             toggle={this.closePhoneModal}
           />
-          <Consent
+          <TherapistConsentForm
             consentmodal={this.state.consentFormModal}
             toggle={this.closeConsentModal}
           />
-          <Agreement
+          <TherapistAgreement
             agreemodal={this.state.agreementModal}
             toggle={this.closeagreeModal}
           />

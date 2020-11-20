@@ -4,6 +4,8 @@ import { startLoading, stopLoading } from "./loading.action";
 
 export const actionTypes = {
   SAVE_THERAPIST_IMAGE: "SAVE_THERAPIST_IMAGE",
+  SAVE_PAYMENT_INFO: "SAVE_PAYMENT_INFO",
+  SAVE_IDENTITY_IMAGE:"SAVE_IDENTITY_IMAGE"
 };
 
 export function saveTherapistImage(data) {
@@ -13,9 +15,21 @@ export function saveTherapistImage(data) {
   };
 }
 
+export function saveIdentityImage(data) {
+  return {
+    type: actionTypes.SAVE_IDENTITY_IMAGE,
+    data: data,
+  };
+}
+export function saveTherapistPayInfo(data) {
+  return {
+    type: actionTypes.SAVE_PAYMENT_INFO,
+    data: data,
+  };
+}
+
 //image-upload
 export function fetchTherapistIdentityImage(data) {
-  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -23,7 +37,6 @@ export function fetchTherapistIdentityImage(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger
           dispatch(saveTherapistImage(data));
           toast.success(data["data"]["Message"]);
 
@@ -42,11 +55,36 @@ export function fetchTherapistIdentityImage(data) {
   };
 }
 
+//get-identity-iamge
+export function getIdentityImage(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return TherapistService.getTherapistImage(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          debugger;
+          dispatch(saveIdentityImage(data));
+          toast.success(data["data"]["Message"]);
 
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
 //consent-form-action
-
 export function fetchTherapistConsentForm(data) {
-debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -56,7 +94,7 @@ debugger;
     })
       .then(async (data) => {
         dispatch(stopLoading());
-       debugger;
+      
         if (data.data.Success) {
           toast.success(data["data"]["Message"]);
 
@@ -69,6 +107,35 @@ debugger;
       .catch((error) => {
         if (error) {
           toast.error(error["data"]["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+
+//theparist-payment
+export function fetchTherapistPaymentInfo(data) {
+  debugger;
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return TherapistService.therapistPaymentDetails(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          debugger;
+          dispatch(saveTherapistPayInfo(data));
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
         }
         dispatch(stopLoading());
       });

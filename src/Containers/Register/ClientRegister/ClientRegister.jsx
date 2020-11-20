@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Button, Form, Input, Tab, Label } from "semantic-ui-react";
-import logIn from "../../../assets/images/logIn.png";
+import { Button, Form, Input} from "semantic-ui-react";
 import { connect } from "react-redux";
 import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
-import logo from "../../../assets/images/logo.png";
 import { userDetail } from ".././../../redux/actions/userList.action";
 import {
   fetchCategoryName,
@@ -41,10 +38,8 @@ class ClientRegister extends Component {
   }
 
   componentDidMount = async () => {
-    //debugger
     var data = await this.props.fetchCategoryName(this.state.name);
     let courseData;
-    //debugger
     if (this.props.categoryName)
       courseData = this.props.categoryName.filter(
         (item) => item.CodeName == this.state.CodeName
@@ -57,7 +52,6 @@ class ClientRegister extends Component {
     if (this.handleValidation()) {
       this.state.fields.accountTypeId = this.golbalID;
       var res = await this.props.userDetail(this.state.fields);
-      // var resw1= await this.props.fetchValidateZip(this.state.zipCode)
       if (res == true) {
         this.props.history.push("/confirm-email");
       } else {
@@ -152,7 +146,6 @@ class ClientRegister extends Component {
     // this.props.fetchValidateZip(this.state.zipCode)
   }
   abc(e) {
-    //debugger
     this.state.zipCode = e;
     var data = {
       zipCode: this.state.zipCode,
@@ -166,7 +159,6 @@ class ClientRegister extends Component {
       errors[field] = "";
       return { errors };
     });
-    //  this.props.fetchValidateZip(this.state.zipCode)
   }
 
   render() {
@@ -270,12 +262,12 @@ class ClientRegister extends Component {
 
           <div className="form-group">
             <label>ZIP Code</label>
-            {/* {this.props.fetchValidateZip(this.state.zipCode) && ( */}
+            
             <Form.Field>
               <Input
                 className="form-control"
                 id="zip"
-                // type="numeric"
+                
                 fullWidth={true}
                 name="zip"
                 placeholder="Zip Code"

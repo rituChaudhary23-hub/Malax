@@ -1,28 +1,31 @@
 import React, { Component, Fragment } from "react";
 import { Modal } from "react-bootstrap";
-// import { Button, Modal, Form, Input, Label, TextArea } from "semantic-ui-react";
 
 export class Payment extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fields: {
+        therapistPaymentInfoId: 0,
+      therapistId: 0,
         city: "",
         address: "",
-        date: "",
-        card_name: "",
-        zip_code: "",
-        card_no: "",
-        cvv: "",
+        cardExpiration: "",
+        cardHolderName: "",
+        zipCode: 0,
+        cardNumber: "",
+        cvvNumber: 0,
+        actionBy: ""
+           
       },
       errors: {
-        date: "",
+        cardExpiration: "",
         city: "",
         address: "",
-        card_name: "",
-        zip_code: "",
-        card_no: "",
-        cvv: "",
+        cardHolderName: "",
+        zipCode: "",
+        cardNumber: "",
+        cvvNumber: "",
       },
       loading: false,
     };
@@ -107,7 +110,7 @@ export class Payment extends Component {
               color="blue"
               type="button"
               className="btn btn-sm btn-primary"
-              disabled={this.state.fields.card_name.length < 5}
+              disabled={this.state.fields.cardHolderName.length < 5}
             >
               Connect with Stripe
             </button>
