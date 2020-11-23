@@ -20,7 +20,6 @@ const addImage = (data) => {
 
 //get-image-api
 const getTherapistImage = (data) => {
-  debugger;
   var identity={
     therapistId: data
   }
@@ -43,7 +42,7 @@ const therapistConsentForm = (data) => {
 
 //payment-api
 const therapistPaymentDetails = (data) => {
-  debugger;
+  debugger
   return fetch(
     "post",
     `${API_HOST}/TherapistAPI​/AddTherapistPaymentInfo`,

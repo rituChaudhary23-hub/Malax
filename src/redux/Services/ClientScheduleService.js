@@ -38,7 +38,6 @@ const getServiceDetails = (data) => {
 };
 
 const getServiceStatus = (data) => {
-  debugger
   return fetch(
     "post",
     `${API_HOST}/ClientScheduleAPI/GetServiceDetailStatus`,

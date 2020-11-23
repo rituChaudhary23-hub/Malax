@@ -116,10 +116,8 @@ class PersonalInfo extends Component {
   };
   saveProfile = async (e, data) => {
     e.preventDefault();
-    debugger;
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
-    debugger;
     if (this.handleValidation()) {
       var res = await this.props.fetchUserInfo(this.state.fields);
       if (res == true) {

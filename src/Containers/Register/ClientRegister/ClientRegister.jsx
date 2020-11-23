@@ -3,6 +3,8 @@ import { Button, Form, Input} from "semantic-ui-react";
 import { connect } from "react-redux";
 import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
+import { toast } from "../../../Components/Toast/Toast";
+
 import { userDetail } from ".././../../redux/actions/userList.action";
 import {
   fetchCategoryName,
@@ -11,21 +13,25 @@ import {
 
 class ClientRegister extends Component {
   golbalID = 0;
+  dropValcode: any;
   constructor(props) {
     super(props);
     this.state = {
       name: "UserAccountTypes",
       CodeName: "Client",
+      zip_code:{
+        name: "ZipCode",
+      },
       zipCode: "",
       fields: {
-        email: "",
-        password: "",
+        Email: "",
+        Password: "",
         conPassword: "",
-        firstName: "",
-        lastName: "",
-        zipCodeId: "",
-        marketId: 0,
-        accountTypeId: 0,
+        FirstName: "",
+        LastName: "",
+        ZipCodeId: "",
+        MarketId: 0,
+        AccountTypeId: 0,
       },
       errors: {
         email: "",
@@ -45,12 +51,18 @@ class ClientRegister extends Component {
         (item) => item.CodeName == this.state.CodeName
       )[0];
     this.golbalID = courseData.GlobalCodeId;
+
+    //zip-code-globally
+    var zipData = await this.props.fetchCategoryName(this.state.zip_code.name);
+    if (zipData != false) {
+      this.dropValcode = zipData.data.Data.globalCodeData;
+    }
   };
 
   signupMalax = async (e, data) => {
     e.preventDefault();
     if (this.handleValidation()) {
-      this.state.fields.accountTypeId = this.golbalID;
+      this.state.fields.AccountTypeId = this.golbalID;
       var res = await this.props.userDetail(this.state.fields);
       if (res == true) {
         this.props.history.push("/confirm-email");
@@ -66,7 +78,7 @@ class ClientRegister extends Component {
     let formIsValid = true;
 
     //Password
-    if (!fields["password"]) {
+    if (!fields["Password"]) {
       formIsValid = false;
       errors["password"] = "Password is required.";
     }
@@ -87,13 +99,13 @@ class ClientRegister extends Component {
     }
 
     //last_name
-    if (!fields["lastName"]) {
+    if (!fields["LastName"]) {
       formIsValid = false;
       errors["lastName"] = "required*";
     }
 
     //first name
-    if (!fields["firstName"]) {
+    if (!fields["FirstName"]) {
       formIsValid = false;
       errors["firstName"] = "required*";
     }
@@ -103,7 +115,7 @@ class ClientRegister extends Component {
       typeof fields["conPassword"] !== "undefined" &&
       fields["conPassword"] !== ""
     ) {
-      if (fields["conPassword"] !== fields["password"]) {
+      if (fields["conPassword"] !== fields["Password"]) {
         formIsValid = false;
         errors["conPassword"] = "Passwords don't match";
       }
@@ -113,7 +125,7 @@ class ClientRegister extends Component {
     }
 
     //Email
-    if (!fields["email"]) {
+    if (!fields["Email"]) {
       formIsValid = false;
       errors["email"] = "Email is required";
     }
@@ -145,14 +157,17 @@ class ClientRegister extends Component {
     this.setState({ fields });
     // this.props.fetchValidateZip(this.state.zipCode)
   }
-  abc(e) {
-    this.state.zipCode = e;
-    var data = {
-      zipCode: this.state.zipCode,
-    };
-    this.state.fields.zipCodeId = this.state.zipCode;
-    this.props.fetchValidateZip(data);
-  }
+
+  //zip-code
+  checkZipCode = (e) => {
+    e.preventDefault();
+    var _zip = this.dropValcode.find((x) => x.CodeName == e.target.value);
+    if (_zip != undefined || _zip != null) {
+      this.state.fields.zipCode = _zip.GlobalCodeId;
+    } else {
+      toast.error("Not matched zipcode");
+    }
+  };
   handleSignupKeyup(field, e) {
     this.setState((prevState) => {
       let errors = Object.assign({}, prevState.errors);
@@ -177,8 +192,8 @@ class ClientRegister extends Component {
                 type="email"
                 margin={"normal"}
                 placeholder="Email"
-                onChange={this.setFormValue.bind(this, "email")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "email")}
+                onChange={this.setFormValue.bind(this, "Email")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "Email")}
                 value={this.state.fields.email}
               />{" "}
               <span style={{ color: "red" }}>{this.state.errors["email"]}</span>
@@ -195,8 +210,8 @@ class ClientRegister extends Component {
                 type="password"
                 placeholder="Password"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "password")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "password")}
+                onChange={this.setFormValue.bind(this, "Password")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "Password")}
               />
 
               <span style={{ color: "red" }}>
@@ -231,8 +246,8 @@ class ClientRegister extends Component {
                 name="name"
                 margin={"normal"}
                 placeholder="First Name"
-                onChange={this.setFormValue.bind(this, "firstName")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "firstName")}
+                onChange={this.setFormValue.bind(this, "FirstName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "FirstName")}
               />
               <span style={{ color: "red" }}>
                 {this.state.errors["firstName"]}
@@ -251,8 +266,8 @@ class ClientRegister extends Component {
                 type="text"
                 placeholder="Last Name"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "lastName")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "lastName")}
+                onChange={this.setFormValue.bind(this, "LastName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "LastName")}
               />
               <span style={{ color: "red" }}>
                 {this.state.errors["lastName"]}
@@ -272,11 +287,18 @@ class ClientRegister extends Component {
                 name="zip"
                 placeholder="Zip Code"
                 margin={"normal"}
-                onChange={(e) => {
-                  this.abc(e.target.value);
+                // onChange={(e) => {
+                //   this.abc(e.target.value);
+                // }}
+                onBlur={(e) => {
+                  this.checkZipCode(e);
                 }}
-                onKeyUp={this.handleSignupKeyup.bind(this, "zipCodeId")}
+                autoComplete="false"
+                // onKeyUp={this.handleSignupKeyup.bind(this, "zipCodeId")}
               />
+
+
+
               <span style={{ color: "red" }}>
                 {this.state.errors["zipCodeId"]}
               </span>

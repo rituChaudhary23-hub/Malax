@@ -33,11 +33,12 @@ class TheparistProfileMain extends Component {
       idImageModal: false,
     };
   }
-  componentDidMount = (data) => {
+  componentDidMount = async(data) => {
     data = {
-      userId: this.props.user.Data.UserId,
+      UserId: this.props.user.Data.UserId,
     };
-    this.props.fetchUserPhone(data);
+  var fethcPhone= await this.props.fetchUserPhone(data);
+  console.log("fethcPhone",fethcPhone)
   };
   showModal = () => {
     this.setState({ modal1: true });

@@ -1,12 +1,15 @@
 import { fetch } from "./Fetch";
 import { API_HOST } from "../../utils/config/constants/index";
 
+//register-api
 const register = (data) => {
   return fetch("post", `${API_HOST}/AuthAPI/SignUp`, data);
   // return fetch("post","http://64.202.184.112:6500/api/AuthAPI/SignUp",data)
 };
-const login = (data) => {
-  return fetch("post", `${API_HOST}/AuthAPI/Login`, data);
+
+//login-api
+const login = (params, options) => {
+  return fetch("get", `${API_HOST}/AuthAPI/Login`, {}, options, params);
 };
 
 //forgot-password-service

@@ -31,6 +31,87 @@ export class Payment extends Component {
     };
   }
 
+  //validation
+  handleValidation = () => {
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    //Password
+    if (!fields["Password"]) {
+      formIsValid = false;
+      errors["password"] = "Password is required.";
+    }
+
+    if (
+      typeof fields["password"] !== "undefined" &&
+      fields["password"] !== ""
+    ) {
+      if (
+        !fields["password"].match(
+          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+        )
+      ) {
+        formIsValid = false;
+        errors["password"] =
+          "Password should have one uppercase letter one number and one special character,minimum 8 characters";
+      }
+    }
+
+    //last_name
+    if (!fields["LastName"]) {
+      formIsValid = false;
+      errors["lastName"] = "required*";
+    }
+
+    //first name
+    if (!fields["FirstName"]) {
+      formIsValid = false;
+      errors["firstName"] = "required*";
+    }
+
+    //Confirm Password
+    if (
+      typeof fields["conPassword"] !== "undefined" &&
+      fields["conPassword"] !== ""
+    ) {
+      if (fields["conPassword"] !== fields["Password"]) {
+        formIsValid = false;
+        errors["conPassword"] = "Passwords don't match";
+      }
+    } else {
+      formIsValid = false;
+      errors["conPassword"] = "Confirm Password is Required";
+    }
+
+    //Email
+    if (!fields["Email"]) {
+      formIsValid = false;
+      errors["email"] = "Email is required";
+    }
+
+    if (typeof fields["email"] !== "undefined" && fields["email"] !== "") {
+      let lastAtPos = fields["email"].lastIndexOf("@");
+      let lastDotPos = fields["email"].lastIndexOf(".");
+
+      if (
+        !(
+          lastAtPos < lastDotPos &&
+          lastAtPos > 0 &&
+          fields["email"].indexOf("@@") === -1 &&
+          lastDotPos > 2 &&
+          fields["email"].length - lastDotPos > 2
+        )
+      ) {
+        formIsValid = false;
+        errors["email"] = "Email is not valid";
+      }
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  };
+
   render() {
     return (
       <Fragment>
@@ -58,9 +139,9 @@ export class Payment extends Component {
               <div class="col-sm-6 pb-3 pr-3">
                 <div class="form-group">
                   <label for="usr" class="chkBox">
-                    Card number
+                    Card number ritu
                   </label>
-                  <input type="text" class="form-control" />
+                  <input type="tel" class="form-control" />
                 </div>
               </div>{" "}
               <div class="col-sm-6 pb-3 pr-3">
@@ -68,7 +149,7 @@ export class Payment extends Component {
                   <label for="usr" class="chkBox">
                     CVV Number
                   </label>
-                  <input type="text" class="form-control" />
+                  <input type="number" pattern="[0-3]*" inputmode="numeric" class="form-control" maxlength="3" />
                 </div>
               </div>{" "}
               <div class="col-sm-6 pb-3 pr-3">

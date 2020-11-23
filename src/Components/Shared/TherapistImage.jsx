@@ -46,11 +46,18 @@ class TherapistImage extends Component {
     this.state.fields.therapistId = data1;
     var aa = await this.props.getIdentityImage(data1);
 
-    this.photoImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(
-      (x) => x.TherapistImageTypeId == globalPhoto
-    )[0].TherapistImage;
+    if (this.photoImg) {
+      this.photoImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(
+        (x) => x.TherapistImageTypeId == globalPhoto
+      )[0].TherapistImage;
 
-    console.log("photoImg-------", this.photoImg);
+      console.log("photoImg-------", this.photoImg);
+    } else {
+      if (this.props.currentImage.data.Data.TherapistIdentityImages.length > 0)
+        this.photoImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(
+          (x) => x.TherapistImageTypeId == globalPhoto
+        )[0].TherapistImage;
+    }
   };
   close = () => {
     this.props.toggle();
@@ -100,6 +107,26 @@ class TherapistImage extends Component {
 
     var res = await this.props.fetchTherapistIdentityImage(this.state.fields);
     if (res == true) {
+
+      //get-identity-api
+      var data = await this.props.fetchCategoryName(this.state.name);
+      if (data != false) {
+        this.dropVal = data.data.Data.globalCodeData;
+
+        //get-IdPhoto-globalID
+        var globalPhoto = this.dropVal.filter((x) => x.CodeName == "IDPhoto")[0]
+          .GlobalCodeId;
+      }
+
+      //get-identity-image
+      var data1 = this.props.user.Data.TherapistId;
+      this.state.fields.therapistId = data1;
+      var aa = await this.props.getIdentityImage(data1);
+
+      this.photoImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(
+        (x) => x.TherapistImageTypeId == globalPhoto
+      )[0].TherapistImage;
+
       this.props.toggle();
     } else {
     }
@@ -139,7 +166,7 @@ class TherapistImage extends Component {
                   ref="fileInput"
                   onChange={this.onFileUploadChange}
                 />
-                {this.currentImg && <img src={this.photoImg} />}
+                {this.photoImg && <img src={this.photoImg} />}
 
                 {this.state.isFormSubmitted &&
                   this.state.isFileValid === false && (

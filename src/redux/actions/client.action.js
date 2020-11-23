@@ -109,7 +109,6 @@ export function saveUserHistory(data) {
 
 //get email id
 export function fetchUserEmail(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -140,7 +139,6 @@ export function fetchUserEmail(data) {
 
 //update email
 export function fetchUpdateEmail(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -151,7 +149,6 @@ export function fetchUpdateEmail(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          //debugger;
           dispatch(saveUserPhone(data.data));
           toast.success(data["data"]["Message"]);
 
@@ -172,12 +169,11 @@ export function fetchUpdateEmail(data) {
 
 //get user phone
 export function fetchUserPhone(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
-
     let state = getState();
     return ClientService.getUserPhone(data, {
+      
       jwt: state["persist"]["c_temp_user"]["token"],
     }).then(async (data) => {
       dispatch(stopLoading());
@@ -202,7 +198,6 @@ export function fetchUserPhone(data) {
 
 //consent agreement forms
 export function fetchConsentForm(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -212,7 +207,6 @@ export function fetchConsentForm(data) {
     })
       .then(async (data) => {
         dispatch(stopLoading());
-        //debugger;
         if (data.data.Success) {
           toast.success(data["data"]["Message"]);
 
@@ -233,7 +227,6 @@ export function fetchConsentForm(data) {
 
 //get-consent-form
 export function getConsentForm(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -243,7 +236,6 @@ export function getConsentForm(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          //debugger;
           dispatch(saveConsent(data));
           // toast.success(data["data"]["Message"]);
 
@@ -294,7 +286,6 @@ export function fetchUserInfo(data) {
 
 //get-personal info
 export function getUserInfo(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -304,7 +295,6 @@ export function getUserInfo(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          //debugger;
           dispatch(savePersonalInfo(data));
           // toast.success(data["data"]["Message"]);
 
@@ -324,7 +314,6 @@ export function getUserInfo(data) {
 }
 //add-medical-history
 export function fetchUserHistory(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -355,7 +344,6 @@ export function fetchUserHistory(data) {
 
 //get-medical-history
 export function getUserHistory(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -365,7 +353,6 @@ export function getUserHistory(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          //debugger;
           dispatch(saveMedicalInfo(data));
           // toast.success(data["data"]["Message"]);
 
@@ -385,7 +372,6 @@ export function getUserHistory(data) {
 }
 //image-upload
 export function fetchIdentityImage(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -412,7 +398,6 @@ export function fetchIdentityImage(data) {
 }
 //medical-conditions
 export function fetchUserMedicalCondition(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -435,7 +420,6 @@ export function fetchUserMedicalCondition(data) {
 
 //massage-prefernce
 export function fetchUserMassagePrefernce(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -456,7 +440,6 @@ export function fetchUserMassagePrefernce(data) {
 }
 //get-medical-conditions'
 export function getConditionInfo(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -466,7 +449,6 @@ export function getConditionInfo(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          //debugger;
            dispatch(saveConditionData(data));
           // toast.success(data["data"]["Message"]);
 
@@ -488,7 +470,6 @@ export function getConditionInfo(data) {
 //get-massage-preferences
 
 export function getMassageInfo(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -498,7 +479,6 @@ export function getMassageInfo(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          //debugger;
         dispatch(saveMassageData(data));
           // toast.success(data["data"]["Message"]);
 
@@ -519,7 +499,6 @@ export function getMassageInfo(data) {
 
 //client-loc
 export function fetchClientLoc(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
 
@@ -529,7 +508,6 @@ export function fetchClientLoc(data) {
     })
       .then(async (data) => {
         dispatch(stopLoading());
-        //debugger;
         if (data.data.Success) {
           toast.success(data["data"]["Message"]);
 
@@ -550,7 +528,6 @@ export function fetchClientLoc(data) {
 
 //get-client-loc
 export function getLocation(data) {
-  //debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -560,7 +537,6 @@ export function getLocation(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          //debugger;
           dispatch(saveLocation(data));
           // toast.success(data["data"]["Message"]);
 
@@ -581,7 +557,6 @@ export function getLocation(data) {
 
 //tab change
 export function tabIndex(data) {
-  //debugger;
 
   if (data > 0) {
     return data;

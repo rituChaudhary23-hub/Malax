@@ -44,7 +44,6 @@ class Massage extends Component {
   }
 
   componentWillMount = async () => {
-    //debugger
     var data2 = this.props.user.Data.ClientId;
     this.state.clientId = data2;
     var res = await this.props.getMassageInfo(data2);
@@ -94,7 +93,6 @@ class Massage extends Component {
     data_check.forEach((element) => {
     
     });
-    //debugger
     if(this.props.massageRes.data)
     this.setState({selectedFreq: this.props.massageRes.data.Data.FrequencyId});
     this.setState();
@@ -108,7 +106,6 @@ class Massage extends Component {
   };
 
   MassageSelected = (e) => {
-    //debugger;
     console.log("check_value", e.target.checked);
     this.state.mycheckbox_data.filter(
       (x) => x.GlobalCodeId == parseInt(e.target.id)
@@ -129,7 +126,6 @@ class Massage extends Component {
   };
 
   saveMassage = () => {
-    //debugger;
     var inputElems = document.getElementsByTagName("input"),
       count = 0;
     for (var i = 0; i < inputElems.length; i++) {
@@ -140,7 +136,6 @@ class Massage extends Component {
     }
   };
   dropdownChange = (e, value) => {
-    //debugger;
     var InfoAs = e.target.outerText;
     var globalId = this.dropvalGender.filter((x) => x.CodeName == InfoAs)[0]
       .GlobalCodeId;
@@ -148,7 +143,6 @@ class Massage extends Component {
   };
 
   changeFrequency = (e, { value }) => {
-    //debugger;
     var infoFrequency = value ;
     this.setState({
       selectedFreq:infoFrequency

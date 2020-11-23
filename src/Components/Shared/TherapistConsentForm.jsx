@@ -25,7 +25,6 @@ class TherapistConsentForm extends Component {
   }
 
   componentDidMount = async (e, data1) => {
-    debugger
     var data1 = this.props.user.Data.TherapistId;
     this.state.fields.therapistId = data1;
     // var res = await this.props.getConsentForm(data1);
@@ -44,10 +43,9 @@ class TherapistConsentForm extends Component {
       buttoncheck: !this.state.buttoncheck,
     });
     e.preventDefault();
-    debugger
     var data = this.props.user.Data.UserId;
     this.state.fields.userId = data;
-    debugger
+    
     var data1 = this.props.user.Data.TherapistId;
     this.state.fields.therapistId = data1;
     if (this.state.fields.consentFormStatus == true) {

@@ -69,7 +69,6 @@ class EditAppointment extends Component {
   };
 
   updateDate = (e) => {
-    debugger
     this.state.request.serviceDate = e.target.value;
     this.props.userDetail.ServiceDate = this.state.request.serviceDate;
     this.setState({ serviceDate: this.props.userDetail.ServiceDate });

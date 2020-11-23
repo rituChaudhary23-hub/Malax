@@ -29,7 +29,6 @@ export class Location extends Component {
   };
 
   updateLoc = (e) => {
-    //debugger;
     if (e.target.checked) {
       console.log("-------ritu----------", e.target.value);
       // this.setState({ locationForMessage: e.target.value });
@@ -39,7 +38,6 @@ export class Location extends Component {
   };
 
   updateConfirm = (e) => {
-    //debugger;
     if (e.target.checked) {
       console.log("-------ritu-ashu---------", e.target.value);
       var space = e.target.value;
@@ -48,7 +46,6 @@ export class Location extends Component {
   };
 
   updatePets = (e) => {
-    //debugger;
     if (e.target.checked) {
       console.log("-------ritu-ashu---------", e.target.value);
       var petsdata=e.target.value
@@ -57,11 +54,9 @@ export class Location extends Component {
   };
 
   updateLocation = async () => {
-    //debugger;
     var data = this.props.user.Data.ClientId;
     this.state.fields.clientId = data;
 
-    //debugger;
     var res = await this.props.fetchClientLoc(this.state.fields);
     if (res == true) {
       console.log("res--------", res);

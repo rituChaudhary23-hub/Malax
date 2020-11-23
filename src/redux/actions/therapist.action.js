@@ -57,7 +57,6 @@ export function fetchTherapistIdentityImage(data) {
 
 //get-identity-iamge
 export function getIdentityImage(data) {
-  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -65,7 +64,6 @@ export function getIdentityImage(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
           dispatch(saveIdentityImage(data));
           toast.success(data["data"]["Message"]);
 
@@ -115,15 +113,15 @@ export function fetchTherapistConsentForm(data) {
 
 //theparist-payment
 export function fetchTherapistPaymentInfo(data) {
-  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
+    debugger
     let state = getState();
     return TherapistService.therapistPaymentDetails(data, {})
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
+          debugger
           dispatch(saveTherapistPayInfo(data));
           toast.success(data["data"]["Message"]);
 

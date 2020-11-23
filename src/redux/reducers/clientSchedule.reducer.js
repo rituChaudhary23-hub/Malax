@@ -7,7 +7,7 @@ const initialState = {
 };
 
 const clientScheduleReducer = (state = initialState, action) => {
-  debugger
+  
   console.log(action);
   switch (action.type) {
     

@@ -39,7 +39,6 @@ class ServiceDetail extends Component {
   };
 
   componentDidMount = () => {
-    debugger;
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
     var data2 = parseInt(this.props.location.search.split("=")[1]);

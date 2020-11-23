@@ -6,16 +6,18 @@ const getUserEmail = (data) => {
   var data1 = {
     userId: data,
   };
-  return fetch("post", `${API_HOST}/AuthAPI/GetUserEmail`, data1);
+  return fetch("get", `${API_HOST}/AuthAPI/GetUserEmail?UserId=`+data1.userId);
 };
 
-const updateUserEmail = (data) => {
-  return fetch("post", `${API_HOST}/AuthAPI/UpdateUserEmail`, data);
+//update-email-api
+const updateUserEmail = (data, options) => {
+  return fetch("put", `${API_HOST}/AuthAPI/UpdateUserEmail`,  data,
+  options);
 };
 
 //get user phone number
 const getUserPhone = (data) => {
-  return fetch("post", `${API_HOST}/AuthAPI/GetUserPhoneNumber`, data);
+  return fetch("get", `${API_HOST}/AuthAPI/GetUserPhoneNumber?UserId=`+data.UserId);
 };
 
 //consent form

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Form, Input, Tab, Label } from "semantic-ui-react";
+import { Button, Form, Input, Tab, Label, Dropdown } from "semantic-ui-react";
 import { userDetail } from ".././../../redux/actions/userList.action";
 import { connect } from "react-redux";
 import { reduxForm } from "redux-form";
@@ -8,21 +8,27 @@ import { fetchCategoryName } from ".././../../redux/actions/global.action";
 
 class TheparistRegister extends Component {
   golbalID = 0;
+  MarketOptions = [];
+  dropvalMarket: any;
   constructor(props) {
     super(props);
     this.state = {
       name: "UserAccountTypes",
+      marketName: {
+        name: "Market",
+      },
       CodeName: "Therapist",
+      selectedMarket: "",
       fields: {
-        email: "",
-        password: "",
+        Email: "",
+        Password: "",
         conPassword: "",
-        firstName: "",
-        lastName: "",
-        zipCodeId: "",
+        FirstName: "",
+        LastName: "",
+        ZipCodeId: "0",
 
-        marketId: 0,
-        accountTypeId: 0,
+        MarketId: 0,
+        AccountTypeId: 0,
       },
       errors: {
         email: "",
@@ -35,22 +41,34 @@ class TheparistRegister extends Component {
   }
 
   componentDidMount = async () => {
-    //debugger
     var data = await this.props.fetchCategoryName(this.state.name);
     let courseData;
-//debugger
     if (this.props.categoryName) {
       courseData = this.props.categoryName.filter(
         (item) => item.CodeName == this.state.CodeName
       )[0];
       this.golbalID = courseData.GlobalCodeId;
     }
+
+    //market-globally
+    var _therapistMarket = await this.props.fetchCategoryName(
+      this.state.marketName.name
+    );
+    if (_therapistMarket != false) {
+      this.dropvalMarket = _therapistMarket.data.Data.globalCodeData;
+      this.dropvalMarket.forEach((element) => {
+        this.MarketOptions.push({
+          text: element.CodeName,
+          value: element.GlobalCodeId,
+        });
+      });
+    }
   };
 
   signupMalax = async (e, data) => {
     e.preventDefault();
     if (this.handleValidation()) {
-      this.state.fields.accountTypeId = this.golbalID;
+      this.state.fields.AccountTypeId = this.golbalID;
 
       var res = await this.props.userDetail(this.state.fields);
       if (res == true) {
@@ -66,7 +84,7 @@ class TheparistRegister extends Component {
     let formIsValid = true;
 
     //Password
-    if (!fields["password"]) {
+    if (!fields["Password"]) {
       formIsValid = false;
       errors["password"] = "Password is required.";
     }
@@ -87,13 +105,13 @@ class TheparistRegister extends Component {
     }
 
     //last_name
-    if (!fields["lastName"]) {
+    if (!fields["LastName"]) {
       formIsValid = false;
       errors["lastName"] = "required*";
     }
 
     //first name
-    if (!fields["firstName"]) {
+    if (!fields["FirstName"]) {
       formIsValid = false;
       errors["firstName"] = "required*";
     }
@@ -103,7 +121,7 @@ class TheparistRegister extends Component {
       typeof fields["conPassword"] !== "undefined" &&
       fields["conPassword"] !== ""
     ) {
-      if (fields["conPassword"] !== fields["password"]) {
+      if (fields["conPassword"] !== fields["Password"]) {
         formIsValid = false;
         errors["conPassword"] = "Passwords don't match";
       }
@@ -113,7 +131,7 @@ class TheparistRegister extends Component {
     }
 
     //Email
-    if (!fields["email"]) {
+    if (!fields["Email"]) {
       formIsValid = false;
       errors["email"] = "Email is required";
     }
@@ -153,6 +171,19 @@ class TheparistRegister extends Component {
     });
   }
 
+  //markets-dropdown
+
+  changeMarket = (e, { value }) => {
+    var infoMarket = value;
+    this.setState({
+      selectedMarket: infoMarket,
+    });
+    var globalMarketId = this.dropvalMarket.filter(
+      (y) => y.GlobalCodeId == infoMarket
+    )[0].GlobalCodeId;
+    this.state.fields.MarketId = globalMarketId;
+  };
+
   render() {
     const { submitting } = this.props;
 
@@ -170,8 +201,8 @@ class TheparistRegister extends Component {
                 type="email"
                 placeholder="Email"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "email")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "email")}
+                onChange={this.setFormValue.bind(this, "Email")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "Email")}
                 value={this.state.fields.email}
               />{" "}
               <span style={{ color: "red" }}>{this.state.errors["email"]}</span>
@@ -188,8 +219,8 @@ class TheparistRegister extends Component {
                 type="password"
                 margin={"normal"}
                 placeholder="Password"
-                onChange={this.setFormValue.bind(this, "password")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "password")}
+                onChange={this.setFormValue.bind(this, "Password")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "Password")}
               />
 
               <span style={{ color: "red" }}>
@@ -224,8 +255,8 @@ class TheparistRegister extends Component {
                 name="name"
                 placeholder="First Name"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "firstName")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "firstName")}
+                onChange={this.setFormValue.bind(this, "FirstName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "FirstName")}
               />
               <span style={{ color: "red" }}>
                 {this.state.errors["firstName"]}
@@ -244,8 +275,8 @@ class TheparistRegister extends Component {
                 type="text"
                 margin={"normal"}
                 placeholder="Last Name"
-                onChange={this.setFormValue.bind(this, "lastName")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "lastName")}
+                onChange={this.setFormValue.bind(this, "LastName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "LastName")}
               />
               <span style={{ color: "red" }}>
                 {this.state.errors["lastName"]}
@@ -253,16 +284,15 @@ class TheparistRegister extends Component {
             </Form.Field>
           </div>
           <div className="form-group">
-            <label for="sel1">Market</label>
-            <select
+            <label for="sel1">Select Market</label>
+            <Dropdown
               className="form-control"
-              id="sel1"
+              options={this.MarketOptions}
               placeholder="Select Market"
-            >
-              <option></option>
-              <option>Billings, MT</option>
-              <option>Other</option>
-            </select>
+              selection
+              value={this.state.selectedMarket}
+              onChange={this.changeMarket}
+            />
           </div>
           <div className="form-group">
             <p>

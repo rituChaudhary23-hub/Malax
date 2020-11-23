@@ -112,9 +112,9 @@ class Licensure extends Component {
       return { fields: fields };
     });
   };
-cancel=()=>{
-  window.location.href="/theparist-profile"
-}
+  cancel = () => {
+    window.location.href = "/theparist-profile";
+  };
   render() {
     const { submitting } = this.props;
 
@@ -153,7 +153,7 @@ cancel=()=>{
                                   <label for="usr" className="chkBox">
                                     State{" "}
                                   </label>
-                                  <Dropdown
+                                  {/* <Dropdown
                                     options={stateOptions}
                                     selection
                                     name="state"
@@ -161,7 +161,15 @@ cancel=()=>{
                                     value={this.state.fields.state}
                                     validators={["required"]}
                                     errorMessages={["this field is required"]}
-                                  />{" "}
+                                  />{" "} */}
+                                  <Dropdown
+                                    options={stateOptions}
+                                    selection
+                                    placeholder="Select State"
+                                    onChange={this.selectState}
+                                    validators={["required"]}
+                                    errorMessages={["this field is required"]}
+                                  />
                                 </div>
 
                                 <div className="form-group">

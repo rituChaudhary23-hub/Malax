@@ -42,6 +42,7 @@ class Login extends Component {
   };
 
   handleChanges = async (e, value) => {
+    debugger
     var loginAs = e.target.outerText;
     loginAs = loginAs.split(" ")[2];
     var globalId = this.dropVal.filter((x) => x.CodeName == loginAs)[0]
@@ -52,10 +53,12 @@ class Login extends Component {
       var res = await this.props.onLoginUser(this.state.fields, value);
       if (res == true) {
         this.props.history.push(value.value);
+        
       } else {
       }
       //  window.location.reload(false);
     }
+   // e.target.className.replace('active','')
   };
 
   handleValidation = () => {

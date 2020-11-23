@@ -69,7 +69,6 @@ export function fetchClientAppointment(data) {
 //get-scheduled-services
 
 export function fetchScheduledAppointment(data) {
-  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();
@@ -80,7 +79,6 @@ export function fetchScheduledAppointment(data) {
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
           dispatch(saveAppointment(data));
           // dispatch(serviceSuccess(data["data"]));
           dispatch(dummy({ token: data["data"] }));

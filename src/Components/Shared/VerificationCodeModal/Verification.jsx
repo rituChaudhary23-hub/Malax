@@ -19,7 +19,7 @@ class Verification extends Component {
     var data = this.props.user.Data.UserId;
     this.state.fields.userId = data;
    var res = await this.props.fetchUpdateEmail(this.state.fields);
-    this.props.toggle();
+   this.props.toggle();
   };
 
   setFormValue(field, e) {
@@ -86,7 +86,7 @@ class Verification extends Component {
               color="grey"
               type="button"
               className="btn btn-sm btn-white"
-              onClick={this.close}
+              onClick={this.props.toggle}
             >
               Cancel
             </button>
