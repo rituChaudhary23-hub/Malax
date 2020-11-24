@@ -2,73 +2,160 @@ import React, { Component } from "react";
 import { Button } from "semantic-ui-react";
 import { Dropdown, Form, Input } from "semantic-ui-react-form-validator";
 import { DateInput } from "semantic-ui-calendar-react";
-
-const options = [
-  { key: "m", text: "Male", value: "m" },
-  { key: "k", text: "Female", value: "f" },
-];
-const stateOptions = [
-  { key: "om", text: "New York", value: "New York" },
-  { key: "ok", text: "Texas", value: "Texas" },
-];
+import {
+  fetchTherapistLicensure,
+  getTherapistLicensureInfo,
+} from "../../../redux/actions/therapist.action";
+import { withRouter } from "react-router";
+import { fetchCategoryName } from ".././../../redux/actions/global.action";
+import { connect } from "react-redux";
 
 class Licensure extends Component {
+  StateOptions = [];
+  GenderOptions = [];
+  dropvalState: any;
+  dropvalGender: any;
   constructor(props) {
     super(props);
     this.state = {
-      fields: {
-        doc_type: "",
-        doc_number: "",
-
-        date: "",
-        exp_date: "",
-
-        gender: "",
-        state: "",
-        number: "",
+      abcGender: {
+        name: "Gender",
       },
+      name: "State",
+      selectedstate: "",
+      selectedGender: "",
+      fields: {
+        therapistLicensureId: 0,
+        therapistId: 0,
+        licensedSince: "",
+        expirationDate: "",
+        gender: 0,
+        state: 0,
+        actionBy: "",
+        licensureNumber: 0,
+      },
+      getLicensure: { therapistLicensureId: 0, therapistId: 0 },
+
       errors: {
-        date: "",
         gender: "",
-        number: "",
-        exp_date: "",
-        zip_code: "",
+        licensureNumber: "",
+        expirationDate: "",
+        licensedSince: "",
+        state: "",
       },
       loading: false,
     };
   }
-  handleChangeDate = (event, { name, value }) => {
-    this.resetError("date");
 
-    this.setState({ [name]: value });
-    this.setState((prevState) => {
-      let fields = Object.assign({}, prevState.fields);
-      fields.date = value;
-      return { fields: fields };
-    });
-  };
-  handleExpDate = (event, { name, value }) => {
-    this.resetError("exp_date");
-
-    this.setState({ [name]: value });
-    this.setState((prevState) => {
-      let fields = Object.assign({}, prevState.fields);
-      fields.exp_date = value;
-      return { fields: fields };
-    });
-  };
-
-  setFormValue(field, e) {
-    let fields = this.state.fields;
-    fields[field] = e.target.value;
-    this.setState({ fields });
-  }
-  submitDocument = (e) => {
-    if (!this.validate()) {
-      return;
+  componentDidMount = async () => {
+    //gender-globally
+    var _licensureGender = await this.props.fetchCategoryName(
+      this.state.abcGender.name
+    );
+    if (_licensureGender != false) {
+      this.dropvalGender = _licensureGender.data.Data.globalCodeData;
+      this.dropvalGender.forEach((element) => {
+        this.GenderOptions.push({
+          text: element.CodeName,
+          value: element.GlobalCodeId,
+        });
+      });
     }
 
-    const { doc_type, doc_number } = this.state.fields;
+    //state-globally
+    var _licensureState = await this.props.fetchCategoryName(this.state.name);
+    if (_licensureState != false) {
+      this.dropvalState = _licensureState.data.Data.globalCodeData;
+      this.dropvalState.forEach((element) => {
+        this.StateOptions.push({
+          text: element.CodeName,
+          value: element.GlobalCodeId,
+        });
+      });
+    }
+
+    //get-licensure-details
+    var data1 = this.props.user.Data.TherapistId;
+    this.state.getLicensure.therapistId = data1;
+    this.props.getTherapistLicensureInfo(this.state.getLicensure);
+    debugger
+    //get-selected-state
+    if(this.props.saveLicensure.data)
+    this.setState({selectedstate: this.props.saveLicensure.data.Data.State});
+    this.setState();
+  };
+
+  //state-change
+  changeState = (e, { value }) => {
+    var infoState = value;
+    this.setState({
+      selectedstate: infoState,
+    });
+    var globalStateId = this.dropvalState.filter(
+      (y) => y.GlobalCodeId == infoState
+    )[0].GlobalCodeId;
+    this.state.fields.state = globalStateId;
+  };
+
+  //gender-onchange
+  changeGender = (e, { value }) => {
+    var infoGender = value;
+    this.setState({
+      selectedGender: infoGender,
+    });
+    var globalGenderId = this.dropvalGender.filter(
+      (y) => y.GlobalCodeId == infoGender
+    )[0].GlobalCodeId;
+    this.state.fields.gender = globalGenderId;
+  };
+
+  handleChangeDate = (event, { name, value }) => {
+    debugger
+    // this.resetError("licensedSince");
+    this.state.fields.licensedSince = parseInt(value);
+    this.props.saveLicensure.data.Data.LicensedSince = this.state.fields.licensedSince;
+    this.setState({ licensedSince: this.props.saveLicensure.data.Data.LicensedSince});
+//  this.setState({ [name]: value }); 
+    // this.setState((prevState) => {
+    //   let fields = Object.assign({}, prevState.fields);
+    //   fields.licensedSince = value;
+    //   return { fields: fields };
+
+     
+  
+    // });
+  };
+  handleExpDate = (event, { name, value }) => {
+    this.resetError("expirationDate");
+    this.setState({ [name]: value });
+    this.setState((prevState) => {
+      let fields = Object.assign({}, prevState.fields);
+      fields.expirationDate = value;
+      return { fields: fields };
+    });
+  };
+
+  changeNumber = (e) => {
+    debugger;
+    this.state.fields.licensureNumber = parseInt(e.target.value);
+    this.props.saveLicensure.data.Data.LicensureNumber = this.state.fields.licensureNumber;
+    this.setState({ licensureNumber: this.props.saveLicensure.data.Data.LicensureNumber});
+
+  };
+
+  submitDocument = async (e) => {
+    e.preventDefault();
+    debugger;
+    var data1 = this.props.user.Data.TherapistId;
+    this.state.fields.therapistId = data1;
+    if (this.validate()) {
+      debugger;
+      var res = await this.props.fetchTherapistLicensure(this.state.fields);
+      if (res == true) {
+        console.log("res--------", res);
+      } else {
+      }
+    }
   };
   resetError = (field) => {
     let errors = this.state.errors;
@@ -89,13 +176,13 @@ class Licensure extends Component {
     let errors = this.state.errors;
 
     let formIsValid = true;
-    if (fields["date"] === "") {
+    if (fields["expirationDate"] === "") {
       formIsValid = false;
-      errors["date"] = "Date can't be blank";
+      errors["expirationDate"] = "Date can't be blank";
     }
-    if (fields["exp_date"] === "") {
+    if (fields["expirationDate"] === "") {
       formIsValid = false;
-      errors["exp_date"] = "Date can't be blank";
+      errors["expirationDate"] = "Date can't be blank";
     }
 
     this.setState({ errors: errors });
@@ -116,6 +203,7 @@ class Licensure extends Component {
     window.location.href = "/theparist-profile";
   };
   render() {
+    console.log("----saveLicensure", this.props.saveLicensure.data);
     const { submitting } = this.props;
 
     return (
@@ -153,20 +241,12 @@ class Licensure extends Component {
                                   <label for="usr" className="chkBox">
                                     State{" "}
                                   </label>
-                                  {/* <Dropdown
-                                    options={stateOptions}
-                                    selection
-                                    name="state"
-                                    onChange={this.dropdownChange}
-                                    value={this.state.fields.state}
-                                    validators={["required"]}
-                                    errorMessages={["this field is required"]}
-                                  />{" "} */}
                                   <Dropdown
-                                    options={stateOptions}
+                                    className="abc"
+                                    options={this.StateOptions}
                                     selection
-                                    placeholder="Select State"
-                                    onChange={this.selectState}
+                                    value={this.state.selectedstate}
+                                    onChange={this.changeState}
                                     validators={["required"]}
                                     errorMessages={["this field is required"]}
                                   />
@@ -182,14 +262,17 @@ class Licensure extends Component {
                                     id="date"
                                     fullWidth={true}
                                     name="date"
-                                    value={this.state.fields.date}
+                                    value={ this.props.saveLicensure.data
+                                      ? this.props.saveLicensure.data.Data
+                                          .LicensedSince
+                                      : this.state.fields.licensedSince}
                                     dateFormat={"YYYY-MM-DD"}
                                     onChange={this.handleChangeDate}
                                   />
-                                  {this.hasError("date") && (
+                                  {this.hasError("licensedSince") && (
                                     <div className="ui pointing label">
                                       <div style={{ color: "red" }}>
-                                        {this.state.errors["date"]}
+                                        {this.state.errors["licensedSince"]}
                                       </div>
                                     </div>
                                   )}
@@ -205,7 +288,7 @@ class Licensure extends Component {
                                     id="date"
                                     fullWidth={true}
                                     name="date"
-                                    value={this.state.fields.exp_date}
+                                    value={this.state.fields.expirationDate}
                                     dateFormat={"YYYY-MM-DD"}
                                     onChange={this.handleExpDate}
                                   />
@@ -228,17 +311,20 @@ class Licensure extends Component {
                                     id="number"
                                     fullWidth={true}
                                     name="number"
+                                    type="number"
                                     margin={"normal"}
-                                    onChange={this.setFormValue.bind(
-                                      this,
-                                      "number"
-                                    )}
-                                    value={this.state.fields.number}
-                                    validators={["required"]}
-                                    errorMessages={[
-                                      "this field is required",
-                                      "Invalid Code",
-                                    ]}
+                                    onChange={this.changeNumber}
+                                    value={
+                                      this.props.saveLicensure.data
+                                        ? this.props.saveLicensure.data.Data
+                                            .LicensureNumber
+                                        : null
+                                    }
+                                    // validators={["required"]}
+                                    // errorMessages={[
+                                    //   "this field is required",
+                                    //   "Invalid Code",
+                                    // ]}
                                     autoComplete="false"
                                   />{" "}
                                 </div>
@@ -249,11 +335,11 @@ class Licensure extends Component {
                                     Gender{" "}
                                   </label>
                                   <Dropdown
-                                    options={options}
+                                    className="abc"
+                                    options={this.GenderOptions}
                                     selection
-                                    name="gender"
-                                    onChange={this.dropdownChange}
-                                    value={this.state.fields.gender}
+                                    value={this.state.selectedGender}
+                                    onChange={this.changeGender}
                                     validators={["required"]}
                                     errorMessages={["this field is required"]}
                                   />
@@ -299,4 +385,23 @@ class Licensure extends Component {
   }
 }
 
-export default Licensure;
+const mapStateToProps = (state) => {
+  console.log("sttate dekho--------", state);
+  return {
+    user: state.user.user,
+    saveLicensure: state.therapistReducer.saveLicensure,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+    fetchTherapistLicensure: (data) => dispatch(fetchTherapistLicensure(data)),
+    getTherapistLicensureInfo: (data) =>
+      dispatch(getTherapistLicensureInfo(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Licensure)
+);

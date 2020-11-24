@@ -1,16 +1,113 @@
 import React, { Component } from "react";
-
+import {
+  fetchTherapistModality,
+  getTherapistModalityInfo,
+} from "../../../redux/actions/therapist.action";
 import { Button, Form } from "semantic-ui-react";
+import { withRouter } from "react-router";
+import { fetchCategoryName } from ".././../../redux/actions/global.action";
+import { connect } from "react-redux";
 
 export class Modalities extends Component {
+  _modalityData: any;
+  dropVal: any;
+  dropvalModality: any;
+  _data: any;
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      name: "Modalities",
+      mycheckbox_data: [],
+      myStatus: [],
+      fields: {
+        therapistModalityId: 0,
+        therapistId: 0,
+        modalityRequest: [],
+        actionBy: "",
+      },
+      getModality:{
+          therapistModalityId: 0,
+          therapistId: 0
+        
+      }
+    };
   }
+
+  componentWillMount = async () => {
+    var data2 = this.props.user.Data.TherapistId;
+    this.state.getModality.therapistId = data2;
+    var res = await this.props.getTherapistModalityInfo(data2);
+    //checkbox
+    debugger;
+    var data = await this.props.fetchCategoryName(this.state.name);
+
+    if (data != false) {
+      this.dropVal = data.data.Data.globalCodeData;
+    }
+    this._data = [];
+    this.dropVal.forEach((element) => {
+      this._data.push({
+        checkBox: element.CodeName,
+        GlobalCodeId: element.GlobalCodeId,
+        status: false,
+      });
+    });
+   console.log("-----dropVal",this.dropVal)
+    var data_check = this._data;
+    data_check.forEach((element) => {
+    
+    });
+    // this.setState({
+    //   mycheckbox_data: data_check,
+    // });
+    if(this.props.saveModality.data)
+    this.setState({selectedFreq: this.props.saveModality.data.Data.FrequencyId});
+    this.setState();
+    this.setState({
+      mycheckbox_data: data_check,
+    });
+  };
+
+  MassageSelected = (e) => {
+    console.log("check_value", e.target.checked);
+    this.state.mycheckbox_data.filter(
+      (x) => x.GlobalCodeId == parseInt(e.target.id)
+    )[0].status = e.target.checked;
+    this.setState({ myStatus: this.state.mycheckbox_data });
+    if (e.target.checked == true) {
+      this.state.fields.modalityRequest.push({
+        modalityId: parseInt(e.target.id),
+
+      });
+    }
+    //  document.getElementById(e.target.id).checked = e.target.checked;
+    if (e.target.checked == false) {
+      document.getElementById(e.target.id).removeAttribute("checked");
+    } else {
+      document.getElementById(e.target.id).setAttribute("checked", "true");
+    }
+    console.log("asdsdadd", this.state.mycheckbox_data);
+  };
+
   back = () => {
     window.location.href = "/theparist-profile";
   };
+
+  saveMassage = () => {
+    var saveId = this.props.user.Data.TherapistId;
+    this.state.fields.therapistId = saveId;
+    var inputElems = document.getElementsByTagName("input"),
+      count = 0;
+    for (var i = 0; i < inputElems.length; i++) {
+      if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
+        count++;
+        this.props.fetchTherapistModality(this.state.fields);
+      }
+    }
+  };
   render() {
+    console.log("mycheckbox_data", this.state.mycheckbox_data);
+
     return (
       <div>
         <div>
@@ -29,91 +126,26 @@ export class Modalities extends Component {
               <div class="tab-pane container-fluid" id="Modalities">
                 <div class="thrChkBox">
                   <form>
-                    <div class="form-check form-check-inline">
-                      <label>
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          id="chk_red"
-                        />
-                        <span class="form-check-label" for="chk_red">
-                          Relaxation
-                        </span>
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <label>
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          id="chk_green"
-                        />
-                        <span class="form-check-label" for="chk_green">
-                          Deep Tissue
-                        </span>
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <label>
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          id="chk_blue"
-                        />
-                        <span class="form-check-label" for="chk_blue">
-                          Sports
-                        </span>
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <label>
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          id="chk_red1"
-                        />
-                        <span class="form-check-label" for="chk_red1">
-                          Sleep
-                        </span>
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <label>
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          id="chk_green1"
-                        />
-                        <span class="form-check-label" for="chk_green1">
-                          Pregnancy
-                        </span>
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <label>
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          id="chk_blue1"
-                        />
-                        <span class="form-check-label" for="chk_blue1">
-                          Senior
-                        </span>
-                      </label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                      <label>
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          id="chk_red2"
-                        />
-                        <span class="form-check-label" for="chk_red2">
-                          Therapeutic
-                        </span>
-                      </label>
-                    </div>
+                    {this.state.mycheckbox_data &&
+                      this.state.mycheckbox_data.map((item, index) => {
+                        return (
+                          <div className="form-check form-check-inline">
+                            <label>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={item.GlobalCodeId}
+                                value={item.checkBox}
+                                onChange={this.MassageSelected}
+                                checked={item.status}
+                              />
+                              <span className="form-check-label" for="chk_red">
+                                {item.checkBox}
+                              </span>
+                            </label>
+                          </div>
+                        );
+                      })}
                   </form>
                 </div>
                 <div class="text-right mt-5">
@@ -121,7 +153,7 @@ export class Modalities extends Component {
                     type="button"
                     class="btn btn-primary mr-4"
                     data-dismiss="modal"
-                    onClick={this.back}
+                    onClick={this.saveMassage}
                   >
                     Submit
                   </Button>
@@ -143,4 +175,23 @@ export class Modalities extends Component {
   }
 }
 
-export default Modalities;
+const mapStateToProps = (state) => {
+  console.log("sttate dekho--------", state);
+  return {
+    user: state.user.user,
+    saveModality: state.therapistReducer.saveModality,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+    fetchTherapistModality: (data) => dispatch(fetchTherapistModality(data)),
+    getTherapistModalityInfo: (data) =>
+      dispatch(getTherapistModalityInfo(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Modalities)
+);

@@ -51,10 +51,53 @@ const therapistPaymentDetails = (data) => {
 };
 
 
+//licensure-api
+const addTherapistLicensure = (data) => {
+  return fetch(
+    "post",
+    `${API_HOST}/TherapistAPI/AddUpdateTherapistLicensure`,
+    data
+  );
+};
+
+
+//get-licensure
+const getTherapistLicensure = (data) => {
+  return fetch(
+    "post",
+    `${API_HOST}/TherapistAPI/GetTherapistLicensure`,
+    data
+  );
+};
+
+//modalities-api
+const addTherapistModality = (data) => {
+  return fetch(
+    "post",
+    `${API_HOST}/TherapistAPI/AddUpdateTherapistModalities`,
+    data
+  );
+};
+
+//get-modalities
+const getTherapistModality = (data) => {
+  var data1 = {
+    therapistId: data,
+  };
+  return fetch(
+    "post",
+    `${API_HOST}/TherapistAPI/GetTherapistModalities`,
+    data1
+  );
+};
 
 export const TherapistService = {
   addImage,
   getTherapistImage,
   therapistConsentForm,
   therapistPaymentDetails,
+  addTherapistModality,
+  getTherapistModality,
+  addTherapistLicensure,
+  getTherapistLicensure
 };

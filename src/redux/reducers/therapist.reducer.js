@@ -3,7 +3,9 @@ import { actionTypes } from "../actions/therapist.action";
 const initialState = {
   saveIdentityImage: {},
   savePayInfo: {},
-  saveIdentity:{}
+  saveIdentity:{},
+  saveLicensure:{},
+  saveModality:{}
 };
 
 const therapistReducer = (state = initialState, action) => {
@@ -23,6 +25,17 @@ const therapistReducer = (state = initialState, action) => {
           ...state,
           saveIdentity: action.data,
         };
+        case actionTypes.SAVE_LICENSURE_INFO:
+          return {
+            ...state,
+            saveLicensure: action.data,
+          };
+          case actionTypes.SAVE_MODALITY_INFO:
+            return {
+              ...state,
+              saveModality: action.data,
+            };
+          
       
     default:
       return state;
