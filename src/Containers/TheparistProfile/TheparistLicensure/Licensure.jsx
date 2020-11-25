@@ -3,6 +3,11 @@ import { Button } from "semantic-ui-react";
 import { Dropdown, Form, Input } from "semantic-ui-react-form-validator";
 import { DateInput } from "semantic-ui-calendar-react";
 import {
+  listDateFormat,
+  listDateFormat_sample,
+} from "../../../utils/dateFormat";
+
+import {
   fetchTherapistLicensure,
   getTherapistLicensureInfo,
 } from "../../../redux/actions/therapist.action";
@@ -77,11 +82,29 @@ class Licensure extends Component {
     //get-licensure-details
     var data1 = this.props.user.Data.TherapistId;
     this.state.getLicensure.therapistId = data1;
-    this.props.getTherapistLicensureInfo(this.state.getLicensure);
+    var aa = await this.props.getTherapistLicensureInfo(
+      this.state.getLicensure
+    );
     debugger
     //get-selected-state
-    if(this.props.saveLicensure.data)
-    this.setState({selectedstate: this.props.saveLicensure.data.Data.State});
+    // if(aa=false){
+    //   this.setState({fields:""})
+    // }
+    if (this.props.saveLicensure.data){
+      this.setState({
+        selectedstate: this.props.saveLicensure.data.Data.State,
+      });
+      this.state.fields.state=this.props.saveLicensure.data.Data.State
+    }
+
+    //get-selected-gender
+    if (this.props.saveLicensure.data){
+      this.setState({
+        selectedGender: this.props.saveLicensure.data.Data.Gender,
+      });
+      this.state.fields.gender=this.props.saveLicensure.data.Data.Gender
+    }
+
     this.setState();
   };
 
@@ -109,22 +132,16 @@ class Licensure extends Component {
     this.state.fields.gender = globalGenderId;
   };
 
+  //licensed-since
   handleChangeDate = (event, { name, value }) => {
-    debugger
-    // this.resetError("licensedSince");
-    this.state.fields.licensedSince = parseInt(value);
+    this.state.fields.licensedSince = value;
     this.props.saveLicensure.data.Data.LicensedSince = this.state.fields.licensedSince;
-    this.setState({ licensedSince: this.props.saveLicensure.data.Data.LicensedSince});
-//  this.setState({ [name]: value }); 
-    // this.setState((prevState) => {
-    //   let fields = Object.assign({}, prevState.fields);
-    //   fields.licensedSince = value;
-    //   return { fields: fields };
-
-     
-  
-    // });
+    this.setState({
+      licensedSince: this.props.saveLicensure.data.Data.LicensedSince,
+    });
   };
+
+   //expiration-date
   handleExpDate = (event, { name, value }) => {
     this.resetError("expirationDate");
     this.setState({ [name]: value });
@@ -133,23 +150,32 @@ class Licensure extends Component {
       fields.expirationDate = value;
       return { fields: fields };
     });
+
+    this.state.fields.expirationDate = value;
+    this.props.saveLicensure.data.Data.ExpirationDate = this.state.fields.expirationDate;
+    this.setState({
+      expirationDate: this.props.saveLicensure.data.Data.ExpirationDate,
+    });
+
+  
   };
 
   changeNumber = (e) => {
-    debugger;
-    this.state.fields.licensureNumber = parseInt(e.target.value);
-    this.props.saveLicensure.data.Data.LicensureNumber = this.state.fields.licensureNumber;
-    this.setState({ licensureNumber: this.props.saveLicensure.data.Data.LicensureNumber});
+   debugger
+   
 
+    this.state.fields.licensureNumber = parseInt(e.target.value);
+   this.props.saveLicensure.data.Data.LicensureNumber = this.state.fields.licensureNumber;
+    this.setState({
+      licensureNumber: this.props.saveLicensure.data.Data.LicensureNumber,
+    });
   };
 
   submitDocument = async (e) => {
     e.preventDefault();
-    debugger;
     var data1 = this.props.user.Data.TherapistId;
     this.state.fields.therapistId = data1;
     if (this.validate()) {
-      debugger;
       var res = await this.props.fetchTherapistLicensure(this.state.fields);
       if (res == true) {
         console.log("res--------", res);
@@ -245,7 +271,11 @@ class Licensure extends Component {
                                     className="abc"
                                     options={this.StateOptions}
                                     selection
-                                    value={this.state.selectedstate}
+                                    value={
+                                      this.state.selectedstate != ""
+                                        ? this.state.selectedstate
+                                        : ""
+                                    }
                                     onChange={this.changeState}
                                     validators={["required"]}
                                     errorMessages={["this field is required"]}
@@ -262,10 +292,12 @@ class Licensure extends Component {
                                     id="date"
                                     fullWidth={true}
                                     name="date"
-                                    value={ this.props.saveLicensure.data
-                                      ? this.props.saveLicensure.data.Data
-                                          .LicensedSince
-                                      : this.state.fields.licensedSince}
+                                    value={listDateFormat_sample(
+                                      this.props.saveLicensure.data
+                                        ? this.props.saveLicensure.data.Data
+                                            .LicensedSince
+                                        : this.state.fields.licensedSince
+                                    )}
                                     dateFormat={"YYYY-MM-DD"}
                                     onChange={this.handleChangeDate}
                                   />
@@ -288,14 +320,20 @@ class Licensure extends Component {
                                     id="date"
                                     fullWidth={true}
                                     name="date"
-                                    value={this.state.fields.expirationDate}
+                                    value={listDateFormat_sample(
+                                      this.props.saveLicensure.data
+                                        ? this.props.saveLicensure.data.Data
+                                            .ExpirationDate
+                                        : this.state.fields.expirationDate
+                                    )}
+                                    // value={this.state.fields.expirationDate}
                                     dateFormat={"YYYY-MM-DD"}
                                     onChange={this.handleExpDate}
                                   />
-                                  {this.hasError("date") && (
+                                  {this.hasError("expirationDate") && (
                                     <div className="ui pointing label">
                                       <div style={{ color: "red" }}>
-                                        {this.state.errors["date"]}
+                                        {this.state.errors["expirationDate"]}
                                       </div>
                                     </div>
                                   )}

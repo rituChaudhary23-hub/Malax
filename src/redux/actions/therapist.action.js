@@ -7,7 +7,8 @@ export const actionTypes = {
   SAVE_PAYMENT_INFO: "SAVE_PAYMENT_INFO",
   SAVE_IDENTITY_IMAGE:"SAVE_IDENTITY_IMAGE",
   SAVE_LICENSURE_INFO:"SAVE_LICENSURE_INFO",
-  SAVE_MODALITY_INFO:"SAVE_MODALITY_INFO"
+  SAVE_MODALITY_INFO:"SAVE_MODALITY_INFO",
+  SAVE_SCHEDULED_INFO:"SAVE_SCHEDULED_INFO"
 };
 
 export function saveTherapistImage(data) {
@@ -23,6 +24,16 @@ export function saveModalityInfo(data) {
     data: data,
   };
 }
+
+
+export function saveScheduledInfo(data) {
+  return {
+    type: actionTypes.SAVE_SCHEDULED_INFO,
+    data: data,
+  };
+}
+
+
 export function saveLicensureInfo(data) {
   return {
     type: actionTypes.SAVE_LICENSURE_INFO,
@@ -243,8 +254,6 @@ export function fetchTherapistModality(data) {
 }
 
 //get-modalities
-
-
 export function getTherapistModalityInfo(data) {
   debugger
   return (dispatch, getState) => {
@@ -257,6 +266,37 @@ export function getTherapistModalityInfo(data) {
         if (data.data.Success) {
           debugger
           dispatch(saveModalityInfo(data));
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+
+//get-scheduled-appointments
+
+export function getTherapistAppointments(data) {
+  debugger
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    debugger
+    let state = getState();
+    return TherapistService.getScheduledAppointments(data, {})
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          debugger
+          dispatch(saveScheduledInfo(data));
           toast.success(data["data"]["Message"]);
 
           return true;

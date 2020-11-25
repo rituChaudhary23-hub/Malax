@@ -12,7 +12,7 @@ class Appointment extends Component {
     return (
       <div>
         <div>
-          <h2>Scheduled Services</h2>
+          <h2>Scheduled Services rity 1</h2>
         </div>
         <div>
           <Table celled>

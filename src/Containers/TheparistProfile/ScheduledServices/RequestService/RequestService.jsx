@@ -12,7 +12,7 @@ class RequestService extends Component {
     return (
       <div>
         <div>
-          <h2>Scheduled Services</h2>
+          <h2>Scheduled Services ritu</h2>
         </div>
         <div>
           <Table celled>

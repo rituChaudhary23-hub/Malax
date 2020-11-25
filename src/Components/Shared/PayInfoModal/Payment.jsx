@@ -30,7 +30,7 @@ export class Payment extends Component {
         cardHolderName: "",
         zipCode: 0,
         cardNumber: "",
-        cvvNumber: 0,
+        cvvNumber: '',
         actionBy: "",
       },
       
@@ -98,6 +98,8 @@ export class Payment extends Component {
 
   //expiration-date
   handleChangeDate = (event, { name, value }) => {
+    console.log("----date name",name)
+    console.log("-----date value",value)
     debugger
     this.resetError("cardExpiration");
     this.setState({ [name]: value });
@@ -108,11 +110,44 @@ export class Payment extends Component {
     });
   };
 
+  abc = (event, { name, value }) => {
+    console.log("----date name",name)
+    console.log("-----date value",value)
+    debugger
+    this.resetError("cardExpiration");
+    this.setState({ [name]: value });
+    this.setState((prevState) => {
+      let fields = Object.assign({}, prevState.fields);
+      fields.cardExpiration = value;
+      return { fields: fields };
+    });
+  }
+
   //onchange-inputs
   setFormValue(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
+  }
+
+  //cvv
+  changeCvv=(e)=>{
+    debugger
+     var regex = '^\\d+$';
+     if(e.target.value.match(regex) ){
+      if(e.target.value.length <=3 && e.target.value != ""){
+      this.setState({cvvNumber:e.target.value});
+      } else if(e.target.value.length ==0){
+        this.setState({cvvNumber:e.target.value});
+      }
+    } else {
+      if(this.state.cvvNumber && this.state.cvvNumber.length>0 && e.target.value != ""){
+        this.setState({cvvNumber:this.state.cvvNumber});
+      } else {
+      this.setState({cvvNumber:''});
+    }
+    }
+    // }
   }
 
   //zipcode
@@ -125,7 +160,20 @@ export class Payment extends Component {
       toast.error("Not matched zipcode");
     }
   };
+  resetError = (field) => {
+    let errors = this.state.errors;
+    errors[field] = "";
+    this.setState({ errors });
+  };
 
+  hasError = (value) => {
+    let errors = this.state.errors;
+    if (errors[value] !== "") {
+      return true;
+    } else {
+      return false;
+    }
+  };
   render() {
     const { submitting } = this.props;
 
@@ -146,7 +194,7 @@ export class Payment extends Component {
           <Form
                 ref="form"
                 autoComplete="off"
-                onSubmit={this.savePayment}
+              ///  onSubmit={this.savePayment}
                 onError={this.handleValidation}
               >
               
@@ -203,24 +251,16 @@ export class Payment extends Component {
                     <label for="usr" class="chkBox">
                       CVV Number
                     </label>
-                    {/* <input
-                      type="number"
-                      pattern="[0-3]*"
-                      inputmode="numeric"
-                      class="form-control"
-                      maxlength="3"
-                      validators={["required"]}
-                      errorMessages={["this field is required"]}
-                    /> */}
-
+                   
                     <Input
                       className="form-control"
                       id="name"
                       fullWidth={true}
-                      type="number"
-                      maxLength="3"
-                      onChange={this.setFormValue.bind(this, "cvvNumber")}
-                      validators={["required", "matchRegexp:^[0-9]*$"]}
+                      type="text"
+                       value={this.state.cvvNumber && this.state.cvvNumber}
+                      onChange={ this.changeCvv }
+                      // onChange={this.setFormValue.bind(this, parseInt("cvvNumber"))}
+                      validators={["required", "pattern:^[0-9]*$"]}
                       errorMessages={[
                         "this field is required",
                         "Invalid Number",
@@ -236,15 +276,16 @@ export class Payment extends Component {
                     {/* <input type="date" class="form-control" id="date" /> */}
                     <DateInput
                       className="form-control date"
-                      id="date"
+                      id="date12"
                       fullWidth={true}
                       placeholder="Card Expiration Date"
-                      name="date"
+                      name="date12"
+                     
                       value={this.state.fields.cardExpiration}
                       dateFormat={"YYYY-MM-DD"}
                       minDate={new Date()}
                       closable="true"
-                      onChange={this.handleChangeDate}
+                      onChange={this.abc}
                     />
                     {this.hasError("cardExpiration") && (
                       <div className="ui pointing label">

@@ -5,7 +5,8 @@ const initialState = {
   savePayInfo: {},
   saveIdentity:{},
   saveLicensure:{},
-  saveModality:{}
+  saveModality:{},
+  saveAppointments:{}
 };
 
 const therapistReducer = (state = initialState, action) => {
@@ -35,7 +36,13 @@ const therapistReducer = (state = initialState, action) => {
               ...state,
               saveModality: action.data,
             };
-          
+            case actionTypes.SAVE_SCHEDULED_INFO:
+              return {
+                ...state,
+                saveAppointments: action.data,
+              };
+
+            
       
     default:
       return state;

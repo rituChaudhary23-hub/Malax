@@ -25,11 +25,10 @@ export class Modalities extends Component {
         modalityRequest: [],
         actionBy: "",
       },
-      getModality:{
-          therapistModalityId: 0,
-          therapistId: 0
-        
-      }
+      getModality: {
+        therapistModalityId: 0,
+        therapistId: 0,
+      },
     };
   }
 
@@ -38,7 +37,6 @@ export class Modalities extends Component {
     this.state.getModality.therapistId = data2;
     var res = await this.props.getTherapistModalityInfo(data2);
     //checkbox
-    debugger;
     var data = await this.props.fetchCategoryName(this.state.name);
 
     if (data != false) {
@@ -52,17 +50,18 @@ export class Modalities extends Component {
         status: false,
       });
     });
-   console.log("-----dropVal",this.dropVal)
+    console.log("-----dropVal", this.dropVal);
+    var data_check = this._data;
+    data_check.forEach((element) => {});
+
     var data_check = this._data;
     data_check.forEach((element) => {
-    
+      this.props.saveModality.data.Data.ModalitiesResponses.forEach((ele) => {
+        if (ele.ModalityId == element.GlobalCodeId) {
+          element.status = true;
+        }
+      });
     });
-    // this.setState({
-    //   mycheckbox_data: data_check,
-    // });
-    if(this.props.saveModality.data)
-    this.setState({selectedFreq: this.props.saveModality.data.Data.FrequencyId});
-    this.setState();
     this.setState({
       mycheckbox_data: data_check,
     });
@@ -77,10 +76,8 @@ export class Modalities extends Component {
     if (e.target.checked == true) {
       this.state.fields.modalityRequest.push({
         modalityId: parseInt(e.target.id),
-
       });
     }
-    //  document.getElementById(e.target.id).checked = e.target.checked;
     if (e.target.checked == false) {
       document.getElementById(e.target.id).removeAttribute("checked");
     } else {
@@ -93,17 +90,35 @@ export class Modalities extends Component {
     window.location.href = "/theparist-profile";
   };
 
-  saveMassage = () => {
+  // saveMassage = () => {
+  //   var saveId = this.props.user.Data.TherapistId;
+  //   this.state.fields.therapistId = saveId;
+  //   var inputElems = document.getElementsByTagName("input"),
+  //     count = 0;
+  //   for (var i = 0; i < inputElems.length; i++) {
+  //     if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
+  //       count++;
+  //       this.props.fetchTherapistModality(this.state.fields);
+  //     }
+  //   }
+  // };
+
+  saveCondition = () => {
     var saveId = this.props.user.Data.TherapistId;
     this.state.fields.therapistId = saveId;
+    this.state.fields.modalityRequest = [];
     var inputElems = document.getElementsByTagName("input"),
       count = 0;
     for (var i = 0; i < inputElems.length; i++) {
       if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
         count++;
-        this.props.fetchTherapistModality(this.state.fields);
+
+        this.state.fields.modalityRequest.push({
+          ModalityId: parseInt(inputElems[i].id),
+        });
       }
     }
+    this.props.fetchTherapistModality(this.state.fields);
   };
   render() {
     console.log("mycheckbox_data", this.state.mycheckbox_data);
@@ -153,7 +168,7 @@ export class Modalities extends Component {
                     type="button"
                     class="btn btn-primary mr-4"
                     data-dismiss="modal"
-                    onClick={this.saveMassage}
+                    onClick={this.saveCondition}
                   >
                     Submit
                   </Button>
