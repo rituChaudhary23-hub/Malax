@@ -12,6 +12,7 @@ import ForgotPassword from "./Containers/ForgotPassword/ForgotPassword";
 import ResetPassword from "./Containers/ResetPassword/ResetPassword";
 import ClientProfile from "./Containers/ClientProfile/ClientProfile";
 import ServiceDetail from "./Containers/Service/ServiceDetail/ServiceDetail";
+import ScheduleServiceDetail from "./Containers/TheparistProfile/ScheduledServices/ScheduleServiceDetail/ScheduleServiceDetail"
 import UpdateClientProfile from "./Containers/ClientProfile/UpdateClientProfile";
 import ServiceRequest from "./Containers/Service/ServiceRequest/ServiceRequest";
 import Profile from "./Containers/TheparistProfile/TheparistProfile";
@@ -71,6 +72,9 @@ class App extends Component {
             />
             <Route path="/payment" component={Payment} />
             <Route component={ServiceDetail} path="/theparist-detail" />
+            
+            <Route component={ScheduleServiceDetail} path="/scheduled-service-details" />
+
           </Switch>
         </Router>
       </div>

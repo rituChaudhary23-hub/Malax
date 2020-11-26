@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import {getTherapistAppointments} from "../../../redux/actions/therapist.action"
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-
-import { Table } from "semantic-ui-react";
+import { listDateFormat } from "../../../utils/dateFormat";
+import { Table ,Button} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 class ScheduleService extends Component {
@@ -16,8 +16,8 @@ class ScheduleService extends Component {
         TherapistId:0,
         Page:"",
         Limit:"",
-        OrderBy:"StreetAddress",
-        OrderByDescending:"",
+        OrderBy:"CreatedOn",
+        OrderByDescending:"", 
         AllRecords:""
       }
     };
@@ -29,11 +29,12 @@ class ScheduleService extends Component {
   }
 
   render() {
+    console.log("saveAppointments-------",this.props.saveAppointments.data)
     return (
       <section className="therapistProDes">
         <div className="card">
           <div className="card-body">
-            <h2 className="card-title">Scheduled Services ritu 2</h2>
+            <h2 className="card-title">Scheduled Services</h2>
             <div className="scheduledServices">
               <div className="row">
                 <div className="col-sm-12">
@@ -49,56 +50,49 @@ class ScheduleService extends Component {
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                      <Table.Row>
-                        <Table.Cell>07-20-2020</Table.Cell>
-                        <Table.Cell>11:00 Am</Table.Cell>
-                        <Table.Cell>New York, NY 10001</Table.Cell>
-                        <Table.Cell>John Warner</Table.Cell>
-                        <Table.Cell>
-                          <Link to="/theparist-detail"> Requested</Link>
-                        </Table.Cell>
-                        <Table.Cell>EDIT/DELETE</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>07-20-2020</Table.Cell>
-                        <Table.Cell>11:00 Am</Table.Cell>
-                        <Table.Cell>New York, NY 10001</Table.Cell>
-                        <Table.Cell>John Warner</Table.Cell>
-                        <Table.Cell>
-                          <Link to="/theparist-detail"> Requested</Link>
-                        </Table.Cell>
-                        <Table.Cell>EDIT/DELETE</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>07-20-2020</Table.Cell>
-                        <Table.Cell>11:00 Am</Table.Cell>
-                        <Table.Cell>New York, NY 10001</Table.Cell>
-                        <Table.Cell>John Warner</Table.Cell>
-                        <Table.Cell>
-                          <Link to="/theparist-detail"> Requested</Link>
-                        </Table.Cell>
-                        <Table.Cell>EDIT/DELETE</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>07-20-2020</Table.Cell>
-                        <Table.Cell>11:00 Am</Table.Cell>
-                        <Table.Cell>New York, NY 10001</Table.Cell>
-                        <Table.Cell>John Warner</Table.Cell>
-                        <Table.Cell>
-                          <Link to="/theparist-detail"> Requested</Link>
-                        </Table.Cell>
-                        <Table.Cell>EDIT/DELETE</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>07-20-2020</Table.Cell>
-                        <Table.Cell>11:00 Am</Table.Cell>
-                        <Table.Cell>New York, NY 10001</Table.Cell>
-                        <Table.Cell>John Warner</Table.Cell>
-                        <Table.Cell>
-                          <Link to="/theparist-detail"> Requested</Link>
-                        </Table.Cell>
-                        <Table.Cell>EDIT/DELETE</Table.Cell>
-                      </Table.Row>
+                      {this.props.saveAppointments.data != null &&
+                        this.props.saveAppointments.data.Data
+                          .AllClientAppointments &&
+                        this.props.saveAppointments.data.Data.AllClientAppointments.map(
+                          (item, index) => (
+                            <Table.Row key={index}>
+                              <Table.Cell>
+                                {listDateFormat(item.ServiceDate)}
+
+                                {/* {listDateFormat(item.ServiceDate).convertToDateTime} */}
+                              </Table.Cell>
+                              <Table.Cell>{item.From}</Table.Cell>
+                              <Table.Cell>
+                                {item.StreetAddress} ,{item.ZipCode}
+                              </Table.Cell>
+                              <Table.Cell>{item.ClientName}</Table.Cell>
+                              <Table.Cell>
+                                <Link
+                                  to={
+                                    "/scheduled-service-details=" +
+                                    item.ClientScheduleId
+                                  }
+                                >
+                                  {" "}
+                                  {item.Status.CodeName}
+                                </Link>
+                              </Table.Cell>
+                           
+                              <Table.Cell>
+                                <Button
+                                  onClick={() =>
+                                    this.deleteAppointment(
+                                      item.ClientScheduleId
+                                    )
+                                  }
+                                >
+                                  DELETE
+                                </Button>
+                              </Table.Cell>
+                            </Table.Row>
+                          )
+                        )}
+                      {this.props.item == 0 && <td>No record</td>}
                     </Table.Body>
                   </Table>
                 </div>
@@ -116,7 +110,7 @@ const mapStateToProps = (state) => {
   console.log("sttate dekho--------", state);
   return {
     user: state.user.user,
-    saveLicensure: state.therapistReducer.saveLicensure,
+    saveAppointments: state.therapistReducer.saveAppointments,
   };
 };
 

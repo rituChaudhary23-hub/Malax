@@ -85,24 +85,45 @@ class Licensure extends Component {
     var aa = await this.props.getTherapistLicensureInfo(
       this.state.getLicensure
     );
-    debugger
     //get-selected-state
-    // if(aa=false){
-    //   this.setState({fields:""})
-    // }
-    if (this.props.saveLicensure.data){
+    if ((aa = false)) {
+      this.setState({ licensureNumber: "" });
+    }
+    if (this.props.saveLicensure.data) {
       this.setState({
         selectedstate: this.props.saveLicensure.data.Data.State,
       });
-      this.state.fields.state=this.props.saveLicensure.data.Data.State
-    }
 
-    //get-selected-gender
-    if (this.props.saveLicensure.data){
+      this.state.fields.state = this.props.saveLicensure.data.Data.State;
+      // }
+
+      //get-selected-gender
+      //  if (this.props.saveLicensure.data){
       this.setState({
         selectedGender: this.props.saveLicensure.data.Data.Gender,
       });
-      this.state.fields.gender=this.props.saveLicensure.data.Data.Gender
+      this.state.fields.gender = this.props.saveLicensure.data.Data.Gender;
+      //    }
+
+      //if licnedeNumber is not updated
+      this.setState({
+        licensureNumber: this.props.saveLicensure.data.Data.LicensureNumber,
+      });
+      this.state.fields.licensureNumber = this.props.saveLicensure.data.Data.LicensureNumber;
+      this.state.fields.licensureNumber = this.props.saveLicensure.data.Data.LicensureNumber;
+      // }
+
+      //if expirationDate is not updated
+      this.setState({
+        expirationDate: this.props.saveLicensure.data.Data.ExpirationDate,
+      });
+      this.state.fields.expirationDate = this.props.saveLicensure.data.Data.ExpirationDate;
+
+      //if licensedSince is not updated
+      this.setState({
+        licensedSince: this.props.saveLicensure.data.Data.LicensedSince,
+      });
+      this.state.fields.licensedSince = this.props.saveLicensure.data.Data.LicensedSince;
     }
 
     this.setState();
@@ -134,14 +155,21 @@ class Licensure extends Component {
 
   //licensed-since
   handleChangeDate = (event, { name, value }) => {
-    this.state.fields.licensedSince = value;
-    this.props.saveLicensure.data.Data.LicensedSince = this.state.fields.licensedSince;
-    this.setState({
-      licensedSince: this.props.saveLicensure.data.Data.LicensedSince,
+    this.resetError("licensedSince");
+    this.setState({ [name]: value });
+    this.setState((prevState) => {
+      let fields = Object.assign({}, prevState.fields);
+      fields.licensedSince = value;
+      return { fields: fields };
     });
+
+    this.setState({ licensedSince: value });
+    this.state.fields.licensedSince = value;
+
+    this.setState();
   };
 
-   //expiration-date
+  //expiration-date
   handleExpDate = (event, { name, value }) => {
     this.resetError("expirationDate");
     this.setState({ [name]: value });
@@ -150,31 +178,26 @@ class Licensure extends Component {
       fields.expirationDate = value;
       return { fields: fields };
     });
-
+    this.setState({ expirationDate: value });
     this.state.fields.expirationDate = value;
-    this.props.saveLicensure.data.Data.ExpirationDate = this.state.fields.expirationDate;
-    this.setState({
-      expirationDate: this.props.saveLicensure.data.Data.ExpirationDate,
-    });
 
-  
+    this.setState();
   };
 
   changeNumber = (e) => {
-   debugger
-   
-
-    this.state.fields.licensureNumber = parseInt(e.target.value);
-   this.props.saveLicensure.data.Data.LicensureNumber = this.state.fields.licensureNumber;
-    this.setState({
-      licensureNumber: this.props.saveLicensure.data.Data.LicensureNumber,
-    });
+    this.setState({ licensureNumber: e.target.value });
+    this.state.fields.licensureNumber = e.target.value;
+    this.setState();
   };
 
   submitDocument = async (e) => {
     e.preventDefault();
+
     var data1 = this.props.user.Data.TherapistId;
     this.state.fields.therapistId = data1;
+    this.state.fields.licensureNumber = parseInt(
+      this.state.fields.licensureNumber
+    );
     if (this.validate()) {
       var res = await this.props.fetchTherapistLicensure(this.state.fields);
       if (res == true) {
@@ -229,7 +252,6 @@ class Licensure extends Component {
     window.location.href = "/theparist-profile";
   };
   render() {
-    console.log("----saveLicensure", this.props.saveLicensure.data);
     const { submitting } = this.props;
 
     return (
@@ -293,10 +315,8 @@ class Licensure extends Component {
                                     fullWidth={true}
                                     name="date"
                                     value={listDateFormat_sample(
-                                      this.props.saveLicensure.data
-                                        ? this.props.saveLicensure.data.Data
-                                            .LicensedSince
-                                        : this.state.fields.licensedSince
+                                      this.state.licensedSince &&
+                                        this.state.licensedSince
                                     )}
                                     dateFormat={"YYYY-MM-DD"}
                                     onChange={this.handleChangeDate}
@@ -321,10 +341,8 @@ class Licensure extends Component {
                                     fullWidth={true}
                                     name="date"
                                     value={listDateFormat_sample(
-                                      this.props.saveLicensure.data
-                                        ? this.props.saveLicensure.data.Data
-                                            .ExpirationDate
-                                        : this.state.fields.expirationDate
+                                      this.state.expirationDate &&
+                                        this.state.expirationDate
                                     )}
                                     // value={this.state.fields.expirationDate}
                                     dateFormat={"YYYY-MM-DD"}
@@ -353,10 +371,8 @@ class Licensure extends Component {
                                     margin={"normal"}
                                     onChange={this.changeNumber}
                                     value={
-                                      this.props.saveLicensure.data
-                                        ? this.props.saveLicensure.data.Data
-                                            .LicensureNumber
-                                        : null
+                                      this.state.licensureNumber &&
+                                      this.state.licensureNumber
                                     }
                                     // validators={["required"]}
                                     // errorMessages={[

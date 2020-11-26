@@ -4,6 +4,11 @@ import { Form, Input, Dropdown } from "semantic-ui-react-form-validator";
 import { withRouter } from "react-router";
 import { Button } from "semantic-ui-react";
 import {
+  listDateFormat,
+  listDateFormat_sample,
+} from "../../../utils/dateFormat";
+
+import {
   fetchCategoryName,
   fetchValidateZip,
 } from ".././../../redux/actions/global.action";
@@ -30,10 +35,10 @@ export class Payment extends Component {
         cardHolderName: "",
         zipCode: 0,
         cardNumber: "",
-        cvvNumber: '',
+        cvvNumber: "",
         actionBy: "",
       },
-      
+
       errors: {
         cardExpiration: "",
         city: "",
@@ -82,73 +87,73 @@ export class Payment extends Component {
 
   //save-payment
   savePayment = async (e, data) => {
-    debugger;
     e.preventDefault();
     var data1 = this.props.user.Data.TherapistId;
     this.state.fields.therapistId = data1;
     if (this.handleValidation()) {
-      debugger
       var res = await this.props.fetchTherapistPaymentInfo(this.state.fields);
       if (res == true) {
-        console.log("res--------", res);
       } else {
       }
     }
   };
 
   //expiration-date
-  handleChangeDate = (event, { name, value }) => {
-    console.log("----date name",name)
-    console.log("-----date value",value)
-    debugger
-    this.resetError("cardExpiration");
-    this.setState({ [name]: value });
-    this.setState((prevState) => {
-      let fields = Object.assign({}, prevState.fields);
-      fields.cardExpiration = value;
-      return { fields: fields };
-    });
+  updateDate = (e) => {
+    var date = e.target.value;
+    this.state.fields.cardExpiration = date;
   };
 
-  abc = (event, { name, value }) => {
-    console.log("----date name",name)
-    console.log("-----date value",value)
-    debugger
-    this.resetError("cardExpiration");
-    this.setState({ [name]: value });
-    this.setState((prevState) => {
-      let fields = Object.assign({}, prevState.fields);
-      fields.cardExpiration = value;
-      return { fields: fields };
-    });
-  }
-
-  //onchange-inputs
-  setFormValue(field, e) {
-    let fields = this.state.fields;
-    fields[field] = e.target.value;
-    this.setState({ fields });
-  }
-
   //cvv
-  changeCvv=(e)=>{
-    debugger
-     var regex = '^\\d+$';
-     if(e.target.value.match(regex) ){
-      if(e.target.value.length <=3 && e.target.value != ""){
-      this.setState({cvvNumber:e.target.value});
-      } else if(e.target.value.length ==0){
-        this.setState({cvvNumber:e.target.value});
+  changeCvv = (e) => {
+    var regex = "^\\d+$";
+    if (e.target.value.match(regex)) {
+      if (e.target.value.length <= 3 && e.target.value != "") {
+        this.state.fields.cvvNumber = parseInt(e.target.value);
+        this.setState({ cvvNumber: e.target.value });
+      } else if (e.target.value.length == 0) {
+        this.state.fields.cvvNumber = e.target.value;
+        this.setState({ cvvNumber: e.target.value });
       }
     } else {
-      if(this.state.cvvNumber && this.state.cvvNumber.length>0 && e.target.value != ""){
-        this.setState({cvvNumber:this.state.cvvNumber});
+      if (
+        this.state.fields.cvvNumber &&
+        this.state.fields.cvvNumber.length > 0 &&
+        e.target.value != ""
+      ) {
+        this.setState({ cvvNumber: this.state.cvvNumber });
       } else {
-      this.setState({cvvNumber:''});
-    }
+        this.state.fields.cvvNumber = "";
+        this.setState({ cvvNumber: "" });
+      }
     }
     // }
-  }
+  };
+
+  //update-cardNumber
+  updateCardNumber = (e) => {
+    var regex = "^\\d+$";
+    if (e.target.value.match(regex)) {
+      if (e.target.value.length <= 16 && e.target.value != "") {
+        this.state.fields.cardNumber = e.target.value;
+        this.setState({ cardNumber: e.target.value });
+      } else if (e.target.value.length == 0) {
+        this.state.fields.cardNumber = e.target.value;
+        this.setState({ cardNumber: e.target.value });
+      }
+    } else {
+      if (
+        this.state.fields.cardNumber &&
+        this.state.fields.cardNumber.length > 0 &&
+        e.target.value != ""
+      ) {
+        this.setState({ cardNumber: this.state.fields.cardNumber });
+      } else {
+        this.setState({ cardNumber: "" });
+      }
+    }
+    // }
+  };
 
   //zipcode
   checkZipCode = (e) => {
@@ -174,6 +179,11 @@ export class Payment extends Component {
       return false;
     }
   };
+  setFormValue(field, e) {
+    let fields = this.state.fields;
+    fields[field] = e.target.value;
+    this.setState({ fields });
+  }
   render() {
     const { submitting } = this.props;
 
@@ -191,25 +201,22 @@ export class Payment extends Component {
             <Modal.Title>Payment information</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <Form
-                ref="form"
-                autoComplete="off"
+            <Form
+              ref="form"
+              autoComplete="off"
               ///  onSubmit={this.savePayment}
-                onError={this.handleValidation}
-              >
-              
-            <div className="row">
-               <div className="col-sm-6 pb-3 pr-3">
+              onError={this.handleValidation}
+            >
+              <div className="row">
+                <div className="col-sm-6 pb-3 pr-3">
                   <div className="form-group">
-                    <label for="usr" className="chkBox">
+                    <label htmlFor="usr" className="chkBox">
                       Card Holder's name
                     </label>
-                    {/* <input type="text" class="form-control" /> */}
-
                     <Input
                       className="form-control"
                       id="name"
-                      fullWidth={true}
+                      fullwidth="true"
                       name="name"
                       type="name"
                       onChange={this.setFormValue.bind(this, "cardHolderName")}
@@ -226,19 +233,18 @@ export class Payment extends Component {
                 </div>{" "}
                 <div className="col-sm-6 pb-3 pr-3">
                   <div className="form-group">
-                    <label for="usr" className="chkBox">
-                      Card number ritu
+                    <label htmlFor="usr" className="chkBox">
+                      Card number
                     </label>
-                    {/* <input type="tel" class="form-control" /> */}
                     <Input
                       className="form-control"
                       id="name"
-                      fullWidth={true}
-                      name="name"
-                      type="number"
+                      fullwidth="true"
+                      type="text"
                       maxLength={16}
-                      onChange={this.setFormValue.bind(this, "cardNumber")}
-                      validators={["required", "matchRegexp:^[0-9]*$"]}
+                      onChange={this.updateCardNumber}
+                      validators={["required"]}
+                      value={this.state.fields.cardNumber}
                       errorMessages={[
                         "this field is required",
                         "Invalid Number",
@@ -246,21 +252,23 @@ export class Payment extends Component {
                     />
                   </div>
                 </div>{" "}
-                <div class="col-sm-6 pb-3 pr-3">
-                  <div class="form-group">
-                    <label for="usr" class="chkBox">
+                <div className="col-sm-6 pb-3 pr-3">
+                  <div className="form-group">
+                    <label htmlFor="usr" className="chkBox">
                       CVV Number
                     </label>
-                   
+
                     <Input
                       className="form-control"
                       id="name"
-                      fullWidth={true}
+                      fullwidth="true"
                       type="text"
-                       value={this.state.cvvNumber && this.state.cvvNumber}
-                      onChange={ this.changeCvv }
-                      // onChange={this.setFormValue.bind(this, parseInt("cvvNumber"))}
-                      validators={["required", "pattern:^[0-9]*$"]}
+                      value={
+                        this.state.fields.cvvNumber &&
+                        this.state.fields.cvvNumber
+                      }
+                      onChange={this.changeCvv}
+                      validators={["required"]}
                       errorMessages={[
                         "this field is required",
                         "Invalid Number",
@@ -268,25 +276,24 @@ export class Payment extends Component {
                     />
                   </div>
                 </div>{" "}
-                <div class="col-sm-6 pb-3 pr-3">
-                  <div class="form-group">
-                    <label for="usr" class="chkBox">
+                <div className="col-sm-6 pb-3 pr-3">
+                  <div className="form-group">
+                    <label htmlFor="usr" className="chkBox">
                       Card Expiration
                     </label>
-                    {/* <input type="date" class="form-control" id="date" /> */}
-                    <DateInput
-                      className="form-control date"
-                      id="date12"
-                      fullWidth={true}
-                      placeholder="Card Expiration Date"
-                      name="date12"
-                     
-                      value={this.state.fields.cardExpiration}
-                      dateFormat={"YYYY-MM-DD"}
-                      minDate={new Date()}
+                    <input
+                      type="date"
+                      name="date"
+                      className="login-form-textfield form-control"
+                      id="date"
+                      dateformat={"YYYY-MM-DD"}
                       closable="true"
-                      onChange={this.abc}
+                      mindate={new Date()}
+                      onChange={this.updateDate}
+                      // value={this.state.fields.cardExpiration}
+                      selected={this.state.fields.cardExpiration}
                     />
+
                     {this.hasError("cardExpiration") && (
                       <div className="ui pointing label">
                         <div style={{ color: "red" }}>
@@ -296,16 +303,15 @@ export class Payment extends Component {
                     )}
                   </div>
                 </div>
-                <div class="col-sm-6 pb-3 pr-3">
-                  <div class="form-group">
-                    <label for="usr" class="chkBox">
+                <div className="col-sm-6 pb-3 pr-3">
+                  <div className="form-group">
+                    <label htmlFor="usr" className="chkBox">
                       City
                     </label>
-                    {/* <input type="text" class="form-control" /> */}
                     <Input
                       className="form-control"
                       id="name"
-                      fullWidth={true}
+                      fullwidth="true"
                       type="name"
                       onChange={this.setFormValue.bind(this, "city")}
                       validators={["required", "matchRegexp:^[a-zA-Z ]*$"]}
@@ -313,15 +319,15 @@ export class Payment extends Component {
                     />
                   </div>
                 </div>
-                <div class="col-sm-6 pb-3 pr-3">
-                  <div class="form-group">
-                    <label for="usr" class="chkBox">
+                <div className="col-sm-6 pb-3 pr-3">
+                  <div className="form-group">
+                    <label htmlFor="usr" className="chkBox">
                       Zip Code
                     </label>
                     <Input
                       className="login-form-textfield"
                       id="zip code"
-                      fullWidth={true}
+                      fullwidth="true"
                       name="zipCode"
                       placeholder="Enter Your Zipcode"
                       margin={"normal"}
@@ -332,21 +338,20 @@ export class Payment extends Component {
                     />{" "}
                   </div>
                 </div>
-                <div class="col-sm-6 pb-3 pr-3">
-                  <div class="form-group">
-                    <label for="usr" class="chkBox">
+                <div className="col-sm-6 pb-3 pr-3">
+                  <div className="form-group">
+                    <label htmlFor="usr" className="chkBox">
                       Adress
                     </label>
                     <input
                       type="textarea"
-                      class="form-control"
+                      className="form-control"
                       id="date"
                       onChange={this.setFormValue.bind(this, "address")}
                     />
                   </div>
                 </div>
-             
-            </div>
+              </div>
             </Form>
           </Modal.Body>
           <Modal.Footer>
@@ -375,7 +380,6 @@ export class Payment extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("sttate dekho--------", state);
   return {
     user: state.user.user,
   };

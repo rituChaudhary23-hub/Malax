@@ -44,7 +44,7 @@ const therapistPaymentDetails = (data) => {
   debugger;
   return fetch(
     "post",
-    `${API_HOST}/TherapistAPI​/AddTherapistPaymentInfo`,
+    `${API_HOST}/TherapistAPI/AddTherapistPaymentInfo`,
     data
   );
 };
@@ -87,22 +87,26 @@ const getTherapistModality = (data) => {
 //scheduled-appointments
 const getScheduledAppointments = (data) => {
   debugger;
-  var getDetails={
-    ClientScheduleId:data,
-    TherapistId:data,
-    OrderBy:data
-  }
+  var getDetails = {
+    ClientScheduleId: data.ClientScheduleId,
+    TherapistId: data.TherapistId,
+    OrderBy: data.OrderBy,
+    Page: data.Page,
+    Limit: data.Limit,
+    OrderByDescending: data.OrderByDescending,
+    AllRecords: data.AllRecords,
+  };
+  debugger;
   return fetch(
     "get",
-    `${API_HOST}​TherapistScheduleAPI/GetTherapistAppointments`,
-    getDetails
+    `${API_HOST}/TherapistScheduleAPI/GetTherapistAppointments?ClientScheduleId=` +
+      getDetails.ClientScheduleId +
+      `&TherapistId=` +
+      getDetails.TherapistId +
+      `&OrderBy=` +
+      getDetails.OrderBy
   );
 };
-
-///AuthAPI/GetUserPhoneNumber?UserId=`+data.UserId
-
-///?ClientScheduleId=0&TherapistId=17&OrderBy=StreetAddress
-
 
 export const TherapistService = {
   addImage,
