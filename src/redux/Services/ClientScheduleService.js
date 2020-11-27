@@ -45,9 +45,21 @@ const getServiceStatus = (data) => {
   );
 };
 
+
+//service-detail
+const getClientTherapistDetail = (data) => {
+  debugger
+  return fetch(
+    "post",
+    `${API_HOST}/ClientScheduleAPI/GetClientAndTherapistOfServiceDetail`,
+    data
+  );
+};
+
 export const ClientScheduleService = {
   addAppointment,
   addPaymentInfo,
+  getClientTherapistDetail,
   getServiceDetails,
   getClientAppointments,
   deleteAppointment,

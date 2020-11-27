@@ -7,7 +7,8 @@ export const actionTypes = {
   SAVE_APPOINTMENTS: "SAVE_APPOINTMENTS",
   SERVICE_DETAIL_SUCCESS: "SERVICE_DETAIL_SUCCESS",
   SAVE_SERVICE_DETAIL: "SAVE_SERVICE_DETAIL",
-  SAVE_SERVICE_STATUS:"SAVE_SERVICE_STATUS"
+  SAVE_SERVICE_STATUS: "SAVE_SERVICE_STATUS",
+  SAVE_DETAILS:"SAVE_DETAILS"
 };
 
 export function saveAppointment(data) {
@@ -25,6 +26,12 @@ export function saveServiceDetail(data) {
 }
 
 
+export function saveDetails(data) {
+  return {
+    type: actionTypes.SAVE_DETAILS,
+    data: data,
+  };
+}
 export function saveServiceStatus(data) {
   return {
     type: actionTypes.SAVE_SERVICE_STATUS,
@@ -67,7 +74,6 @@ export function fetchClientAppointment(data) {
 }
 
 //get-scheduled-services
-
 export function fetchScheduledAppointment(data) {
   return (dispatch, getState) => {
     dispatch(startLoading());
@@ -163,7 +169,7 @@ export function fetchServiceDetails(data) {
         dispatch(stopLoading());
         if (data.data.Success) {
           dispatch(saveServiceDetail(data.data));
-      
+
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -181,11 +187,7 @@ export function fetchServiceDetails(data) {
   };
 }
 
-
 //get-service-status
-
-
-
 export function fetchServiceStatus(data) {
   return (dispatch, getState) => {
     dispatch(startLoading());
@@ -197,7 +199,7 @@ export function fetchServiceStatus(data) {
         dispatch(stopLoading());
         if (data.data.Success) {
           dispatch(saveServiceStatus(data.data));
-      
+
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -215,3 +217,35 @@ export function fetchServiceStatus(data) {
   };
 }
 
+//get-client-therapist-details
+
+
+export function fetchClientTherapistDetails(data) {
+  debugger
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return ClientScheduleService.getClientTherapistDetail(data, {
+      jwt: state["persist"]["c_temp_user"]["token"],
+    })
+      .then(async (data) => {
+        dispatch(stopLoading());
+        if (data.data.Success) {
+          dispatch(saveDetails(data.data));
+
+          toast.success(data["data"]["Message"]);
+
+          return true;
+        } else {
+          toast.error(data.data.Message);
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          toast.error(error["data"]["Message"]);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}

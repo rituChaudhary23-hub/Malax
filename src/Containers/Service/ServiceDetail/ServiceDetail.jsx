@@ -5,10 +5,14 @@ import { connect } from "react-redux";
 import { Table, Modal, Label, Button } from "semantic-ui-react";
 import CancelService from "../../../Components/Shared/CancelService/CancelService";
 import ScheduledService from "../../../Components/Shared/ScheduledServiceModal/ScheduledService";
-import { fetchServiceDetails,fetchServiceStatus } from "../../../redux/actions/clientSchedule.action";
-
+import {
+  fetchServiceDetails,
+  fetchServiceStatus,
+} from "../../../redux/actions/clientSchedule.action";
 
 class ServiceDetail extends Component {
+  _status:any;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +42,7 @@ class ServiceDetail extends Component {
     this.setState({ cancelModal: false });
   };
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
     var data2 = parseInt(this.props.location.search.split("=")[1]);
@@ -48,7 +52,10 @@ class ServiceDetail extends Component {
     this.state.fields.clientScheduleId = data2;
     this.state.fields.status = stats;
     this.props.fetchServiceDetails(this.state.fields);
-    this.props.fetchServiceStatus(this.state.fields)
+    this.props.fetchServiceStatus(this.state.fields);
+    //get-status-message
+    var statusMessage = await this.props.getServiceStatus;
+    this._status = statusMessage.Message;
   };
 
   render() {
@@ -64,7 +71,6 @@ class ServiceDetail extends Component {
                 <div className="col-sm-12">
                   <div className="serDetDes">
                     <p>
-                     
                       {this.props.getServiceDetails.Data.Timelength}
                       {""}
                       &nbsp;
@@ -78,7 +84,6 @@ class ServiceDetail extends Component {
                       {this.props.getServiceDetails.Data.From}
                     </p>
                     <p>
-                     
                       {this.props.getServiceDetails.Data.ClientGender}
                       &nbsp;Client with therapist &nbsp;
                       {this.props.getServiceDetails.Data.TherapistGender}&nbsp;
@@ -86,10 +91,11 @@ class ServiceDetail extends Component {
                     </p>
                     <p>
                       {/* At home in the town - Heights area. */}
-                      {this.props.getServiceDetails.Data.LocationType}&nbsp;in the &nbsp;
-                      {this.props.getServiceDetails.Data.GeneralLocation}&nbsp;Area
-                      
-                      </p>
+                      {this.props.getServiceDetails.Data.LocationType}&nbsp;in
+                      the &nbsp;
+                      {this.props.getServiceDetails.Data.GeneralLocation}
+                      &nbsp;Area
+                    </p>
                   </div>
 
                   <br></br>
@@ -100,75 +106,14 @@ class ServiceDetail extends Component {
                           <div className="col-sm-8">
                             <div className="thisSer">
                               <h5>
-                                This service has not been scheduled yet.
-{/* {this.props.getServiceStatus.Data.Message} */}
-
+                              <h5>
+                                {this._status}
+                              </h5>
                               </h5>
                             </div>
                           </div>
-                          <div className="col-sm-4 text-right">
-                            <Button
-                              className="btn btn-primary "
-                              data-toggle="modal"
-                              data-target="#canSer"
-                              onClick={() => this.ShowServiceModal()}
-                            >
-                              Schedule service
-                            </Button>
-                          </div>
                         </div>
                       </div>
-                      <section className="cltThrp serDetScr">
-                        <div className="container-fluid">
-                          <div className="row">
-                            <div className="col-sm-6">
-                              <h3 className="pb-2 pl-4">Client </h3>
-                            </div>
-                            <div className="col-sm-6">
-                              <h3 className="pb-2">Therapist </h3>
-                            </div>
-                            <div className="col-sm-12">
-                              <div className="cltThrpone">
-                                <Table celled className="table ">
-                                  <Table.Header>
-                                    <Table.Row>
-                                      <Table.HeaderCell>
-                                        Client name
-                                      </Table.HeaderCell>
-                                      <Table.HeaderCell>
-                                        Therapist name
-                                      </Table.HeaderCell>
-                                    </Table.Row>
-                                  </Table.Header>
-                                  <Table.Body>
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        <label>Photo</label>
-                                        <br></br>
-                                        <label>Location street address</label>
-                                        <br></br>
-                                        <label>Client rating</label>
-                                        <br></br>
-                                        <label>Status</label>
-                                      </Table.Cell>
-
-                                      <Table.Cell>
-                                        <label>Photo</label>
-                                        <br></br>
-                                        <label>Location street address</label>
-                                        <br></br>
-                                        <label>Client rating</label>
-                                        <br></br>
-                                        <label>Status</label>
-                                      </Table.Cell>
-                                    </Table.Row>
-                                  </Table.Body>
-                                </Table>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
 
                       <div>
                         <Button
@@ -203,7 +148,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.user.user,
     getAppointment: state.clientScheduleReducer.getAppointment,
-    getServiceStatus:state.clientScheduleReducer.getServiceStatus,
+    getServiceStatus: state.clientScheduleReducer.getServiceStatus,
     getServiceDetails: state.clientScheduleReducer.getServiceDetails,
   };
 };
@@ -211,7 +156,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchServiceDetails: (data) => dispatch(fetchServiceDetails(data)),
-    fetchServiceStatus:(data)=> dispatch(fetchServiceStatus(data))
+    fetchServiceStatus: (data) => dispatch(fetchServiceStatus(data)),
   };
 };
 

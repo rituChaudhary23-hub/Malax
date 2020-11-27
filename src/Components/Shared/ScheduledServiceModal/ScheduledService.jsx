@@ -1,13 +1,28 @@
 import React, { Component, Fragment } from "react";
-
+import {
+  fetchScheduledServices,
+} from "../../../redux/actions/therapist.action";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
 import { Modal } from "react-bootstrap";
 
 export class ScheduledService extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      fields:{
+        clientScheduleId: 0,
+        TherapistId: 0,
+        status: 0,
+        From:"",
+        ActionBy:""
+      }
+    };
   }
-
+ //time-from
+ onChangeFromTime = (time) => {
+  this.state.fields.From = time.target.value;
+};
   render() {
     return (
       <Fragment>
@@ -20,7 +35,7 @@ export class ScheduledService extends Component {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Schedule Service</Modal.Title>
+            {/* <Modal.Title>Schedule Service</Modal.Title> */}
           </Modal.Header>
           <Modal.Body>
             <div class="row">
@@ -31,11 +46,13 @@ export class ScheduledService extends Component {
               </div>
               <div class="col-lg-8 col-md-6 col-6">
                 <input
-                  className="login-form-textfield form-control"
+                  type="time"
+                  className="form-control date"
+                  step="900"
                   id="time"
                   fullWidth={true}
                   name="time"
-                  type="time"
+                  onChange={this.onChangeFromTime}
                 />
               </div>
             </div>
@@ -63,4 +80,25 @@ export class ScheduledService extends Component {
     );
   }
 }
-export default ScheduledService;
+
+const mapStateToProps = (state) => {
+  console.log("Service--Detail", state);
+  return {
+    user: state.user.user,
+
+    saveAppointments: state.therapistReducer.saveAppointments,
+    getServiceStatus: state.clientScheduleReducer.getServiceStatus,
+    getServiceDetails: state.clientScheduleReducer.getServiceDetails,
+    // saveService:state.therapistReducer.saveService
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchScheduledServices: (data) => dispatch(fetchScheduledServices(data)),
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ScheduledService)
+);

@@ -1,35 +1,34 @@
 import React, { Component } from "react";
-import {getTherapistAppointments} from "../../../redux/actions/therapist.action"
+import { getTherapistAppointments } from "../../../redux/actions/therapist.action";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { listDateFormat } from "../../../utils/dateFormat";
-import { Table ,Button} from "semantic-ui-react";
+import { Table, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 class ScheduleService extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
-      fields:{
-        ClientScheduleId:0,
-        TherapistId:0,
-        Page:"",
-        Limit:"",
-        OrderBy:"CreatedOn",
-        OrderByDescending:"", 
-        AllRecords:""
-      }
+      fields: {
+        ClientScheduleId: 0,
+        TherapistId: 0,
+        Page: "",
+        Limit: "",
+        OrderBy: "CreatedOn",
+        OrderByDescending: "",
+        AllRecords: "",
+      },
     };
   }
 
   componentDidMount = async () => {
-    this.state.fields.TherapistId=this.props.user.Data.TherapistId;
-    await this.props.getTherapistAppointments(this.state.fields)
-  }
+    this.state.fields.TherapistId = this.props.user.Data.TherapistId;
+    await this.props.getTherapistAppointments(this.state.fields);
+  };
 
   render() {
-    console.log("saveAppointments-------",this.props.saveAppointments.data)
+    console.log("saveAppointments-------", this.props.saveAppointments.data);
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -67,9 +66,9 @@ class ScheduleService extends Component {
                               </Table.Cell>
                               <Table.Cell>{item.ClientName}</Table.Cell>
                               <Table.Cell>
-                                <Link
+                              <Link
                                   to={
-                                    "/scheduled-service-details=" +
+                                    "/scheduled-services?sid=" +
                                     item.ClientScheduleId
                                   }
                                 >
@@ -77,7 +76,7 @@ class ScheduleService extends Component {
                                   {item.Status.CodeName}
                                 </Link>
                               </Table.Cell>
-                           
+
                               <Table.Cell>
                                 <Button
                                   onClick={() =>
@@ -105,7 +104,6 @@ class ScheduleService extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
   console.log("sttate dekho--------", state);
   return {
@@ -116,7 +114,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getTherapistAppointments: (data) => dispatch(getTherapistAppointments(data)),
+    getTherapistAppointments: (data) =>
+      dispatch(getTherapistAppointments(data)),
   };
 };
 

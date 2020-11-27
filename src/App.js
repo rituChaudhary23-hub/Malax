@@ -73,7 +73,7 @@ class App extends Component {
             <Route path="/payment" component={Payment} />
             <Route component={ServiceDetail} path="/theparist-detail" />
             
-            <Route component={ScheduleServiceDetail} path="/scheduled-service-details" />
+            <Route component={ScheduleServiceDetail} path="/scheduled-services" />
 
           </Switch>
         </Router>

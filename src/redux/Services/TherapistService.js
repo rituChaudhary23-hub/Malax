@@ -41,7 +41,6 @@ const therapistConsentForm = (data) => {
 
 //payment-api
 const therapistPaymentDetails = (data) => {
-  debugger;
   return fetch(
     "post",
     `${API_HOST}/TherapistAPI/AddTherapistPaymentInfo`,
@@ -108,6 +107,14 @@ const getScheduledAppointments = (data) => {
   );
 };
 
+//scheduled-service-details
+const getScheduledServices = (data, options) => {
+  return fetch("put", `${API_HOST}/TherapistScheduleAPI/ScheduledServiceDetail`,  data,
+  options);
+};
+
+
+
 export const TherapistService = {
   addImage,
   getTherapistImage,
@@ -118,4 +125,5 @@ export const TherapistService = {
   addTherapistLicensure,
   getScheduledAppointments,
   getTherapistLicensure,
+  getScheduledServices,
 };

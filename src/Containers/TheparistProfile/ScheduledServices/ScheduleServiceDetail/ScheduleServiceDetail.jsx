@@ -1,13 +1,17 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Header from "../../../../Components/Shared/Header";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { Table, Modal, Label, Button } from "semantic-ui-react";
 import ScheduledService from "../../../../Components/Shared/ScheduledServiceModal/ScheduledService";
-// import { fetchServiceDetails,fetchServiceStatus } from "../../../redux/actions/clientSchedule.action";
-
+import {
+  fetchServiceDetails,
+  fetchServiceStatus,
+  fetchClientTherapistDetails,
+} from "../../../../redux/actions/clientSchedule.action";
 
 class ScheduleServiceDetail extends Component {
+  _status: any;
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +26,7 @@ class ScheduleServiceDetail extends Component {
     };
   }
   back() {
-    window.location.href = "/client-profile";
+    window.location.href = "/theparist-profile";
   }
   ShowServiceModal = () => {
     this.setState({ service: true });
@@ -37,33 +41,45 @@ class ScheduleServiceDetail extends Component {
     this.setState({ cancelModal: false });
   };
 
-  componentDidMount = () => {
-    var data1 = this.props.user.Data.ClientId;
-    this.state.fields.clientId = data1;
+  componentDidMount = async () => {
+    debugger;
     var data2 = parseInt(this.props.location.search.split("=")[1]);
-    var stats = this.props.getAppointment.token.Data.AllClientAppointments.filter(
+    var stats = this.props.saveAppointments.data.Data.AllClientAppointments.filter(
       (x) => x.ClientScheduleId == data2
-    )[0].Status.GlobalCodeId;
+    )[0];
+    debugger;
     this.state.fields.clientScheduleId = data2;
-    this.state.fields.status = stats;
-    this.props.fetchServiceDetails(this.state.fields);
-    this.props.fetchServiceStatus(this.state.fields)
+    this.state.fields.status = stats.Status.GlobalCodeId;
+
+    var clientIdData = this.props.saveAppointments.data.Data.AllClientAppointments.filter(
+      (x) => x.ClientId == stats.ClientId && x.ClientScheduleId == data2
+    )[0];
+    this.state.fields.clientId = clientIdData.ClientId;
+    var details = await this.props.fetchServiceDetails(this.state.fields);
+    this.props.fetchServiceStatus(this.state.fields);
+
+    //get-status-message
+    var statusMessage = await this.props.getServiceStatus;
+    this._status = statusMessage.Message;
+
+    //get-of service-details
+    this.props.fetchClientTherapistDetails(this.state.fields);
   };
 
   render() {
-    console.log(" getAppointment------", this.props.getAppointment);
+    console.log("getServiceDetails", this.props.getServiceDetails.data);
+    console.log("saveService------", this.props.saveService);
     return (
       <div>
         <Header />
         <section className="therapistProDes serDetScr">
           <div className="card">
             <div className="card-body">
-              <h2 className="card-title">Service Detail Screen </h2>
+              <h2 className="card-title">Service Detail Screen ritu </h2>
               <div className="row">
                 <div className="col-sm-12">
                   <div className="serDetDes">
                     <p>
-                     
                       {this.props.getServiceDetails.Data.Timelength}
                       {""}
                       &nbsp;
@@ -77,18 +93,17 @@ class ScheduleServiceDetail extends Component {
                       {this.props.getServiceDetails.Data.From}
                     </p>
                     <p>
-                     
                       {this.props.getServiceDetails.Data.ClientGender}
                       &nbsp;Client with therapist &nbsp;
                       {this.props.getServiceDetails.Data.TherapistGender}&nbsp;
                       only.
                     </p>
                     <p>
-                      {/* At home in the town - Heights area. */}
-                      {this.props.getServiceDetails.Data.LocationType}&nbsp;in the &nbsp;
-                      {this.props.getServiceDetails.Data.GeneralLocation}&nbsp;Area
-                      
-                      </p>
+                      {this.props.getServiceDetails.Data.LocationType}&nbsp;in
+                      the &nbsp;
+                      {this.props.getServiceDetails.Data.GeneralLocation}
+                      &nbsp;Area
+                    </p>
                   </div>
 
                   <br></br>
@@ -98,11 +113,7 @@ class ScheduleServiceDetail extends Component {
                         <div className="row">
                           <div className="col-sm-8">
                             <div className="thisSer">
-                              <h5>
-                                This service has not been scheduled yet.
-{/* {this.props.getServiceStatus.Data.Message} */}
-
-                              </h5>
+                              <h5>{this._status}</h5>
                             </div>
                           </div>
                           <div className="col-sm-4 text-right">
@@ -110,7 +121,7 @@ class ScheduleServiceDetail extends Component {
                               className="btn btn-primary "
                               data-toggle="modal"
                               data-target="#canSer"
-                              onClick={() => this.ShowServiceModal()}
+                              onClick={this.ShowServiceModal}
                             >
                               Schedule service
                             </Button>
@@ -179,11 +190,63 @@ class ScheduleServiceDetail extends Component {
                       </div>
                     </div>
                   </div>
-                 
-                  <ScheduledService
+
+                  {/* <ScheduledService
                     scheduleModal={this.state.service}
                     toggle={this.closeServiceModal}
-                  />
+                  /> */}
+                  <Fragment>
+                    <Modal
+                      show={this.props.scheduleModal}
+                      onHide={this.props.toggle}
+                      size="lg"
+                      className="custom-modal"
+                      aria-labelledby="contained-modal-title-vcenter"
+                      centered
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title>Schedule Service</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <div className="row">
+                          <div className="col-lg-4 col-md-6 col-6">
+                            <div className="modCon">
+                              <h6>Scheduled Service Time :</h6>
+                            </div>
+                          </div>
+                          <div className="col-lg-8 col-md-6 col-6">
+                            <input
+                              type="time"
+                              className="form-control date"
+                              step="900"
+                              id="time"
+                              fullWidth={true}
+                              name="time"
+                              onChange={this.onChangeFromTime}
+                            />
+                          </div>
+                        </div>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <button
+                          color="blue"
+                          type="button"
+                          className="btn btn-sm btn-primary"
+                          onClick={this.deleteUser}
+                        >
+                          Scheduled
+                        </button>
+                        <button
+                          color="grey"
+                          type="button"
+                          className="btn btn-sm btn-white"
+                          onClick={this.close}
+                        >
+                          Cancel
+                        </button>
+                      </Modal.Footer>
+                    </Modal>
+                  </Fragment>
                 </div>
               </div>
             </div>
@@ -198,16 +261,20 @@ const mapStateToProps = (state) => {
   console.log("Service--Detail", state);
   return {
     user: state.user.user,
-    getAppointment: state.clientScheduleReducer.getAppointment,
-    getServiceStatus:state.clientScheduleReducer.getServiceStatus,
+
+    saveAppointments: state.therapistReducer.saveAppointments,
+    getServiceStatus: state.clientScheduleReducer.getServiceStatus,
     getServiceDetails: state.clientScheduleReducer.getServiceDetails,
+    // saveService:state.therapistReducer.saveService
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // fetchServiceDetails: (data) => dispatch(fetchServiceDetails(data)),
-    // fetchServiceStatus:(data)=> dispatch(fetchServiceStatus(data))
+    fetchServiceDetails: (data) => dispatch(fetchServiceDetails(data)),
+    fetchServiceStatus: (data) => dispatch(fetchServiceStatus(data)),
+    fetchClientTherapistDetails: (data) =>
+      dispatch(fetchClientTherapistDetails(data)),
   };
 };
 
