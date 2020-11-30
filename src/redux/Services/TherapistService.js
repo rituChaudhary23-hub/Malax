@@ -85,7 +85,6 @@ const getTherapistModality = (data) => {
 
 //scheduled-appointments
 const getScheduledAppointments = (data) => {
-  debugger;
   var getDetails = {
     ClientScheduleId: data.ClientScheduleId,
     TherapistId: data.TherapistId,
@@ -95,7 +94,6 @@ const getScheduledAppointments = (data) => {
     OrderByDescending: data.OrderByDescending,
     AllRecords: data.AllRecords,
   };
-  debugger;
   return fetch(
     "get",
     `${API_HOST}/TherapistScheduleAPI/GetTherapistAppointments?ClientScheduleId=` +
@@ -108,12 +106,22 @@ const getScheduledAppointments = (data) => {
 };
 
 //scheduled-service-details
-const getScheduledServices = (data, options) => {
-  return fetch("put", `${API_HOST}/TherapistScheduleAPI/ScheduledServiceDetail`,  data,
-  options);
+const getScheduledServices = (data) => {
+  var getTime = {
+    ClientScheduleId: data.ClientScheduleId,
+    TherapistId: data.TherapistId,
+    Status: data.Status,
+    From: data.From,
+    ActionBy: "",
+  };
+  return fetch(
+    "put",
+    `${API_HOST}/TherapistScheduleAPI/ScheduledServiceDetail?ClientScheduleId=` +
+      getTime.ClientScheduleId
+  );
 };
 
-
+//?ClientScheduleId=4028&TherapistId=0&From=15%3A00&Status=2023
 
 export const TherapistService = {
   addImage,

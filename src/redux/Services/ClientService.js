@@ -17,7 +17,8 @@ const updateUserEmail = (data, options) => {
 
 //get user phone number
 const getUserPhone = (data) => {
-  return fetch("get", `${API_HOST}/AuthAPI/GetUserPhoneNumber?UserId=`+data.UserId);
+  debugger
+  return fetch("get", `${API_HOST}/AuthAPI/GetUserPhoneNumber?UserId=`+data.userId);
 };
 
 //consent form
@@ -60,9 +61,10 @@ const getMedicalCondition = (data) => {
   var data1 = {
     clientId: data,
   };
+  debugger
   return fetch(
-    "post",
-    `${API_HOST}/ClientAPI/GetClientMedicalConditions`,
+    "get",
+    `${API_HOST}/ClientAPI/GetClientMedicalConditions?ClientId=`+data1.clientId,
     data1
   );
 };
@@ -85,7 +87,8 @@ const getUserInfo = (data) => {
   var data1 = {
     clientId: data,
   };
-  return fetch("post", `${API_HOST}/ClientAPI/GetClientPersonalInfo`, data1);
+  debugger
+  return fetch("get", `${API_HOST}/ClientAPI/GetClientPersonalInfo?ClientId=`+data1.clientId);
 };
 
 //get medical history
@@ -101,7 +104,7 @@ const getConsentAgreement = (data) => {
   var data1 = {
     clientId: data,
   };
-  return fetch("post", `${API_HOST}/ClientAPI/GetClientConsentForms`, data1);
+  return fetch("get", `${API_HOST}/ClientAPI/GetClientConsentForms?ClientId=`+data1.clientId);
 };
 
 //client-loc

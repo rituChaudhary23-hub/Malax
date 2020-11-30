@@ -75,7 +75,8 @@ export class Agreement extends Component {
                 <div className="form-check form-check-inline">
                   <label>
                   <input
-                    className="form-check-input"
+                    // className="form-check-input"
+                    className="input"
                     type="checkbox"
                     id="chk_red"
                     onChange={this.agreed}
@@ -107,7 +108,7 @@ export class Agreement extends Component {
               color="grey"
               type="button"
               className="btn btn-sm btn-white"
-              onClick={this.close}
+              onClick=  {this.props.toggle}
             >
               Cancel
             </button>

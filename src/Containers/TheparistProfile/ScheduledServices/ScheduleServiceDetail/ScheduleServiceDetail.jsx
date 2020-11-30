@@ -2,8 +2,9 @@ import React, { Component, Fragment } from "react";
 import Header from "../../../../Components/Shared/Header";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { Table, Modal, Label, Button } from "semantic-ui-react";
-import ScheduledService from "../../../../Components/Shared/ScheduledServiceModal/ScheduledService";
+import { Modal } from "react-bootstrap";
+import { Table, Label, Button } from "semantic-ui-react";
+import { fetchScheduledServices } from "../../../../redux/actions/therapist.action";
 import {
   fetchServiceDetails,
   fetchServiceStatus,
@@ -23,12 +24,20 @@ class ScheduleServiceDetail extends Component {
         clientId: 0,
         status: 0,
       },
+      setTimeFields: {
+        ClientScheduleId: 0,
+        TherapistId: 0,
+        Status: 0,
+        From: "",
+        ActionBy: "",
+      },
     };
   }
   back() {
     window.location.href = "/theparist-profile";
   }
-  ShowServiceModal = () => {
+  ShowServiceModal = (data) => {
+    debugger;
     this.setState({ service: true });
   };
   closeServiceModal = () => {
@@ -41,13 +50,11 @@ class ScheduleServiceDetail extends Component {
     this.setState({ cancelModal: false });
   };
 
-  componentDidMount = async () => {
-    debugger;
+  componentWillMount = async () => {
     var data2 = parseInt(this.props.location.search.split("=")[1]);
     var stats = this.props.saveAppointments.data.Data.AllClientAppointments.filter(
       (x) => x.ClientScheduleId == data2
     )[0];
-    debugger;
     this.state.fields.clientScheduleId = data2;
     this.state.fields.status = stats.Status.GlobalCodeId;
 
@@ -64,18 +71,32 @@ class ScheduleServiceDetail extends Component {
 
     //get-of service-details
     this.props.fetchClientTherapistDetails(this.state.fields);
+
+    // modal-fileds-params
+    this.state.setTimeFields.ClientScheduleId = data2;
+    this.state.setTimeFields.Status = stats.Status.GlobalCodeId;
+    this.state.setTimeFields.TherapistId = stats.TherapistId;
   };
 
+  //modal-setTime
+  scheduleTime = async () => {
+    var setTime = await this.props.fetchScheduledServices(
+      this.state.setTimeFields
+    );
+    this.closeServiceModal();
+  };
+
+  onChangeFromTime = (time) => {
+    this.state.setTimeFields.From = time.target.value;
+  };
   render() {
-    console.log("getServiceDetails", this.props.getServiceDetails.data);
-    console.log("saveService------", this.props.saveService);
     return (
       <div>
         <Header />
         <section className="therapistProDes serDetScr">
           <div className="card">
             <div className="card-body">
-              <h2 className="card-title">Service Detail Screen ritu </h2>
+              <h2 className="card-title">Service Detail Screen</h2>
               <div className="row">
                 <div className="col-sm-12">
                   <div className="serDetDes">
@@ -143,10 +164,18 @@ class ScheduleServiceDetail extends Component {
                                   <Table.Header>
                                     <Table.Row>
                                       <Table.HeaderCell>
-                                        Client name
+                                        Client name :{" "}
+                                        {
+                                          this.props.getDetails.Data
+                                            .ClientResponse.Name
+                                        }
                                       </Table.HeaderCell>
                                       <Table.HeaderCell>
-                                        Therapist name
+                                        Therapist name:{" "}
+                                        {this.props.getDetails.Data
+                                          ? this.props.getDetails.Data
+                                              .TherapistResponse.Name
+                                          : "Null"}
                                       </Table.HeaderCell>
                                     </Table.Row>
                                   </Table.Header>
@@ -155,21 +184,58 @@ class ScheduleServiceDetail extends Component {
                                       <Table.Cell>
                                         <label>Photo</label>
                                         <br></br>
-                                        <label>Location street address</label>
+                                        <label>
+                                          Location street address :{" "}
+                                          {this.props.getDetails.Data
+                                            ? this.props.getDetails.Data
+                                                .TherapistResponse.Location
+                                            : "Null"}
+                                        </label>
                                         <br></br>
-                                        <label>Client rating</label>
+                                        <label>
+                                          Client rating:{" "}
+                                          {this.props.getDetails.Data
+                                            ? this.props.getDetails.Data
+                                                .TherapistResponse
+                                                .TherapistRating
+                                            : "Null"}
+                                        </label>
                                         <br></br>
-                                        <label>Status</label>
+                                        <label>
+                                          Status:{" "}
+                                          {this.props.getDetails.Data
+                                            ? this.props.getDetails.Data
+                                                .TherapistResponse.Status
+                                            : "Null"}
+                                        </label>
                                       </Table.Cell>
 
                                       <Table.Cell>
                                         <label>Photo</label>
                                         <br></br>
-                                        <label>Location street address</label>
+                                        <label>
+                                          Location street address:{" "}
+                                          {
+                                            this.props.getDetails.Data
+                                              .ClientResponse.Location
+                                          }
+                                        </label>
                                         <br></br>
-                                        <label>Client rating</label>
+                                        <label>
+                                          Client rating:{" "}
+                                          {
+                                            this.props.getDetails.Data
+                                              .ClientResponse.ClientRating
+                                          }
+                                        </label>
                                         <br></br>
-                                        <label>Status</label>
+                                        <label>
+                                          Status:{" "}
+                                          {
+                                            this.props.getDetails.Data
+                                              .ClientResponse.Status
+                                          }
+                                        </label>
                                       </Table.Cell>
                                     </Table.Row>
                                   </Table.Body>
@@ -194,59 +260,58 @@ class ScheduleServiceDetail extends Component {
                   {/* <ScheduledService
                     scheduleModal={this.state.service}
                     toggle={this.closeServiceModal}
+                    timeDetail={this.state.fields}
                   /> */}
-                  <Fragment>
-                    <Modal
-                      show={this.props.scheduleModal}
-                      onHide={this.props.toggle}
-                      size="lg"
-                      className="custom-modal"
-                      aria-labelledby="contained-modal-title-vcenter"
-                      centered
-                    >
-                      <Modal.Header closeButton>
-                        <Modal.Title>Schedule Service</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        <div className="row">
-                          <div className="col-lg-4 col-md-6 col-6">
-                            <div className="modCon">
-                              <h6>Scheduled Service Time :</h6>
-                            </div>
-                          </div>
-                          <div className="col-lg-8 col-md-6 col-6">
-                            <input
-                              type="time"
-                              className="form-control date"
-                              step="900"
-                              id="time"
-                              fullWidth={true}
-                              name="time"
-                              onChange={this.onChangeFromTime}
-                            />
+                  <Modal
+                    show={this.state.service}
+                    onHide={this.closeServiceModal}
+                    size="lg"
+                    className="custom-modal"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                  >
+                    <Modal.Header closeButton>
+                      <Modal.Title>Schedule Service</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <div className="row">
+                        <div className="col-lg-4 col-md-6 col-6">
+                          <div className="modCon">
+                            <h6>Scheduled Service Time :</h6>
                           </div>
                         </div>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <button
-                          color="blue"
-                          type="button"
-                          className="btn btn-sm btn-primary"
-                          onClick={this.deleteUser}
-                        >
-                          Scheduled
-                        </button>
-                        <button
-                          color="grey"
-                          type="button"
-                          className="btn btn-sm btn-white"
-                          onClick={this.close}
-                        >
-                          Cancel
-                        </button>
-                      </Modal.Footer>
-                    </Modal>
-                  </Fragment>
+                        <div className="col-lg-8 col-md-6 col-6">
+                          <input
+                            type="time"
+                            className="form-control date"
+                            step="900"
+                            id="time"
+                            fullWidth={true}
+                            name="time"
+                            onChange={this.onChangeFromTime}
+                          />
+                        </div>
+                      </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <button
+                        color="blue"
+                        type="button"
+                        className="btn btn-sm btn-primary"
+                        onClick={this.scheduleTime}
+                      >
+                        Scheduled
+                      </button>
+                      <button
+                        color="grey"
+                        type="button"
+                        className="btn btn-sm btn-white"
+                        onClick={this.closeServiceModal}
+                      >
+                        Cancel
+                      </button>
+                    </Modal.Footer>
+                  </Modal>
                 </div>
               </div>
             </div>
@@ -265,7 +330,7 @@ const mapStateToProps = (state) => {
     saveAppointments: state.therapistReducer.saveAppointments,
     getServiceStatus: state.clientScheduleReducer.getServiceStatus,
     getServiceDetails: state.clientScheduleReducer.getServiceDetails,
-    // saveService:state.therapistReducer.saveService
+    getDetails: state.clientScheduleReducer.getDetails,
   };
 };
 
@@ -275,6 +340,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchServiceStatus: (data) => dispatch(fetchServiceStatus(data)),
     fetchClientTherapistDetails: (data) =>
       dispatch(fetchClientTherapistDetails(data)),
+    fetchScheduledServices: (data) => dispatch(fetchScheduledServices(data)),
   };
 };
 

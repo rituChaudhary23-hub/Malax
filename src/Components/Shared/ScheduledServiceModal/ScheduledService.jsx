@@ -1,7 +1,4 @@
 import React, { Component, Fragment } from "react";
-import {
-  fetchScheduledServices,
-} from "../../../redux/actions/therapist.action";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { Modal } from "react-bootstrap";
@@ -10,20 +7,23 @@ export class ScheduledService extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fields:{
+      fields: {
         clientScheduleId: 0,
         TherapistId: 0,
         status: 0,
-        From:"",
-        ActionBy:""
-      }
+        From: "",
+        ActionBy: "",
+      },
     };
   }
- //time-from
- onChangeFromTime = (time) => {
-  this.state.fields.From = time.target.value;
-};
+  //time-from
+  onChangeFromTime = (time) => {
+    this.state.fields.From = time.target.value;
+  };
+
+  scheduleTime = () => {};
   render() {
+    let { timeDetail } = this.props;
     return (
       <Fragment>
         <Modal
@@ -35,16 +35,16 @@ export class ScheduledService extends Component {
           centered
         >
           <Modal.Header closeButton>
-            {/* <Modal.Title>Schedule Service</Modal.Title> */}
+            <Modal.Title>Schedule Service</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div class="row">
-              <div class="col-lg-4 col-md-6 col-6">
-                <div class="modCon">
+            <div className="row">
+              <div className="col-lg-4 col-md-6 col-6">
+                <div className="modCon">
                   <h6>Scheduled Service Time :</h6>
                 </div>
               </div>
-              <div class="col-lg-8 col-md-6 col-6">
+              <div className="col-lg-8 col-md-6 col-6">
                 <input
                   type="time"
                   className="form-control date"
@@ -62,7 +62,7 @@ export class ScheduledService extends Component {
               color="blue"
               type="button"
               className="btn btn-sm btn-primary"
-              onClick={this.deleteUser}
+              onClick={this.scheduleTime}
             >
               Scheduled
             </button>
@@ -95,7 +95,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchScheduledServices: (data) => dispatch(fetchScheduledServices(data)),
+    // fetchScheduledServices: (data) => dispatch(fetchScheduledServices(data)),
   };
 };
 

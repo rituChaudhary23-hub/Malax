@@ -4,11 +4,6 @@ import { Form, Input, Dropdown } from "semantic-ui-react-form-validator";
 import { withRouter } from "react-router";
 import { Button } from "semantic-ui-react";
 import {
-  listDateFormat,
-  listDateFormat_sample,
-} from "../../../utils/dateFormat";
-
-import {
   fetchCategoryName,
   fetchValidateZip,
 } from ".././../../redux/actions/global.action";
@@ -61,17 +56,39 @@ export class Payment extends Component {
   };
 
   //validation
-
   handleValidation = () => {
     let fields = this.state.fields;
     let errors = this.state.errors;
     let formIsValid = true;
-
     if (fields["cardExpiration"] === "") {
       formIsValid = false;
       errors["cardExpiration"] = "Expiration date can't be blank.";
     }
+    if (fields["city"] === "") {
+      formIsValid = false;
+      errors["city"] = "required.";
+    }
+    if (fields["cardHolderName"] === "") {
+      formIsValid = false;
+      errors["cardHolderName"] = "this field is required.";
+    }
 
+    if (fields["cardNumber"] === "") {
+      formIsValid = false;
+      errors["cardNumber"] = "this field is required.";
+    }
+    if (fields["cvvNumber"] === "") {
+      formIsValid = false;
+      errors["cvvNumber"] = "this field is required.";
+    }
+    if (fields["zipCode"] === "") {
+      formIsValid = false;
+      errors["zipCode"] = "this field is required.";
+    }
+    if (fields["address"] === "") {
+      formIsValid = false;
+      errors["address"] = "this field is required.";
+    }
     this.setState({ errors: errors });
     this.setState({ loading: false });
     return formIsValid;
@@ -229,6 +246,9 @@ export class Payment extends Component {
                       validators={["required", "matchRegexp:^[a-zA-Z ]*$"]}
                       errorMessages={["this field is required", "Invalid Name"]}
                     />
+                    <span style={{ color: "red" }}>
+                      {this.state.errors["cardHolderName"]}
+                    </span>
                   </div>
                 </div>{" "}
                 <div className="col-sm-6 pb-3 pr-3">
@@ -250,6 +270,9 @@ export class Payment extends Component {
                         "Invalid Number",
                       ]}
                     />
+                    <span style={{ color: "red" }}>
+                      {this.state.errors["cardNumber"]}
+                    </span>
                   </div>
                 </div>{" "}
                 <div className="col-sm-6 pb-3 pr-3">
@@ -274,6 +297,9 @@ export class Payment extends Component {
                         "Invalid Number",
                       ]}
                     />
+                    <span style={{ color: "red" }}>
+                      {this.state.errors["cvvNumber"]}
+                    </span>
                   </div>
                 </div>{" "}
                 <div className="col-sm-6 pb-3 pr-3">
@@ -317,6 +343,9 @@ export class Payment extends Component {
                       validators={["required", "matchRegexp:^[a-zA-Z ]*$"]}
                       errorMessages={["this field is required", "Invalid Name"]}
                     />
+                    <span style={{ color: "red" }}>
+                      {this.state.errors["city"]}
+                    </span>
                   </div>
                 </div>
                 <div className="col-sm-6 pb-3 pr-3">
@@ -336,6 +365,9 @@ export class Payment extends Component {
                       }}
                       autoComplete="false"
                     />{" "}
+                    <span style={{ color: "red" }}>
+                      {this.state.errors["zipCode"]}
+                    </span>
                   </div>
                 </div>
                 <div className="col-sm-6 pb-3 pr-3">
@@ -349,6 +381,9 @@ export class Payment extends Component {
                       id="date"
                       onChange={this.setFormValue.bind(this, "address")}
                     />
+                    <span style={{ color: "red" }}>
+                      {this.state.errors["address"]}
+                    </span>
                   </div>
                 </div>
               </div>

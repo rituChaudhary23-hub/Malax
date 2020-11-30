@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import { Form, TextArea, Button } from "semantic-ui-react";
 import { Field } from "redux-form";
@@ -165,6 +164,8 @@ class Condition extends Component {
       document.getElementById(e.target.id).setAttribute("checked", "true");
     }
   };
+
+  
 
   render() {
     const { submitting } = this.props;

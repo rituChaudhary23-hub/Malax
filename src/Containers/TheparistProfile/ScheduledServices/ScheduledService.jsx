@@ -66,7 +66,7 @@ class ScheduleService extends Component {
                               </Table.Cell>
                               <Table.Cell>{item.ClientName}</Table.Cell>
                               <Table.Cell>
-                              <Link
+                                <Link
                                   to={
                                     "/scheduled-services?sid=" +
                                     item.ClientScheduleId
@@ -85,7 +85,7 @@ class ScheduleService extends Component {
                                     )
                                   }
                                 >
-                                  DELETE
+                                  Cancel
                                 </Button>
                               </Table.Cell>
                             </Table.Row>

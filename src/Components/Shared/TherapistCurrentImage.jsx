@@ -126,7 +126,6 @@ class TherapistCurrentImage extends Component {
   };
 
   render() {
-    console.log("currentImage--------", this.props.currentImage);
     return (
       <Fragment>
         <Modal
@@ -161,8 +160,7 @@ class TherapistCurrentImage extends Component {
                   onChange={this.onFileUploadChange}
                 />
 
-                {/* ${BTC_ADDRESS_BTC}/${address} */}
-                {this.currentImg && <img src={this.currentImg} />}
+                {this.currentImg && <img src={this.currentImg} style={{ width: "50%" ,height:"50%"}} />}
                 {this.state.isFormSubmitted &&
                   this.state.isFileValid === false && (
                     <p style={{ color: "red" }}>Please upload file</p>
@@ -173,6 +171,7 @@ class TherapistCurrentImage extends Component {
                   src={
                     "data:image/jpeg;base64," + this.state.fields.therapistImage
                   }
+                  style={{ width: "50%" ,height:"50%"}}
                 />
               )}
             </div>

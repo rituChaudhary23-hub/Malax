@@ -13,13 +13,17 @@ import Header from "../../../Components/Shared/Header";
 import { toast } from "../../../Components/Toast/Toast";
 
 class ServiceRequest extends Component {
+  GenderOptions = [];
+  dropvalGender: any;
   golbalID = 0;
   dropVal: any;
   dropValcode: any;
   dropvalState: any;
+  stateOptions = [];
   dropvaltime: any;
   dropvalMassage: any;
   dropvalLocation: any;
+  locationOptions = [];
   dropvalLocType: any;
   datalist: [];
   constructor(props) {
@@ -46,6 +50,9 @@ class ServiceRequest extends Component {
         name: "TimeLength",
       },
       zipCode: "",
+      selectedGender: "",
+      selectedState: "",
+      selectedLocation: "",
       fields: {
         clientScheduleId: 0,
         clientId: 0,
@@ -79,15 +86,28 @@ class ServiceRequest extends Component {
     if (data != false) {
       this.dropValcode = data.data.Data.globalCodeData;
     }
-    //state
+    //state-globally
     var _state = await this.props.fetchCategoryName(this.state.abcState.name);
-    if (_state) {
+    if (_state != false) {
       this.dropvalState = _state.data.Data.globalCodeData;
+      this.dropvalState.forEach((element) => {
+        this.stateOptions.push({
+          text: element.CodeName,
+          value: element.GlobalCodeId,
+        });
+      });
     }
-    //gender
+
+    //gender-globally
     var _gender = await this.props.fetchCategoryName(this.state.abcGender.name);
-    if (_gender) {
-      this.dropVal = _gender.data.Data.globalCodeData;
+    if (_gender != false) {
+      this.dropvalGender = _gender.data.Data.globalCodeData;
+      this.dropvalGender.forEach((element) => {
+        this.GenderOptions.push({
+          text: element.CodeName,
+          value: element.GlobalCodeId,
+        });
+      });
     }
     //time-length
     var _timeLength = await this.props.fetchCategoryName(
@@ -109,10 +129,15 @@ class ServiceRequest extends Component {
     var _location = await this.props.fetchCategoryName(
       this.state.abcLocation.name
     );
-    if (_location) {
+    if (_location != false) {
       this.dropvalLocation = _location.data.Data.globalCodeData;
+      this.dropvalLocation.forEach((element) => {
+        this.locationOptions.push({
+          text: element.CodeName,
+          value: element.GlobalCodeId,
+        });
+      });
     }
-
     //loc-type
 
     var _locType = await this.props.fetchCategoryName(this.state.abc.name);
@@ -142,19 +167,31 @@ class ServiceRequest extends Component {
     }
   };
 
-  dropdownChange = (e, value) => {
-    var InfoAs = e.target.outerText;
-    var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
-      .GlobalCodeId;
-    this.state.fields.therapistGender = globalId;
+  dropdownChange = (e, { value }) => {
+    // var InfoAs = e.target.outerText;
+    // var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
+    //   .GlobalCodeId;
+    // this.state.fields.therapistGender = globalId;
+    var infoGender = value;
+    this.setState({
+      selectedGender: infoGender,
+    });
+    var globalGenderId = this.dropvalGender.filter(
+      (y) => y.GlobalCodeId == infoGender
+    )[0].GlobalCodeId;
+    this.state.fields.therapistGender = globalGenderId;
   };
 
   //state
-  selectState = (e) => {
-    var InfoAs = e.target.outerText;
-    var globalState = this.dropvalState.filter((x) => x.CodeName == InfoAs)[0]
-      .GlobalCodeId;
-    this.state.fields.state = globalState;
+  selectState = (e, { value }) => {
+    var infoState = value;
+    this.setState({
+      selectedState: infoState,
+    });
+    var globalStateId = this.dropvalState.filter(
+      (y) => y.GlobalCodeId == infoState
+    )[0].GlobalCodeId;
+    this.state.fields.state = globalStateId;
   };
 
   //time-length
@@ -176,12 +213,15 @@ class ServiceRequest extends Component {
   };
 
   //general-location
-  selectLocation = (e) => {
-    var InfoAs = e.target.outerText;
-    var globalLocation = this.dropvalLocation.filter(
-      (x) => x.CodeName == InfoAs
+  selectLocation = (e, { value }) => {
+    var infoLocation = value;
+    this.setState({
+      selectedLocation: infoLocation,
+    });
+    var globalLocationId = this.dropvalLocation.filter(
+      (y) => y.GlobalCodeId == infoLocation
     )[0].GlobalCodeId;
-    this.state.fields.generallocation = globalLocation;
+    this.state.fields.generallocation = globalLocationId;
   };
 
   //location-type
@@ -277,25 +317,10 @@ class ServiceRequest extends Component {
       { key: "r", text: "Relaxation", value: "Relaxation" },
     ];
 
-    const locationOptions = [
-      { key: "g", text: " Town - Heights", value: " Town - Heights" },
-      { key: "s", text: "Location 2", value: "Location 2" },
-      { key: "s", text: "Location 3", value: "Location 3" },
-    ];
-    const stateOptions = [
-      { key: "g", text: "New York", value: "New York" },
-      { key: "s", text: "North Carolina 3", value: "North Carolina 3" },
-      { key: "t", text: "Ohio", value: "Ohio" },
-      { key: "w", text: "Texas", value: "Texas" },
-    ];
     const typeOptions = [
       { key: "g", text: "At home", value: "At home" },
       { key: "s", text: "At work", value: "At work" },
       { key: "s", text: "Other", value: "Other" },
-    ];
-    const genderOptions = [
-      { key: "u", text: "Male", value: "Male" },
-      { key: "j", text: "Female", value: "Female" },
     ];
     return (
       //
@@ -353,14 +378,13 @@ class ServiceRequest extends Component {
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
-                              <Input
+                              <input
+                                type="time"
                                 className="form-control date"
                                 step="900"
                                 id="time"
                                 fullWidth={true}
                                 name="time"
-                                placeholder="Time to"
-                                type="time"
                                 onChange={this.onChangeToTime}
                               />
                             </div>
@@ -422,10 +446,13 @@ class ServiceRequest extends Component {
                                 Therapist gender preference{" "}
                               </label>
                               <Dropdown
-                                options={genderOptions}
+                                className="dropNav"
+                                options={this.GenderOptions}
                                 selection
-                                placeholder="Select Gender"
+                                value={this.state.selectedGender}
                                 onChange={this.dropdownChange}
+                                validators={["required"]}
+                                errorMessages={["this field is required"]}
                               />
                             </div>
                           </div>
@@ -435,16 +462,15 @@ class ServiceRequest extends Component {
                               <label for="usr" className="chkBox">
                                 General location{" "}
                               </label>
-
                               <Dropdown
-                                className="form-control"
-                                options={locationOptions}
+                                className="dropNav"
+                                options={this.locationOptions}
                                 selection
-                                placeholder="Select General Location"
+                                value={this.state.selectedLocation}
                                 onChange={this.selectLocation}
-                                // value={this.state.fields.generallocation}
-                                // validators={["required"]}
-                                // errorMessages={["this field is required"]}
+                                placeholder="Select General Location"
+                                validators={["required"]}
+                                errorMessages={["this field is required"]}
                               />
                             </div>
                           </div>
@@ -515,10 +541,14 @@ class ServiceRequest extends Component {
                                 State{" "}
                               </label>
                               <Dropdown
-                                options={stateOptions}
+                                className="dropNav"
+                                options={this.stateOptions}
                                 selection
-                                placeholder="Select State"
+                                value={this.state.selectedState}
                                 onChange={this.selectState}
+                                placeholder="Select State"
+                                validators={["required"]}
+                                errorMessages={["this field is required"]}
                               />
                             </div>
                           </div>

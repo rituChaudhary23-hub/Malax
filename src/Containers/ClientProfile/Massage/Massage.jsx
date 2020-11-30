@@ -11,9 +11,10 @@ import {
 } from "../../../redux/actions/client.action";
 
 class Massage extends Component {
+  GenderOptions = [];
   dropVal: any;
   _data: any;
-  FrequencyOptions= [];
+  FrequencyOptions = [];
   dropvalFrequency: any;
   dropvalGender: any;
   constructor(props) {
@@ -29,7 +30,8 @@ class Massage extends Component {
       abcFrequency: {
         name: "Frequency",
       },
-      selectedFreq:"",
+      selectedFreq: "",
+      selectedGender:"",
       fields: {
         clientMassagePreferencesId: 0,
         clientId: 0,
@@ -49,7 +51,7 @@ class Massage extends Component {
     var res = await this.props.getMassageInfo(data2);
 
     //fields data
- 
+
     var data1 = this.props.user.Data.ClientId;
     this.state.fields.clientId = data1;
 
@@ -58,28 +60,37 @@ class Massage extends Component {
     if (data != false) {
       this.dropVal = data.data.Data.globalCodeData;
     }
-    var _gender = await this.props.fetchCategoryName(this.state.abc.name);
-    if (_gender != false) {
-      this.dropvalGender = _gender.data.Data.globalCodeData;
-    }
+    // var _gender = await this.props.fetchCategoryName(this.state.abc.name);
+    // if (_gender != false) {
+    //   this.dropvalGender = _gender.data.Data.globalCodeData;
+    // }
 
+  //gender-globally
+  var _gender = await this.props.fetchCategoryName
+    (this.state.abc.name
+  );
+  if (_gender != false) {
+    this.dropvalGender = _gender.data.Data.globalCodeData;
+    this.dropvalGender.forEach((element) => {
+      this.GenderOptions.push({
+        text: element.CodeName,
+        value: element.GlobalCodeId,
+      });
+    });
+  }
     var _frequency = await this.props.fetchCategoryName(
       this.state.abcFrequency.name
     );
     if (_frequency != false) {
       this.dropvalFrequency = _frequency.data.Data.globalCodeData;
-      this.dropvalFrequency.forEach(element => {
+      this.dropvalFrequency.forEach((element) => {
         this.FrequencyOptions.push({
-          text:element.CodeName,
-          value:element.GlobalCodeId
-        })
+          text: element.CodeName,
+          value: element.GlobalCodeId,
+        });
       });
-
-   
-      console.log("text-----",   this.FrequencyOptions)
     }
 
-    console.log("dropVal condiiton", this.dropVal);
     this._data = [];
     this.dropVal.forEach((element) => {
       this._data.push({
@@ -88,13 +99,13 @@ class Massage extends Component {
         status: false,
       });
     });
-   
+
     var data_check = this._data;
-    data_check.forEach((element) => {
-    
-    });
-    if(this.props.massageRes.data)
-    this.setState({selectedFreq: this.props.massageRes.data.Data.FrequencyId});
+    data_check.forEach((element) => {});
+    if (this.props.massageRes.data)
+      this.setState({
+        selectedFreq: this.props.massageRes.data.Data.FrequencyId,
+      });
     this.setState();
     this.setState({
       mycheckbox_data: data_check,
@@ -106,7 +117,6 @@ class Massage extends Component {
   };
 
   MassageSelected = (e) => {
-    console.log("check_value", e.target.checked);
     this.state.mycheckbox_data.filter(
       (x) => x.GlobalCodeId == parseInt(e.target.id)
     )[0].status = e.target.checked;
@@ -122,7 +132,6 @@ class Massage extends Component {
     } else {
       document.getElementById(e.target.id).setAttribute("checked", "true");
     }
-    console.log("asdsdadd", this.state.mycheckbox_data);
   };
 
   saveMassage = () => {
@@ -135,23 +144,22 @@ class Massage extends Component {
       }
     }
   };
-  dropdownChange = (e, value) => {
-    var InfoAs = e.target.outerText;
-    var globalId = this.dropvalGender.filter((x) => x.CodeName == InfoAs)[0]
-      .GlobalCodeId;
-    this.state.fields.therapistGenderId = globalId;
-  };
+  // dropdownChange = (e, value) => {
+  //   var InfoAs = e.target.outerText;
+  //   var globalId = this.dropvalGender.filter((x) => x.CodeName == InfoAs)[0]
+  //     .GlobalCodeId;
+  //   this.state.fields.therapistGenderId = globalId;
+  // };
 
-  changeFrequency = (e, { value }) => {
-    var infoFrequency = value ;
+  changeFrequency = (e, { value }) => { 
+    var infoFrequency = value;
     this.setState({
-      selectedFreq:infoFrequency
-     })
-     console.log("selected drop down value===============",   this.state.selectedFreq)
+      selectedFreq: infoFrequency,
+    });
     var globalFrequencyId = this.dropvalFrequency.filter(
       (y) => y.GlobalCodeId == infoFrequency
     )[0].GlobalCodeId;
-    this.state.fields.frequencyId = globalFrequencyId;
+    this.state.fields.therapistGenderId = globalFrequencyId;
   };
 
   setFormValue(field, e) {
@@ -159,21 +167,19 @@ class Massage extends Component {
     fields[field] = e.target.value;
     this.setState({ fields });
   }
+  genderSelected = (e, { value })=> {
+      var infoGender = value;
+    this.setState({
+      selectedGender: infoGender,
+    });
+    debugger
+    var globalGenderId = this.dropvalGender.filter(
+      (y) => y.GlobalCodeId == infoGender
+    )[0].GlobalCodeId;
+    this.state.fields.genderId = globalGenderId;
+  };
 
   render() {
-    console.log("Massage-info-----------",  this.props.massageRes.data);
-    console.log("mycheckbox_data", this.state.mycheckbox_data);
-    console.log('my state', this.state);
-    const genderOptions = [
-      { key: "u", text: "Male", value: "Male" },
-      { key: "j", text: "Female", value: "Female" },
-    ];
-
-    // const FrequencyOptions = [
-    //   { key: "m", text: "Daily", value: "4011" },
-    //   { key: "k", text: "Weekly", value: "4010" },
-    //   { key: "k", text: "Monthly", value: "4012" },
-    // ];
     return (
       <div>
         <div>
@@ -221,23 +227,24 @@ class Massage extends Component {
                       <div>
                         <h5>Therapist gender preference</h5>
                         <Dropdown
-                          options={genderOptions}
+                          className="dropNav"
+                          options={this.GenderOptions}
                           selection
-                          placeholder="Select Gender"
-                          onChange={this.dropdownChange}
+                          value={this.state.selectedGender}
+                          onChange={this.genderSelected}
+                          validators={["required"]}
+                          errorMessages={["this field is required"]}
                         />
                       </div>
 
                       <div>
                         <h5>Frequency</h5>
                         <Dropdown
-                       className='abc'
+                          className="abc"
                           options={this.FrequencyOptions}
                           selection
-                           value={this.state.selectedFreq}
+                          value={this.state.selectedFreq}
                           onChange={this.changeFrequency}
-                        
-                         
                         />
                       </div>
 

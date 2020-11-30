@@ -160,7 +160,8 @@ class Consent extends Component {
               color="grey"
               type="button"
               className="btn btn-sm btn-white"
-              onClick={this.close}
+              onClick=  {this.props.toggle}
+
             >
               Cancel
             </button>
