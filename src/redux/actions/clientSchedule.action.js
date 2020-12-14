@@ -40,7 +40,6 @@ export function saveServiceStatus(data) {
 }
 
 export function serviceSuccess(data) {
-  console.log("USER", data);
   return {
     type: actionTypes.SERVICE_DETAIL_SUCCESS,
     data,
@@ -221,7 +220,6 @@ export function fetchServiceStatus(data) {
 
 
 export function fetchClientTherapistDetails(data) {
-  debugger
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();

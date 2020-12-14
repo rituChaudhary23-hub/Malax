@@ -31,22 +31,22 @@ class ServiceRequest extends Component {
     this.state = {
       str_code: "",
       name: "ZipCode",
-      abcGender: {
+      globalGender: {
         name: "Gender",
       },
-      abc: {
+      globalType: {
         name: "LocationType",
       },
-      abcMassage: {
+      globalMassage: {
         name: "MassageType",
       },
-      abcLocation: {
+      globalLocation: {
         name: "GeneralLocation",
       },
-      abcState: {
+      globalState: {
         name: "State",
       },
-      abcTime: {
+      globalTime: {
         name: "TimeLength",
       },
       zipCode: "",
@@ -87,7 +87,9 @@ class ServiceRequest extends Component {
       this.dropValcode = data.data.Data.globalCodeData;
     }
     //state-globally
-    var _state = await this.props.fetchCategoryName(this.state.abcState.name);
+    var _state = await this.props.fetchCategoryName(
+      this.state.globalState.name
+    );
     if (_state != false) {
       this.dropvalState = _state.data.Data.globalCodeData;
       this.dropvalState.forEach((element) => {
@@ -99,7 +101,9 @@ class ServiceRequest extends Component {
     }
 
     //gender-globally
-    var _gender = await this.props.fetchCategoryName(this.state.abcGender.name);
+    var _gender = await this.props.fetchCategoryName(
+      this.state.globalGender.name
+    );
     if (_gender != false) {
       this.dropvalGender = _gender.data.Data.globalCodeData;
       this.dropvalGender.forEach((element) => {
@@ -111,7 +115,7 @@ class ServiceRequest extends Component {
     }
     //time-length
     var _timeLength = await this.props.fetchCategoryName(
-      this.state.abcTime.name
+      this.state.globalTime.name
     );
     if (_timeLength) {
       this.dropvaltime = _timeLength.data.Data.globalCodeData;
@@ -119,7 +123,7 @@ class ServiceRequest extends Component {
 
     //massage-type
     var _massageType = await this.props.fetchCategoryName(
-      this.state.abcMassage.name
+      this.state.globalMassage.name
     );
     if (_massageType) {
       this.dropvalMassage = _massageType.data.Data.globalCodeData;
@@ -127,7 +131,7 @@ class ServiceRequest extends Component {
 
     //general-location
     var _location = await this.props.fetchCategoryName(
-      this.state.abcLocation.name
+      this.state.globalLocation.name
     );
     if (_location != false) {
       this.dropvalLocation = _location.data.Data.globalCodeData;
@@ -140,7 +144,9 @@ class ServiceRequest extends Component {
     }
     //loc-type
 
-    var _locType = await this.props.fetchCategoryName(this.state.abc.name);
+    var _locType = await this.props.fetchCategoryName(
+      this.state.globalType.name
+    );
     if (_locType) {
       this.dropvalLocType = _locType.data.Data.globalCodeData;
     }
@@ -157,7 +163,7 @@ class ServiceRequest extends Component {
   };
 
   //zipcode
-  abc = (e) => {
+  onChangeCode = (e) => {
     e.preventDefault();
     var _zip = this.dropValcode.find((x) => x.CodeName == e.target.value);
     if (_zip != undefined || _zip != null) {
@@ -567,7 +573,7 @@ class ServiceRequest extends Component {
                                 placeholder="Enter Your Zipcode"
                                 margin={"normal"}
                                 onBlur={(e) => {
-                                  this.abc(e);
+                                  this.onChangeCode(e);
                                 }}
                                 autoComplete="false"
                               />{" "}
@@ -637,7 +643,7 @@ class ServiceRequest extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
-    saveashu: state.clientReducer.saveashu,
+    saveNumber: state.clientReducer.saveNumber,
   };
 };
 

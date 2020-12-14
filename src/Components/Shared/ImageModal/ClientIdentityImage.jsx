@@ -42,14 +42,12 @@ class ClientIdentityImage extends Component {
     var file = e.target.files[0];
 var _sts = this;
     reader.onload = function(upload) {
-      console.log('file', upload.target.result);
           var base64 = upload.target.result.split(',')[1]
      _sts.setState({
       clientImage:base64
      })
     };
     reader.readAsDataURL(file);
-    console.log(this.state.image);
 
    
     if (

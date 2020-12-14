@@ -28,7 +28,6 @@ class ScheduleService extends Component {
   };
 
   render() {
-    console.log("saveAppointments-------", this.props.saveAppointments.data);
     return (
       <section className="therapistProDes">
         <div className="card">
@@ -105,7 +104,6 @@ class ScheduleService extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("sttate dekho--------", state);
   return {
     user: state.user.user,
     saveAppointments: state.therapistReducer.saveAppointments,

@@ -10,14 +10,12 @@ export const actionTypes = {
  */
 
 export function loginUserPersist(payload) {
-  console.log("payload",payload)
   return {
     type: actionTypes.LOGIN_USER_SUCCESS_PERSIST,
     data: payload,
   };
 }
 export function dummy(payload) {
-  console.log("payload",payload)
   return {
     type: actionTypes.SAVE_APPOINTMENTS,
     data: payload,

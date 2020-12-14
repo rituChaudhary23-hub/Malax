@@ -42,7 +42,6 @@ class Login extends Component {
   };
 
   handleChanges = async (e, value) => {
-    debugger
     var loginAs = e.target.outerText;
     loginAs = loginAs.split(" ")[2];
     var globalId = this.dropVal.filter((x) => x.CodeName == loginAs)[0]

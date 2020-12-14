@@ -149,7 +149,6 @@ class PersonalInfo extends Component {
     this.setState({
       selectedGender: infoGender,
     });
-    debugger
     var globalGenderId = this.dropvalGender.filter(
       (y) => y.GlobalCodeId == infoGender
     )[0].GlobalCodeId;

@@ -5,7 +5,6 @@ const initialState = {
 };
 
 const globalReducer = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case actionTypes.GLOBAL_CATEGORY_NAME:
       return {

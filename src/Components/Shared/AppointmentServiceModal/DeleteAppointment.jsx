@@ -6,7 +6,10 @@ import { withRouter } from "react-router";
 import { Button, Input, Form } from "semantic-ui-react";
 
 import { connect } from "react-redux";
-import { fetchDeleteAppointment,fetchScheduledAppointment } from "../../../redux/actions/clientSchedule.action";
+import {
+  fetchDeleteAppointment,
+  fetchScheduledAppointment,
+} from "../../../redux/actions/clientSchedule.action";
 
 class DeleteAppointment extends Component {
   constructor(props) {
@@ -40,10 +43,7 @@ class DeleteAppointment extends Component {
 
   render() {
     const { submitting } = this.props;
-    console.log("------user", this.props.user);
     let { userDetail } = this.props;
-    console.log("---this.props.userDetail---", userDetail);
-    console.log("data---delete",this.props.userDetail)
 
     return (
       <Fragment>
@@ -102,7 +102,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchDeleteAppointment: (data) => dispatch(fetchDeleteAppointment(data)),
-    fetchScheduledAppointment:(data)=>dispatch(fetchScheduledAppointment(data))
+    fetchScheduledAppointment: (data) =>
+      dispatch(fetchScheduledAppointment(data)),
   };
 };
 

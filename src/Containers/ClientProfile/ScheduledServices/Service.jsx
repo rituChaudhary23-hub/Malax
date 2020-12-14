@@ -55,7 +55,7 @@ class ServiceAppointment extends Component {
       <section className="therapistProDes">
         <div className="card">
           <div className="card-body">
-            <h2 className="card-title">Scheduled Services</h2>
+            <h2 className="card-title">Scheduled Services ghj</h2>
             <div className="scheduledServices">
               <div className="row">
                 <div className="col-sm-12">

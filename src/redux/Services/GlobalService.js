@@ -3,8 +3,6 @@ import { API_HOST } from "../../utils/config/constants/index";
 
 //global-category
 const globalCategory = (data) => {
-  ;
-  console.log("*******", data);
   var data1 = {
     name: data,
   };
@@ -16,7 +14,6 @@ const globalCategory = (data) => {
 };
 //validate-zip
 const validateZip = (data) => {
-  console.log("*******", data);
   // var zipData = {
   //   zipCode: data,
   // };

@@ -37,7 +37,7 @@ class Consent extends Component {
     // this.props.saveConsent.data
     //   ? this.props.saveConsent.data.Data.MCF
     //   : consentFormStatus;
-    if (this.state.fields.consentFormStatus==true) {
+    if (this.state.fields.consentFormStatus == true) {
       this.state.fields.consentFormStatus = this.props.saveConsent.data.Data.MCF;
       //  if(this.props.saveConsent.data.Data.MCF==true)
       // document.getElementById("abc123").checked = true;
@@ -77,7 +77,6 @@ class Consent extends Component {
   };
 
   render() {
-    console.log("ashu--------", this.props.saveConsent.data);
     return (
       <Fragment>
         <Modal
@@ -107,9 +106,6 @@ class Consent extends Component {
 
               <div className="col-sm-12 mt-4">
                 <div className="form-check form-check-inline">
-                  
-                  
-                  
                   <input
                     // className="form-check-input"
                     className="input"
@@ -160,8 +156,7 @@ class Consent extends Component {
               color="grey"
               type="button"
               className="btn btn-sm btn-white"
-              onClick=  {this.props.toggle}
-
+              onClick={this.props.toggle}
             >
               Cancel
             </button>

@@ -287,14 +287,11 @@ class ClientRegister extends Component {
                 name="zip"
                 placeholder="Zip Code"
                 margin={"normal"}
-                // onChange={(e) => {
-                //   this.abc(e.target.value);
-                // }}
+               
                 onBlur={(e) => {
                   this.checkZipCode(e);
                 }}
                 autoComplete="false"
-                // onKeyUp={this.handleSignupKeyup.bind(this, "zipCodeId")}
               />
 
 

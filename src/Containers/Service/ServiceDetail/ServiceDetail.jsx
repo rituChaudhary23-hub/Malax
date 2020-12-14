@@ -42,24 +42,46 @@ class ServiceDetail extends Component {
     this.setState({ cancelModal: false });
   };
 
-  componentDidMount = async () => {
-    var data1 = this.props.user.Data.ClientId;
-    this.state.fields.clientId = data1;
+  // componentDidMount = async () => {
+
+  //   var data1 = this.props.user.Data.ClientId;
+  //   this.state.fields.clientId = data1;
+  //   var data2 = parseInt(this.props.location.search.split("=")[1]);
+  //   var stats = this.props.getAppointment.token.Data.AllClientAppointments.filter(
+  //     (x) => x.ClientScheduleId == data2
+  //   )[0].Status.GlobalCodeId;
+  //   this.state.fields.clientScheduleId = data2;
+  //   this.state.fields.status = stats;
+  //   this.props.fetchServiceDetails(this.state.fields);
+  //   this.props.fetchServiceStatus(this.state.fields);
+  //   //get-status-message
+  //   var statusMessage = await this.props.getServiceStatus;
+  //   this._status = statusMessage.Message;
+  // };
+  componentWillMount = async () => {
     var data2 = parseInt(this.props.location.search.split("=")[1]);
     var stats = this.props.getAppointment.token.Data.AllClientAppointments.filter(
       (x) => x.ClientScheduleId == data2
-    )[0].Status.GlobalCodeId;
+    )[0];
     this.state.fields.clientScheduleId = data2;
-    this.state.fields.status = stats;
-    this.props.fetchServiceDetails(this.state.fields);
+    this.state.fields.status = stats.Status.GlobalCodeId;
+
+    var clientIdData = this.props.getAppointment.token.Data.AllClientAppointments.filter(
+      (x) => x.ClientId == stats.ClientId && x.ClientScheduleId == data2
+    )[0];
+    this.state.fields.clientId = clientIdData.ClientId;
+    var details = await this.props.fetchServiceDetails(this.state.fields);
     this.props.fetchServiceStatus(this.state.fields);
+
     //get-status-message
     var statusMessage = await this.props.getServiceStatus;
     this._status = statusMessage.Message;
-  };
 
+    //get-of service-details
+    // this.props.fetchClientTherapistDetails(this.state.fields);
+  };
   render() {
-    console.log(" getAppointment------", this.props.getAppointment);
+  
     return (
       <div>
         <Header />
@@ -70,6 +92,7 @@ class ServiceDetail extends Component {
               <div className="row">
                 <div className="col-sm-12">
                   <div className="serDetDes">
+                    
                     <p>
                       {this.props.getServiceDetails.Data.Timelength}
                       {""}
@@ -144,7 +167,6 @@ class ServiceDetail extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("Service--Detail", state);
   return {
     user: state.user.user,
     getAppointment: state.clientScheduleReducer.getAppointment,

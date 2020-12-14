@@ -66,10 +66,8 @@ export function fetchValidateZip(data) {
     })
       .then(async (data) => {
         if(data.data.Success){
-        console.log("zip", data);
         dispatch(stopLoading());
         dispatch(globalZipCode(data))
-        console.log("susces",data.data.Message)
         toast.success(data.data.Message);
         return true;
         }

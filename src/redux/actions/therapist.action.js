@@ -152,16 +152,13 @@ export function fetchTherapistConsentForm(data) {
 
 //theparist-payment
 export function fetchTherapistPaymentInfo(data) {
-  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
-    debugger;
     let state = getState();
     return TherapistService.therapistPaymentDetails(data, {})
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
           dispatch(saveTherapistPayInfo(data));
           toast.success(data["data"]["Message"]);
 
@@ -208,16 +205,13 @@ export function fetchTherapistLicensure(data) {
 //get-licensure
 
 export function getTherapistLicensureInfo(data) {
-  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
-    debugger;
     let state = getState();
     return TherapistService.getTherapistLicensure(data, {})
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
           dispatch(saveLicensureInfo(data));
           toast.success(data["data"]["Message"]);
 
@@ -238,16 +232,13 @@ export function getTherapistLicensureInfo(data) {
 
 //add-modality
 export function fetchTherapistModality(data) {
-  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
-    debugger;
     let state = getState();
     return TherapistService.addTherapistModality(data, {})
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
           toast.success(data["data"]["Message"]);
 
           return true;
@@ -267,16 +258,13 @@ export function fetchTherapistModality(data) {
 
 //get-modalities
 export function getTherapistModalityInfo(data) {
-  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
-    debugger;
     let state = getState();
     return TherapistService.getTherapistModality(data, {})
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
           dispatch(saveModalityInfo(data));
           toast.success(data["data"]["Message"]);
 
@@ -297,16 +285,13 @@ export function getTherapistModalityInfo(data) {
 
 //get-scheduled-appointments
 export function getTherapistAppointments(data) {
-  debugger;
   return (dispatch, getState) => {
     dispatch(startLoading());
-    debugger;
     let state = getState();
     return TherapistService.getScheduledAppointments(data, {})
       .then(async (data) => {
         dispatch(stopLoading());
         if (data.data.Success) {
-          debugger;
           dispatch(saveScheduledInfo(data));
           toast.success(data["data"]["Message"]);
 
@@ -327,7 +312,6 @@ export function getTherapistAppointments(data) {
 
 //get-scheduled-services
 export function fetchScheduledServices(data) {
-  debugger
   return (dispatch, getState) => {
     dispatch(startLoading());
     let state = getState();

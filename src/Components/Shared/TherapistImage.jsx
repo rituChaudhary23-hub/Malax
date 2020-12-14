@@ -50,8 +50,6 @@ class TherapistImage extends Component {
       this.photoImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(
         (x) => x.TherapistImageTypeId == globalPhoto
       )[0].TherapistImage;
-
-      console.log("photoImg-------", this.photoImg);
     } else {
       if (this.props.currentImage.data.Data.TherapistIdentityImages.length > 0)
         this.photoImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(

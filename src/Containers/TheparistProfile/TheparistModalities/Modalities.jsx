@@ -50,7 +50,6 @@ export class Modalities extends Component {
         status: false,
       });
     });
-    console.log("-----dropVal", this.dropVal);
     var data_check = this._data;
     data_check.forEach((element) => {});
 
@@ -68,7 +67,6 @@ export class Modalities extends Component {
   };
 
   MassageSelected = (e) => {
-    console.log("check_value", e.target.checked);
     this.state.mycheckbox_data.filter(
       (x) => x.GlobalCodeId == parseInt(e.target.id)
     )[0].status = e.target.checked;
@@ -83,7 +81,6 @@ export class Modalities extends Component {
     } else {
       document.getElementById(e.target.id).setAttribute("checked", "true");
     }
-    console.log("asdsdadd", this.state.mycheckbox_data);
   };
 
   back = () => {
@@ -121,7 +118,6 @@ export class Modalities extends Component {
     this.props.fetchTherapistModality(this.state.fields);
   };
   render() {
-    console.log("mycheckbox_data", this.state.mycheckbox_data);
 
     return (
       <div>
@@ -191,7 +187,6 @@ export class Modalities extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("sttate dekho--------", state);
   return {
     user: state.user.user,
     saveModality: state.therapistReducer.saveModality,

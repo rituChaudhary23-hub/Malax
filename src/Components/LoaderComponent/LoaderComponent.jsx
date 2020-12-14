@@ -23,10 +23,9 @@ class LoaderComponent extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  console.log(">>>>>>>>>>>>>>>>>>>>>>>", state);
+const mapStateToProps = (state) => {
   return {
-    loading: state.loading.meta
+    loading: state.loading.meta,
   };
 };
 

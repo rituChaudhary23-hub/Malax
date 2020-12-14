@@ -8,7 +8,6 @@ const initialState = {
 };
 
 const clientScheduleReducer = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case actionTypes.SAVE_APPOINTMENTS:
       return {

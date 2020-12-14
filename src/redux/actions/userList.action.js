@@ -41,10 +41,8 @@ export function userDetail(data, location) {
     return UserService.register(data, {
       jwt: state["persist"]["c_temp_user"]["token"]
     }).then(async (data) => {
-      console.log("Userlist", data);
       dispatch(stopLoading());
       if (data.data.Success) {
-        console.log("push-path", push);
         dispatch(saveDetails(data));
         toast.success(data["data"]["message"]);
 
@@ -54,15 +52,7 @@ export function userDetail(data, location) {
         return false;
       }
     });
-    // .catch((error) => {
-    //   console.log("ERROR", data.Message);
-    //   if (error) {
-    //     console.log("ERROR", data.Message);
 
-    //     toast.error(error["data"]["Message"]);
-    //   }
-    //   dispatch(stopLoading());
-    // });
   };
 }
 
@@ -74,11 +64,9 @@ export function userForgotPassword(data, history) {
     return UserService.forgotPassword(data, {})
       .then(async (data) => {
         if (data.data.Success) {
-          console.log("forgot Password", data);
           dispatch(stopLoading());
           // history.push("/reset-password");
           dispatch(userPassword(data));
-          console.log("susces", data.data.Message);
           toast.success(data.data.Message);
           return true;
         } else {
@@ -87,11 +75,8 @@ export function userForgotPassword(data, history) {
         }
       })
       .catch((error) => {
-        console.log("ERROR", data.Message);
         if (error) {
-          console.log("ERROR", data.Message);
           toast.error(error(data.Data.Message));
-          // toast.error(error["data"]["Message"]);
         }
         dispatch(stopLoading());
       });
@@ -107,13 +92,10 @@ export function fetchResetPassword(data) {
     return UserService.resetPassword(data, {})
       .then(async (data) => {
         if (data.data.Success) {
-          console.log("Reset Password", data);
 
           dispatch(stopLoading());
-          // history.push('/login');
 
           dispatch(userResetPassword(data));
-          console.log("susces", data.data.Message);
           toast.success(data.data.Message);
           return true;
         } else {
@@ -122,9 +104,7 @@ export function fetchResetPassword(data) {
         }
       })
       .catch((error) => {
-        console.log("ERROR", data.Message);
         if (error) {
-          console.log("ERROR", data.Message);
           toast.error(error(data.Data.Message));
           // toast.error(error["data"]["Message"]);
         }
@@ -141,9 +121,7 @@ export function fetchResendEmail(data) {
     return UserService.resendEmail(data, {})
       .then(async (data) => {
         if (data.data.Success) {
-          console.log("resend", data);
           dispatch(stopLoading());
-          console.log("susces", data.data.Message);
           toast.success(data.data.Message);
           return true;
         } else {
@@ -152,11 +130,8 @@ export function fetchResendEmail(data) {
         }
       })
       .catch((error) => {
-        console.log("ERROR", data.Message);
         if (error) {
-          console.log("ERROR", data.Message);
           toast.error(error(data.Data.Message));
-          // toast.error(error["data"]["Message"]);
         }
         dispatch(stopLoading());
       });

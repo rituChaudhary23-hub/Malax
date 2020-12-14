@@ -94,7 +94,6 @@ class ResetPassword extends Component {
   }
   render() {
     const { handleSubmit, pristine, reset, submitting } = this.props;
-    console.log("props", this.props);
     return (
       <section className="log-in">
         <div className="container">
@@ -196,7 +195,6 @@ class ResetPassword extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("@@@@@@>>>>>>>ritu.", state);
   return {
     resetPassword: state.userList.resetPassword,
   };

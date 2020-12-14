@@ -37,7 +37,6 @@ class ScheduleServiceDetail extends Component {
     window.location.href = "/theparist-profile";
   }
   ShowServiceModal = (data) => {
-    debugger;
     this.setState({ service: true });
   };
   closeServiceModal = () => {
@@ -323,7 +322,6 @@ class ScheduleServiceDetail extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("Service--Detail", state);
   return {
     user: state.user.user,
 

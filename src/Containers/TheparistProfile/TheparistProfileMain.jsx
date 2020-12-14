@@ -38,7 +38,6 @@ class TheparistProfileMain extends Component {
       UserId: this.props.user.Data.UserId,
     };
   var fethcPhone= await this.props.fetchUserPhone(data);
-  console.log("fethcPhone",fethcPhone)
   };
   showModal = () => {
     this.setState({ modal1: true });
@@ -143,9 +142,9 @@ class TheparistProfileMain extends Component {
                         </li>
                         <li>
                           <p>
-                            {this.props.saveashu.data &&
-                            this.props.saveashu.data.Data
-                              ? this.props.saveashu.data.Data.PhoneNumber
+                            {this.props.saveNumber.data &&
+                            this.props.saveNumber.data.Data
+                              ? this.props.saveNumber.data.Data.PhoneNumber
                               : "Not Yet Confirmed"}
                           </p>
                         </li>
@@ -307,11 +306,10 @@ class TheparistProfileMain extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("phone state----", state);
   return {
     formVal: state.form,
     user: state.user.user,
-    saveashu: state.clientReducer.saveashu,
+    saveNumber: state.clientReducer.saveNumber,
   };
 };
 

@@ -23,7 +23,7 @@ class Licensure extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      abcGender: {
+      globalGender: {
         name: "Gender",
       },
       name: "State",
@@ -55,7 +55,7 @@ class Licensure extends Component {
   componentDidMount = async () => {
     //gender-globally
     var _licensureGender = await this.props.fetchCategoryName(
-      this.state.abcGender.name
+      this.state.globalGender.name
     );
     if (_licensureGender != false) {
       this.dropvalGender = _licensureGender.data.Data.globalCodeData;
@@ -201,7 +201,6 @@ class Licensure extends Component {
     if (this.validate()) {
       var res = await this.props.fetchTherapistLicensure(this.state.fields);
       if (res == true) {
-        console.log("res--------", res);
       } else {
       }
     }
@@ -440,7 +439,6 @@ class Licensure extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("sttate dekho--------", state);
   return {
     user: state.user.user,
     saveLicensure: state.therapistReducer.saveLicensure,

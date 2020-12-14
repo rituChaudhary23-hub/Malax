@@ -12,7 +12,14 @@ const addAppointment = (data) => {
 
 //get-scheduled-services
 const getClientAppointments = (data) => {
-  return fetch("post", `${API_HOST}/ClientScheduleAPI/GetAppointments`, data);
+  var Details = {
+    ClientScheduleId: data.clientScheduleId,
+    ClientId: data.clientId,
+  
+  };
+  return fetch("get", `${API_HOST}/ClientScheduleAPI/GetAppointments?ClientScheduleId=` +Details.ClientScheduleId+
+  `&ClientId=` +
+  Details.ClientId);
 };
 
 //payment-details
@@ -34,7 +41,12 @@ const deleteAppointment = (data) => {
 };
 
 const getServiceDetails = (data) => {
-  return fetch("post", `${API_HOST}/ClientScheduleAPI/GetServiceDetail`, data);
+  var scheduledDetails = {
+    ClientScheduleId: data.clientScheduleId,
+    ClientId: data.clientId,
+  
+  }
+  return fetch("get", `${API_HOST}/ClientScheduleAPI/GetServiceDetail`, data);
 };
 
 const getServiceStatus = (data) => {
@@ -48,7 +60,6 @@ const getServiceStatus = (data) => {
 
 //service-detail
 const getClientTherapistDetail = (data) => {
-  debugger
   return fetch(
     "post",
     `${API_HOST}/ClientScheduleAPI/GetClientAndTherapistOfServiceDetail`,

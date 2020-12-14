@@ -152,11 +152,9 @@ class ProfileMain extends Component {
                         </li>
                         <li>
                           <p>
-                            {/* {this.props.saveashu.data.Data!=null
-                              && this.props.saveashu.data.Data.PhoneNumber
-                             } */}
-                              {this.props.saveashu.data && this.props.saveashu.data.Data
-                              ? this.props.saveashu.data.Data.PhoneNumber
+                          
+                              {this.props.saveNumber.data && this.props.saveNumber.data.Data
+                              ? this.props.saveNumber.data.Data.PhoneNumber
                               : "Not Yet Confirmed"}
                           </p>
                         </li>
@@ -295,7 +293,7 @@ const mapStateToProps = (state) => {
   return {
     formVal: state.form,
     user: state.user.user,
-    saveashu: state.clientReducer.saveashu,
+    saveNumber: state.clientReducer.saveNumber,
   };
 };
 

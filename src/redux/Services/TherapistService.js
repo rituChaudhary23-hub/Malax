@@ -24,9 +24,9 @@ const getTherapistImage = (data) => {
     therapistId: data,
   };
   return fetch(
-    "post",
-    `${API_HOST}/TherapistAPI/GetTherapistIdentity`,
-    identity
+    "get",
+    `${API_HOST}/TherapistAPI/GetTherapistIdentity?TherapistId=` +
+      identity.therapistId
   );
 };
 
@@ -59,7 +59,17 @@ const addTherapistLicensure = (data) => {
 
 //get-licensure
 const getTherapistLicensure = (data) => {
-  return fetch("post", `${API_HOST}/TherapistAPI/GetTherapistLicensure`, data);
+  var licensure = {
+    TherapistLicensureId: data.therapistId,
+    TherapistId: data.therapistLicensureId,
+  };
+  return fetch(
+    "get",
+    `${API_HOST}/TherapistAPI/GetTherapistLicensure?TherapistLicensureId=` +
+      licensure.TherapistLicensureId +
+      `&TherapistId=` +
+      licensure.TherapistId
+  );
 };
 
 //modalities-api
@@ -73,13 +83,14 @@ const addTherapistModality = (data) => {
 
 //get-modalities
 const getTherapistModality = (data) => {
-  var data1 = {
-    therapistId: data,
+  var modalityData = {
+    TherapistModalityId: data,
+    TherapistId:data
   };
   return fetch(
-    "post",
-    `${API_HOST}/TherapistAPI/GetTherapistModalities`,
-    data1
+    "get",
+    `${API_HOST}/TherapistAPI/GetTherapistModalities?TherapistId=`+
+    modalityData.TherapistId + `&TherapistModalityId=`+modalityData.TherapistModalityId
   );
 };
 
@@ -121,7 +132,6 @@ const getScheduledServices = (data) => {
   );
 };
 
-//?ClientScheduleId=4028&TherapistId=0&From=15%3A00&Status=2023
 
 export const TherapistService = {
   addImage,

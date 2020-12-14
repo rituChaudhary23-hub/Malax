@@ -16,7 +16,6 @@ class HomePage extends Component {
   }
 
   handleChanges = (e, { value }) => {
-    console.log("values", value);
     history.push(value);
     window.location.reload(false);
   };

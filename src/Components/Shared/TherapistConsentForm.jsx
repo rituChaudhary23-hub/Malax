@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Modal } from "react-bootstrap";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import {fetchTherapistConsentForm} from "../../redux/actions/therapist.action"
+import { fetchTherapistConsentForm } from "../../redux/actions/therapist.action";
 
 class TherapistConsentForm extends Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class TherapistConsentForm extends Component {
     this.state.fields.therapistId = data1;
     // var res = await this.props.getConsentForm(data1);
     // if (this.state.fields.consentFormStatus==true) {
-      
+
     //   this.state.fields.consentFormStatus = this.props.saveConsent.data.Data.MCF;
     // }
   };
@@ -45,7 +45,7 @@ class TherapistConsentForm extends Component {
     e.preventDefault();
     var data = this.props.user.Data.UserId;
     this.state.fields.userId = data;
-    
+
     var data1 = this.props.user.Data.TherapistId;
     this.state.fields.therapistId = data1;
     if (this.state.fields.consentFormStatus == true) {
@@ -84,9 +84,6 @@ class TherapistConsentForm extends Component {
 
               <div className="col-sm-12 mt-4">
                 <div className="form-check form-check-inline">
-                  
-                  
-                  
                   <input
                     // className="form-check-input"
                     className="input"
@@ -143,7 +140,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchTherapistConsentForm: (data) => dispatch(fetchTherapistConsentForm(data)),
+    fetchTherapistConsentForm: (data) =>
+      dispatch(fetchTherapistConsentForm(data)),
     // getConsentForm: (data) => dispatch(getConsentForm(data)),
   };
 };

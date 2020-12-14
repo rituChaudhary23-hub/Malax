@@ -32,7 +32,6 @@ export function loginUserError(error) {
 }
 
 export function loginUserSuccess(user) {
-  console.log("USER", user);
   return {
     type: actionTypes.LOGIN_USER_SUCCESS,
     user,
@@ -53,16 +52,13 @@ export function loginUser(data, value) {
     return UserService.login(data)
       .then(async (user) => {
         if (user.data.Success) {
-          console.log("response", user.data.Data.Token);
           dispatch(
             loginUserTempPersist({ token: user["data"]["Data"]["Token"] })
           );
 
-          console.log("saveduser", JSON.stringify(data));
           sessionStorage.setItem("savedUser", user.data.Data.Token);
 
           dispatch(stopLoading());
-          console.log("DDD", user["data"]);
 
           toast.success(user.data.Message);
           dispatch(loginUserSuccess(user["data"]));
@@ -80,7 +76,7 @@ export function loginUser(data, value) {
       })
       .catch((error) => {
         return false;
-        console.log("ERROR", error);
+       
         if (error) {
           // toast.error(error["data"]["Message"]);
           // toast.error(data.Message)

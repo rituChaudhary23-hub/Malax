@@ -24,10 +24,10 @@ class Massage extends Component {
       name: "TypePerferred",
       mycheckbox_data: [],
       myStatus: [],
-      abc: {
+      globalGender: {
         name: "Gender",
       },
-      abcFrequency: {
+      globalFrequency: {
         name: "Frequency",
       },
       selectedFreq: "",
@@ -67,7 +67,7 @@ class Massage extends Component {
 
   //gender-globally
   var _gender = await this.props.fetchCategoryName
-    (this.state.abc.name
+    (this.state.globalGender.name
   );
   if (_gender != false) {
     this.dropvalGender = _gender.data.Data.globalCodeData;
@@ -79,7 +79,7 @@ class Massage extends Component {
     });
   }
     var _frequency = await this.props.fetchCategoryName(
-      this.state.abcFrequency.name
+      this.state.globalFrequency.name
     );
     if (_frequency != false) {
       this.dropvalFrequency = _frequency.data.Data.globalCodeData;
@@ -172,7 +172,6 @@ class Massage extends Component {
     this.setState({
       selectedGender: infoGender,
     });
-    debugger
     var globalGenderId = this.dropvalGender.filter(
       (y) => y.GlobalCodeId == infoGender
     )[0].GlobalCodeId;

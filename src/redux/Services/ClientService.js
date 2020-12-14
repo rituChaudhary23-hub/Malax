@@ -17,8 +17,7 @@ const updateUserEmail = (data, options) => {
 
 //get user phone number
 const getUserPhone = (data) => {
-  debugger
-  return fetch("get", `${API_HOST}/AuthAPI/GetUserPhoneNumber?UserId=`+data.userId);
+  return fetch("get", `${API_HOST}/AuthAPI/GetUserPhoneNumber?UserId=`+data.UserId);
 };
 
 //consent form
@@ -61,7 +60,6 @@ const getMedicalCondition = (data) => {
   var data1 = {
     clientId: data,
   };
-  debugger
   return fetch(
     "get",
     `${API_HOST}/ClientAPI/GetClientMedicalConditions?ClientId=`+data1.clientId,
@@ -76,9 +74,8 @@ const getMassageSelected = (data) => {
     clientId: data,
   };
   return fetch(
-    "post",
-    `${API_HOST}/ClientAPI/GetClientMassagePreferences`,
-    data1
+    "get",
+    `${API_HOST}/ClientAPI/GetClientMassagePreferences?ClientId=`+data1.clientId
   );
 };
 
@@ -87,7 +84,6 @@ const getUserInfo = (data) => {
   var data1 = {
     clientId: data,
   };
-  debugger
   return fetch("get", `${API_HOST}/ClientAPI/GetClientPersonalInfo?ClientId=`+data1.clientId);
 };
 
@@ -96,7 +92,7 @@ const getMedicalInfo = (data) => {
   var data1 = {
     clientId: data,
   };
-  return fetch("post", `${API_HOST}/ClientAPI/GetClientMedicalHistory`, data1);
+  return fetch("get", `${API_HOST}/ClientAPI/GetClientMedicalHistory?ClientId=`+data1.clientId);
 };
 
 //get consent form
@@ -116,19 +112,17 @@ const getClientLoc = (data) => {
   var data1 = {
     clientId: data,
   };
-  return fetch("post", `${API_HOST}/ClientAPI/GetClientLocations`, data1);
+  return fetch("get", `${API_HOST}/ClientAPI/GetClientLocations?ClientId=`+data1.clientId);
 };
 
 //upload-image
 const addImage = (data) => {
-  console.log("user info------------", data);
   return fetch("post", `${API_HOST}/ClientAPI/AddClientIdentityImage`, data);
 };
 
 
 //get-uploaded-image
 const getClientImage = (data) => {
-  console.log("user info------------", data);
   return fetch("post", `${API_HOST}/ClientAPI/GetClientIdentityImage`, data);
 };
 

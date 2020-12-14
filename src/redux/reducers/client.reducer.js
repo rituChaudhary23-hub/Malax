@@ -3,7 +3,7 @@ import { actionTypes } from "../actions/client.action";
 const initialState = {
   userId: "",
   savePhone: {},
-  saveashu: {},
+  saveNumber: {},
   saveUser: {},
   saveHistory: {},
   saveCondition: {},
@@ -16,7 +16,6 @@ const initialState = {
 };
 
 const clientReducer = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case actionTypes.SAVE_USER_ID:
       return {
@@ -31,7 +30,7 @@ const clientReducer = (state = initialState, action) => {
     case actionTypes.GET_PHONE:
       return {
         ...state,
-        saveashu: action.data,
+        saveNumber: action.data,
       };
     case actionTypes.SAVE_INFO:
       return {

@@ -34,7 +34,6 @@ class ForgotPassword extends Component {
 };
 
   setFormValue(field, e) {
-    console.log("field", field);
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
@@ -167,7 +166,6 @@ class ForgotPassword extends Component {
 
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("@@@@@@>>>>>>>ritu.", state);
   return {
    userForgotPassword: state.userList.userForgotPassword,
  

@@ -82,7 +82,6 @@ export class ScheduledService extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("Service--Detail", state);
   return {
     user: state.user.user,
 

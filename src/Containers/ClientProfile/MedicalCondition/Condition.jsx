@@ -24,7 +24,7 @@ class Condition extends Component {
       mycheckbox_data: [],
       my_checkBox: false,
       areaCheckbox_data: [],
-      abc: {
+      globalConditions: {
         name: "MedicalConditionsAreas",
       },
       fields: {
@@ -75,7 +75,7 @@ class Condition extends Component {
     });
 
     //areas checkbox
-    var _areaCheck = await this.props.fetchCategoryName(this.state.abc.name);
+    var _areaCheck = await this.props.fetchCategoryName(this.state.globalConditions.name);
     if (_areaCheck) {
       this.dropvalArea = _areaCheck.data.Data.globalCodeData;
     }

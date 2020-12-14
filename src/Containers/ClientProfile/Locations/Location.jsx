@@ -30,8 +30,6 @@ export class Location extends Component {
 
   updateLoc = (e) => {
     if (e.target.checked) {
-      console.log("-------ritu----------", e.target.value);
-      // this.setState({ locationForMessage: e.target.value });
       var data1 = e.target.value;
       this.state.fields.locationForMessage = data1;
     }
@@ -39,7 +37,6 @@ export class Location extends Component {
 
   updateConfirm = (e) => {
     if (e.target.checked) {
-      console.log("-------ritu-ashu---------", e.target.value);
       var space = e.target.value;
       this.state.fields.spaceAvailability = space;
     }
@@ -47,7 +44,6 @@ export class Location extends Component {
 
   updatePets = (e) => {
     if (e.target.checked) {
-      console.log("-------ritu-ashu---------", e.target.value);
       var petsdata=e.target.value
       this.state.fields.presencePets=petsdata;
     }
@@ -59,7 +55,6 @@ export class Location extends Component {
 
     var res = await this.props.fetchClientLoc(this.state.fields);
     if (res == true) {
-      console.log("res--------", res);
     } else {
     }
   };
