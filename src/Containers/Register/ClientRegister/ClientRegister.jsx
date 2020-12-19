@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Button, Form, Input} from "semantic-ui-react";
+import { Button, Form, Input } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
+import fire from "../../../utils/config/fire";
 import { toast } from "../../../Components/Toast/Toast";
 
 import { userDetail } from ".././../../redux/actions/userList.action";
@@ -17,21 +18,25 @@ class ClientRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "UserAccountTypes",
-      CodeName: "Client",
-      zip_code:{
+      zip_code: {
         name: "ZipCode",
       },
       zipCode: "",
       fields: {
-        Email: "",
-        Password: "",
+        email: "",
+        password: "",
         conPassword: "",
-        FirstName: "",
-        LastName: "",
-        ZipCodeId: "",
-        MarketId: 0,
-        AccountTypeId: 0,
+        firstName: "",
+        lastName: "",
+        zipCode: "",
+        accountTypeId: 2,
+        id: "",
+        userVerified: "",
+        userTypeId: "client",
+        createdBy: "",
+        createdDate: "",
+
+
       },
       errors: {
         email: "",
@@ -44,13 +49,13 @@ class ClientRegister extends Component {
   }
 
   componentDidMount = async () => {
-    var data = await this.props.fetchCategoryName(this.state.name);
-    let courseData;
-    if (this.props.categoryName)
-      courseData = this.props.categoryName.filter(
-        (item) => item.CodeName == this.state.CodeName
-      )[0];
-    this.golbalID = courseData.GlobalCodeId;
+    //   var data = await this.props.fetchCategoryName(this.state.name);
+    //   let courseData;
+    //   if (this.props.categoryName)
+    //     courseData = this.props.categoryName.filter(
+    //       (item) => item.CodeName == this.state.CodeName
+    //     )[0];
+    //   this.golbalID = courseData.GlobalCodeId;
 
     //zip-code-globally
     var zipData = await this.props.fetchCategoryName(this.state.zip_code.name);
@@ -59,15 +64,63 @@ class ClientRegister extends Component {
     }
   };
 
-  signupMalax = async (e, data) => {
+  // signupMalax = async (e, data) => {
+  //   e.preventDefault();
+  //   if (this.handleValidation()) {
+  //     this.state.fields.AccountTypeId = this.golbalID;
+  //     var res = await this.props.userDetail(this.state.fields);
+  //     if (res == true) {
+  //       this.props.history.push("/confirm-email");
+  //     } else {
+  //     }
+  //   }
+  // };
+
+  signupMalax = async (e) => {
     e.preventDefault();
+    var app = fire;
+    var auth = app.auth();
+    var actionCode = "ABC123";
+    var continueUrl = "https://mydemo-863e7.firebaseapp.com/__/auth/action";
+    var lang = "en";
     if (this.handleValidation()) {
-      this.state.fields.AccountTypeId = this.golbalID;
-      var res = await this.props.userDetail(this.state.fields);
-      if (res == true) {
-        this.props.history.push("/confirm-email");
-      } else {
-      }
+      fire
+        .auth()
+        .createUserWithEmailAndPassword(
+          this.state.fields.email,
+          this.state.fields.password
+        )
+        .then(async (u) => {
+          console.log(u);
+          var actionCodeSettings = {
+            url: "https://mydemo-863e7.firebaseapp.com",
+
+            handleCodeInApp: true,
+          };
+          fire
+            // .auth()
+            // .sendSignInLinkToEmail(this.state.fields.email, actionCodeSettings);
+            .auth()
+            .currentUser.sendEmailVerification(actionCodeSettings).then(async(res) => {
+          var localId = u.user.uid;
+          this.state.fields.id = localId;
+          var verify = auth.currentUser.emailVerified;
+          this.state.fields.userVerified = verify;
+          debugger
+          var nameCreated = this.state.fields.firstName;
+          this.state.fields.createdBy = nameCreated;
+            debugger;
+          var res = await this.props.userDetail(this.state.fields);
+          if (res == true) {
+            this.props.history.push("/confirm-email");
+          } else {
+          }
+            })
+            .catch(err => {
+          console.log(err);
+        });
+      })
+        .catch((err) => {});
     }
   };
 
@@ -78,7 +131,7 @@ class ClientRegister extends Component {
     let formIsValid = true;
 
     //Password
-    if (!fields["Password"]) {
+    if (!fields["password"]) {
       formIsValid = false;
       errors["password"] = "Password is required.";
     }
@@ -99,13 +152,13 @@ class ClientRegister extends Component {
     }
 
     //last_name
-    if (!fields["LastName"]) {
+    if (!fields["lastName"]) {
       formIsValid = false;
       errors["lastName"] = "required*";
     }
 
     //first name
-    if (!fields["FirstName"]) {
+    if (!fields["firstName"]) {
       formIsValid = false;
       errors["firstName"] = "required*";
     }
@@ -115,7 +168,7 @@ class ClientRegister extends Component {
       typeof fields["conPassword"] !== "undefined" &&
       fields["conPassword"] !== ""
     ) {
-      if (fields["conPassword"] !== fields["Password"]) {
+      if (fields["conPassword"] !== fields["password"]) {
         formIsValid = false;
         errors["conPassword"] = "Passwords don't match";
       }
@@ -125,7 +178,7 @@ class ClientRegister extends Component {
     }
 
     //Email
-    if (!fields["Email"]) {
+    if (!fields["email"]) {
       formIsValid = false;
       errors["email"] = "Email is required";
     }
@@ -165,7 +218,9 @@ class ClientRegister extends Component {
     if (_zip != undefined || _zip != null) {
       this.state.fields.zipCode = _zip.GlobalCodeId;
     } else {
-      toast.error("Not matched zipcode");
+      toast.error(
+        "Malax is not yet available in your area. You can submit this form, and we will be happy to notify you when Malax is available in your ZIP code."
+      );
     }
   };
   handleSignupKeyup(field, e) {
@@ -192,8 +247,8 @@ class ClientRegister extends Component {
                 type="email"
                 margin={"normal"}
                 placeholder="Email"
-                onChange={this.setFormValue.bind(this, "Email")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "Email")}
+                onChange={this.setFormValue.bind(this, "email")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "email")}
                 value={this.state.fields.email}
               />{" "}
               <span style={{ color: "red" }}>{this.state.errors["email"]}</span>
@@ -210,8 +265,8 @@ class ClientRegister extends Component {
                 type="password"
                 placeholder="Password"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "Password")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "Password")}
+                onChange={this.setFormValue.bind(this, "password")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "password")}
               />
 
               <span style={{ color: "red" }}>
@@ -246,8 +301,8 @@ class ClientRegister extends Component {
                 name="name"
                 margin={"normal"}
                 placeholder="First Name"
-                onChange={this.setFormValue.bind(this, "FirstName")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "FirstName")}
+                onChange={this.setFormValue.bind(this, "firstName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "firstName")}
               />
               <span style={{ color: "red" }}>
                 {this.state.errors["firstName"]}
@@ -266,8 +321,8 @@ class ClientRegister extends Component {
                 type="text"
                 placeholder="Last Name"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "LastName")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "LastName")}
+                onChange={this.setFormValue.bind(this, "lastName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "lastName")}
               />
               <span style={{ color: "red" }}>
                 {this.state.errors["lastName"]}
@@ -277,24 +332,20 @@ class ClientRegister extends Component {
 
           <div className="form-group">
             <label>ZIP Code</label>
-            
+
             <Form.Field>
               <Input
                 className="form-control"
                 id="zip"
-                
                 fullWidth={true}
                 name="zip"
                 placeholder="Zip Code"
                 margin={"normal"}
-               
                 onBlur={(e) => {
                   this.checkZipCode(e);
                 }}
                 autoComplete="false"
               />
-
-
 
               <span style={{ color: "red" }}>
                 {this.state.errors["zipCodeId"]}
@@ -302,13 +353,7 @@ class ClientRegister extends Component {
             </Form.Field>
             {/* )} */}
           </div>
-          <div className="form-group">
-            <p>
-              Malax is not yet available in your area. You can submit this form,
-              and we will be happy to notify you when Malax is available in your
-              ZIP code.
-            </p>
-          </div>
+
           <div className="text-center">
             {" "}
             <Button

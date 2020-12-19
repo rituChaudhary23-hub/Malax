@@ -1,10 +1,12 @@
 import { fetch } from "./Fetch";
 import { API_HOST } from "../../utils/config/constants/index";
 
-//register-api
 const register = (data) => {
-  return fetch("post", `${API_HOST}/AuthAPI/SignUp`, data);
-  // return fetch("post","http://64.202.184.112:6500/api/AuthAPI/SignUp",data)
+  return fetch(
+    "post",
+    "https://malax.azurewebsites.net/api/AddUser?code=fn4qrG7zceRw8BifC0HybIbMfxpk073NaZ4TR7JOzep3Jdy9KaK/lg==",
+    JSON.stringify(data)
+  );
 };
 
 //login-api

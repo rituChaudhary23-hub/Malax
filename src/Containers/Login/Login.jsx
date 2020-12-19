@@ -8,9 +8,10 @@ import { required, email } from "redux-form-validators";
 import { loginUser } from "../../redux/actions/user.action";
 import { connect } from "react-redux";
 import { fetchCategoryName } from "../../redux/actions/global.action";
-
+import fire from "../../utils/config/fire";
 import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
 import loading from "../../redux/reducers/loading.reducer";
+import { toast } from "../../Components/Toast/Toast";
 
 class Login extends Component {
   golbalID = 0;
@@ -41,23 +42,50 @@ class Login extends Component {
     }
   };
 
-  handleChanges = async (e, value) => {
-    var loginAs = e.target.outerText;
-    loginAs = loginAs.split(" ")[2];
-    var globalId = this.dropVal.filter((x) => x.CodeName == loginAs)[0]
-      .GlobalCodeId;
-    this.state.fields.accountTypeId = globalId;
+  // handleChanges = async (e, value) => {
+  //   var loginAs = e.target.outerText;
+  //   loginAs = loginAs.split(" ")[2];
+  //   var globalId = this.dropVal.filter((x) => x.CodeName == loginAs)[0]
+  //     .GlobalCodeId;
+  //   this.state.fields.accountTypeId = globalId;
+  //   e.preventDefault();
+  //   if (this.handleValidation()) {
+  //     var res = await this.props.onLoginUser(this.state.fields, value);
+  //     if (res == true) {
+  //       this.props.history.push(value.value);
+
+  //     } else {
+  //     }
+  //     //  window.location.reload(false);
+  //   }
+  //  // e.target.className.replace('active','')
+  // };
+
+  handleChanges = async (e) => {
     e.preventDefault();
-    if (this.handleValidation()) {
-      var res = await this.props.onLoginUser(this.state.fields, value);
-      if (res == true) {
-        this.props.history.push(value.value);
-        
-      } else {
-      }
-      //  window.location.reload(false);
-    }
-   // e.target.className.replace('active','')
+    let userEntity = e.target.outerText;
+    fire
+      .auth()
+      .signInWithEmailAndPassword(
+        this.state.fields.email,
+        this.state.fields.password
+      )
+      .then((u) => {
+        console.log(u);
+        if (u.user.emailVerified == false) {
+          fire.auth().signOut();
+
+          toast.error("Please verify your email first.");
+          return;
+        } else if (userEntity == "LogIn As Client") {
+          this.props.history.push("/client-profile");
+        } else if (userEntity == "LogIn As Therapist") {
+          this.props.history.push("/theparist-profile");
+        } else {
+          this.props.history.push("/dashboard");
+        }
+      })
+      .catch((err) => {});
   };
 
   handleValidation = () => {

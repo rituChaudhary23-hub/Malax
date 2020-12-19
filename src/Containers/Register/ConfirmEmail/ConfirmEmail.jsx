@@ -5,9 +5,13 @@ import logo from "../../../assets/images/logo.png";
 import { connect } from "react-redux";
 import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
+import fire from "../../../utils/config/fire";
+
 import { fetchResendEmail } from ".././../../redux/actions/userList.action";
+import { email } from "redux-form-validators";
 
 export class ConfirmEmail extends Component {
+  email = "abc";
   constructor(props) {
     super(props);
     this.state = {
@@ -18,11 +22,38 @@ export class ConfirmEmail extends Component {
     window.location.href = "/register";
   };
 
-  resendEmail = () => {
-    var data = this.props.saveUser.data.Data.Email;
-    this.state.email = data;
-    this.props.fetchResendEmail(data);
-  };
+  // resendEmail = () => {
+  //   var data = this.props.saveUser.data.Data.Email;
+  //   this.state.email = data;
+  //   this.props.fetchResendEmail(data);
+  // };
+  componentWillMount() {
+    var app = fire;
+    var auth = app.auth();
+    if (auth.currentUser) {
+      this.email = auth.currentUser.email;
+      sessionStorage.setItem("userEmail", auth.currentUser.email);
+    } else {
+      this.email = sessionStorage.getItem("userEmail");
+    }
+
+    var mode = new URLSearchParams(window.location.search).get("mode");
+    var actionCode = new URLSearchParams(window.location.search).get("oobCode");
+    var continueUrl = new URLSearchParams(window.location.search).get(
+      "continueUrl"
+    );
+    var lang = new URLSearchParams(window.location.search).get("lang") || "en";
+    if (actionCode && mode)
+      this.handleVerifyEmail(auth, actionCode, continueUrl, lang);
+  }
+
+  handleVerifyEmail(auth, actionCode, continueUrl, lang) {
+    fire
+      .auth()
+      .applyActionCode(actionCode)
+      .then(function (resp) {})
+      .catch(function (error) {});
+  }
 
   render() {
     return (
@@ -42,10 +73,7 @@ export class ConfirmEmail extends Component {
                 <h3>Confirm your email address</h3>
                 <p>
                   We sent a confirmation email to:<br></br>
-                  <h2>
-                    {this.props.saveUser.data &&
-                      this.props.saveUser.data.Data.Email}
-                  </h2>
+                  <h2>Email:- {this.email}</h2>
                 </p>
                 <p>
                   Check your email and click on the confirmation link to
@@ -54,7 +82,7 @@ export class ConfirmEmail extends Component {
                 <Button
                   type="submit"
                   className="btn btn-primary mr-4"
-                  onClick={this.resendEmail}
+                  onClick={this.handleVerifyEmail}
                 >
                   Resend Mail
                 </Button>

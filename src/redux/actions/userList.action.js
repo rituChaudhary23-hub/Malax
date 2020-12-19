@@ -42,7 +42,7 @@ export function userDetail(data, location) {
       jwt: state["persist"]["c_temp_user"]["token"]
     }).then(async (data) => {
       dispatch(stopLoading());
-      if (data.data.Success) {
+      if (data.data.status) {
         dispatch(saveDetails(data));
         toast.success(data["data"]["message"]);
 
