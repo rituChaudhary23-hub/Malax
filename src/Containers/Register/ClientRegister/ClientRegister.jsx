@@ -5,7 +5,6 @@ import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
 import fire from "../../../utils/config/fire";
 import { toast } from "../../../Components/Toast/Toast";
-
 import { userDetail } from ".././../../redux/actions/userList.action";
 import {
   fetchCategoryName,
@@ -14,29 +13,23 @@ import {
 
 class ClientRegister extends Component {
   golbalID = 0;
-  dropValcode: any;
   constructor(props) {
     super(props);
     this.state = {
-      zip_code: {
-        name: "ZipCode",
-      },
-      zipCode: "",
       fields: {
         email: "",
         password: "",
         conPassword: "",
         firstName: "",
         lastName: "",
-        zipCode: "",
+
         accountTypeId: 2,
         id: "",
         userVerified: "",
         userTypeId: "client",
         createdBy: "",
         createdDate: "",
-
-
+        zipCode: "",
       },
       errors: {
         email: "",
@@ -47,34 +40,6 @@ class ClientRegister extends Component {
       },
     };
   }
-
-  componentDidMount = async () => {
-    //   var data = await this.props.fetchCategoryName(this.state.name);
-    //   let courseData;
-    //   if (this.props.categoryName)
-    //     courseData = this.props.categoryName.filter(
-    //       (item) => item.CodeName == this.state.CodeName
-    //     )[0];
-    //   this.golbalID = courseData.GlobalCodeId;
-
-    //zip-code-globally
-    var zipData = await this.props.fetchCategoryName(this.state.zip_code.name);
-    if (zipData != false) {
-      this.dropValcode = zipData.data.Data.globalCodeData;
-    }
-  };
-
-  // signupMalax = async (e, data) => {
-  //   e.preventDefault();
-  //   if (this.handleValidation()) {
-  //     this.state.fields.AccountTypeId = this.golbalID;
-  //     var res = await this.props.userDetail(this.state.fields);
-  //     if (res == true) {
-  //       this.props.history.push("/confirm-email");
-  //     } else {
-  //     }
-  //   }
-  // };
 
   signupMalax = async (e) => {
     e.preventDefault();
@@ -98,28 +63,25 @@ class ClientRegister extends Component {
             handleCodeInApp: true,
           };
           fire
-            // .auth()
-            // .sendSignInLinkToEmail(this.state.fields.email, actionCodeSettings);
             .auth()
-            .currentUser.sendEmailVerification(actionCodeSettings).then(async(res) => {
-          var localId = u.user.uid;
-          this.state.fields.id = localId;
-          var verify = auth.currentUser.emailVerified;
-          this.state.fields.userVerified = verify;
-          debugger
-          var nameCreated = this.state.fields.firstName;
-          this.state.fields.createdBy = nameCreated;
-            debugger;
-          var res = await this.props.userDetail(this.state.fields);
-          if (res == true) {
-            this.props.history.push("/confirm-email");
-          } else {
-          }
+            .currentUser.sendEmailVerification(actionCodeSettings)
+            .then(async (res) => {
+              var localId = u.user.uid;
+              this.state.fields.id = localId;
+              var verify = auth.currentUser.emailVerified;
+              this.state.fields.userVerified = verify;
+              var nameCreated = this.state.fields.firstName;
+              this.state.fields.createdBy = nameCreated;
+              var res = await this.props.userDetail(this.state.fields);
+              if (res == true) {
+                this.props.history.push("/confirm-email");
+              } else {
+              }
             })
-            .catch(err => {
-          console.log(err);
-        });
-      })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
         .catch((err) => {});
     }
   };
@@ -212,17 +174,21 @@ class ClientRegister extends Component {
   }
 
   //zip-code
-  checkZipCode = (e) => {
+  checkZipCode = async (e) => {
     e.preventDefault();
-    var _zip = this.dropValcode.find((x) => x.CodeName == e.target.value);
-    if (_zip != undefined || _zip != null) {
-      this.state.fields.zipCode = _zip.GlobalCodeId;
+    var code = e.target.value;
+    var resCode = await this.props.fetchValidateZip(code);
+    if (resCode.data.status == 200) {
+      this.setState({ code: this.state.fields.zipCode });
+      this.state.fields.zipCode = code;
     } else {
       toast.error(
         "Malax is not yet available in your area. You can submit this form, and we will be happy to notify you when Malax is available in your ZIP code."
       );
+    
     }
   };
+
   handleSignupKeyup(field, e) {
     this.setState((prevState) => {
       let errors = Object.assign({}, prevState.errors);

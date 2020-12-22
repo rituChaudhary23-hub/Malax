@@ -2,13 +2,9 @@ import React, { Component } from "react";
 import { Label, Button } from "semantic-ui-react";
 import logIn from "../../../assets/images/logIn.png";
 import logo from "../../../assets/images/logo.png";
-import { connect } from "react-redux";
-import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
 import fire from "../../../utils/config/fire";
-
-import { fetchResendEmail } from ".././../../redux/actions/userList.action";
-import { email } from "redux-form-validators";
+import { toast } from "react-toastify";
 
 export class ConfirmEmail extends Component {
   email = "abc";
@@ -22,17 +18,13 @@ export class ConfirmEmail extends Component {
     window.location.href = "/register";
   };
 
-  // resendEmail = () => {
-  //   var data = this.props.saveUser.data.Data.Email;
-  //   this.state.email = data;
-  //   this.props.fetchResendEmail(data);
-  // };
   componentWillMount() {
     var app = fire;
     var auth = app.auth();
     if (auth.currentUser) {
       this.email = auth.currentUser.email;
       sessionStorage.setItem("userEmail", auth.currentUser.email);
+      sessionStorage.setItem("currentUser", auth.currentUser);
     } else {
       this.email = sessionStorage.getItem("userEmail");
     }
@@ -55,6 +47,24 @@ export class ConfirmEmail extends Component {
       .catch(function (error) {});
   }
 
+  resendEmail = async (e) => {
+    e.preventDefault();
+    var actionCode = "ABC123";
+    var continueUrl = "https://mydemo-863e7.firebaseapp.com/__/auth/action";
+    var lang = "en";
+
+    var actionCodeSettings = {
+      url: "https://mydemo-863e7.firebaseapp.com",
+
+      handleCodeInApp: true,
+    };
+
+    fire.auth().onAuthStateChanged(async function (user) {
+      var verify = await user.sendEmailVerification();
+      toast.success("We sent a confirmation email.");
+    });
+  };
+
   render() {
     return (
       <section className="log-in">
@@ -73,7 +83,7 @@ export class ConfirmEmail extends Component {
                 <h3>Confirm your email address</h3>
                 <p>
                   We sent a confirmation email to:<br></br>
-                  <h2>Email:- {this.email}</h2>
+                  <h2>{this.email}</h2>
                 </p>
                 <p>
                   Check your email and click on the confirmation link to
@@ -82,7 +92,7 @@ export class ConfirmEmail extends Component {
                 <Button
                   type="submit"
                   className="btn btn-primary mr-4"
-                  onClick={this.handleVerifyEmail}
+                  onClick={this.resendEmail}
                 >
                   Resend Mail
                 </Button>
@@ -102,18 +112,4 @@ export class ConfirmEmail extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    saveUser: state.userList.saveUser,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchResendEmail: (data) => dispatch(fetchResendEmail(data)),
-  };
-};
-
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(ConfirmEmail)
-);
+export default withRouter(ConfirmEmail);

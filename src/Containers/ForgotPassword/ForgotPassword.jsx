@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {  reduxForm } from "redux-form";
+import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
 import { Button, Form, Input } from "semantic-ui-react";
 import logo from "../../assets/images/logo.png";
 import signUp from "../../assets/images/signUp.png";
-import {userForgotPassword} from "../../redux/actions/userList.action"
+import { userForgotPassword } from "../../redux/actions/userList.action";
+import fire from "../../utils/config/fire";
 
 class ForgotPassword extends Component {
   constructor(props) {
@@ -23,15 +24,15 @@ class ForgotPassword extends Component {
     window.location.href = "/";
   }
 
-  
-  forgotPassword = e => {
+  forgotPassword = (e) => {
     e.preventDefault();
-
-    if (this.handleValidation()) {
-        this.props.userForgotPassword(this.state.fields);
-    }
-    
-};
+    var auth = fire.auth();
+    var emailAddress = "ritudumyanwins@gmail.com";
+    auth
+      .sendPasswordResetEmail(emailAddress)
+      .then(function () {})
+      .catch(function (error) {});
+  };
 
   setFormValue(field, e) {
     let fields = this.state.fields;
@@ -130,7 +131,6 @@ class ForgotPassword extends Component {
                     disabled={this.state.fields.email.length <= 5}
                     className="btn btn-primary register mr-4"
                     onClick={this.forgotPassword}
-                  
                   >
                     Reset Password
                   </Button>
@@ -164,18 +164,15 @@ class ForgotPassword extends Component {
   }
 }
 
-
 const mapStateToProps = (state, ownProps) => {
   return {
-   userForgotPassword: state.userList.userForgotPassword,
- 
+    userForgotPassword: state.userList.userForgotPassword,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    userForgotPassword: data => dispatch(userForgotPassword(data)),
-
+    userForgotPassword: (data) => dispatch(userForgotPassword(data)),
   };
 };
 

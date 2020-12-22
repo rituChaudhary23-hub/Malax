@@ -1,9 +1,6 @@
 import { UserService } from "../Services/UserService";
 import { toast } from "../../Components/Toast/Toast";
 import { startLoading, stopLoading } from "./loading.action";
-import { push } from "react-router-redux";
-import { history } from "react-router";
-
 
 export const actionTypes = {
   SUCCESS_REGISTER: "SUCCESS_REGISTER",
@@ -39,7 +36,7 @@ export function userDetail(data, location) {
 
     let state = getState();
     return UserService.register(data, {
-      jwt: state["persist"]["c_temp_user"]["token"]
+      jwt: state["persist"]["c_temp_user"]["token"],
     }).then(async (data) => {
       dispatch(stopLoading());
       if (data.data.status) {
@@ -52,7 +49,6 @@ export function userDetail(data, location) {
         return false;
       }
     });
-
   };
 }
 
@@ -92,7 +88,6 @@ export function fetchResetPassword(data) {
     return UserService.resetPassword(data, {})
       .then(async (data) => {
         if (data.data.Success) {
-
           dispatch(stopLoading());
 
           dispatch(userResetPassword(data));

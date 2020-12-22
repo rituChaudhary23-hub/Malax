@@ -14,10 +14,14 @@ const globalCategory = (data) => {
 };
 //validate-zip
 const validateZip = (data) => {
-  // var zipData = {
-  //   zipCode: data,
-  // };
-  return fetch("post", `${API_HOST}/GlobalCodesAPI/ValidateZipCode`, data);
+  var zipData = {
+    zipcode: data,
+  };
+  return fetch(
+    "post",
+    `${API_HOST}/GetZipCode?code=eKxInUHXYWvgpDsNgc7Bqe0v3aq65aZFSZqWn2U7Ck0JevDniCUD5Q==`,
+    JSON.stringify(zipData)
+  );
 };
 
 export const GlobalService = {

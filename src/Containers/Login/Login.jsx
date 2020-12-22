@@ -34,13 +34,13 @@ class Login extends Component {
       loading: false,
     };
   }
-  componentDidMount = async () => {
-    var user = sessionStorage.getItem("savedUser");
-    var data = await this.props.fetchCategoryName(this.state.name);
-    if (data != false) {
-      this.dropVal = data.data.Data.globalCodeData;
-    }
-  };
+  // componentDidMount = async () => {
+  //   var user = sessionStorage.getItem("savedUser");
+  //   var data = await this.props.fetchCategoryName(this.state.name);
+  //   if (data != false) {
+  //     this.dropVal = data.data.Data.globalCodeData;
+  //   }
+  // };
 
   // handleChanges = async (e, value) => {
   //   var loginAs = e.target.outerText;
