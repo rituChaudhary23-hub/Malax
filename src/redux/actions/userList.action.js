@@ -52,6 +52,8 @@ export function userDetail(data, location) {
   };
 }
 
+
+
 //forgot-password
 export function userForgotPassword(data, history) {
   return (dispatch, getState) => {

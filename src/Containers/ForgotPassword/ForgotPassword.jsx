@@ -27,9 +27,16 @@ class ForgotPassword extends Component {
   forgotPassword = (e) => {
     e.preventDefault();
     var auth = fire.auth();
+
+    var actionCodeSettings = {
+      url: "https://mydemo-863e7.firebaseapp.com",
+      handleCodeInApp: true,
+      mode: "resetPassword",
+    };
+
     var emailAddress = "ritudumyanwins@gmail.com";
     auth
-      .sendPasswordResetEmail(emailAddress)
+      .sendPasswordResetEmail(emailAddress, actionCodeSettings)
       .then(function () {})
       .catch(function (error) {});
   };

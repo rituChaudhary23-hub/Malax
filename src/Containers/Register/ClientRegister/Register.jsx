@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import { Tab } from "semantic-ui-react";
+import {Button} from "semantic-ui-react";
 import { Link } from "react-router-dom";
-
-import TheparistRegister from "../TheparistRegister/TheparistRegister";
-import ClientRegister from "../ClientRegister/ClientRegister";
 import logIn from "../../../assets/images/logIn.png";
 import logo from "../../../assets/images/logo.png";
+// import { Button } from "bootstrap";
 
 class Register extends Component {
   constructor(props) {
@@ -13,25 +11,33 @@ class Register extends Component {
     this.state = {};
   }
 
+  clientRegister = () => {
+    window.location.href = "/client-register";
+
+  }
+  therapistRegister = () => {
+    window.location.href = "/therapist-register";
+
+  }
   render() {
-    const panes = [
-      {
-        menuItem: "Client",
-        render: () => (
-          <Tab.Pane attached={false}>
-            <ClientRegister />
-          </Tab.Pane>
-        ),
-      },
-      {
-        menuItem: "Theparist",
-        render: () => (
-          <Tab.Pane attached={false}>
-            <TheparistRegister />
-          </Tab.Pane>
-        ),
-      },
-    ];
+    // const panes = [
+    //   {
+    //     menuItem: "Client",
+    //     render: () => (
+    //       <Tab.Pane attached={false}>
+    //         <ClientRegister />
+    //       </Tab.Pane>
+    //     ),
+    //   },
+    //   {
+    //     menuItem: "Theparist",
+    //     render: () => (
+    //       <Tab.Pane attached={false}>
+    //         <TheparistRegister />
+    //       </Tab.Pane>
+    //     ),
+    //   },
+    // ];
     return (
       <section className="log-in">
         <div className="container">
@@ -52,7 +58,11 @@ class Register extends Component {
                   Already registered?
                   <Link to="/"> Click here to Login</Link>
                 </p>
-                <Tab menu={{ secondary: true }} panes={panes} />
+                  {/* <Tab menu={{ secondary: true }} panes={panes} /> */}
+                  <Button onClick={this.clientRegister}>
+                    Register as Client</Button>
+<br/>
+                  <Button onClick={this.therapistRegister}>Register as Therapist</Button>
               </div>
             </div>
           </div>

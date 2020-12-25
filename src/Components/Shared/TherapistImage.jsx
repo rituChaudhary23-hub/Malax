@@ -31,32 +31,32 @@ class TherapistImage extends Component {
       },
     };
   }
-  componentDidMount = async (data1) => {
-    var data = await this.props.fetchCategoryName(this.state.name);
-    if (data != false) {
-      this.dropVal = data.data.Data.globalCodeData;
+  // componentDidMount = async (data1) => {
+  //   var data = await this.props.fetchCategoryName(this.state.name);
+  //   if (data != false) {
+  //     this.dropVal = data.data.Data.globalCodeData;
 
-      //get-IdPhoto-globalID
-      var globalPhoto = this.dropVal.filter((x) => x.CodeName == "IDPhoto")[0]
-        .GlobalCodeId;
-    }
+  //     //get-IdPhoto-globalID
+  //     var globalPhoto = this.dropVal.filter((x) => x.CodeName == "IDPhoto")[0]
+  //       .GlobalCodeId;
+  //   }
 
-    //get-identity-image
-    var data1 = this.props.user.Data.TherapistId;
-    this.state.fields.therapistId = data1;
-    var aa = await this.props.getIdentityImage(data1);
+  //   //get-identity-image
+  //   var data1 = this.props.user.Data.TherapistId;
+  //   this.state.fields.therapistId = data1;
+  //   var aa = await this.props.getIdentityImage(data1);
 
-    if (this.photoImg) {
-      this.photoImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(
-        (x) => x.TherapistImageTypeId == globalPhoto
-      )[0].TherapistImage;
-    } else {
-      if (this.props.currentImage.data.Data.TherapistIdentityImages.length > 0)
-        this.photoImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(
-          (x) => x.TherapistImageTypeId == globalPhoto
-        )[0].TherapistImage;
-    }
-  };
+  //   if (this.photoImg) {
+  //     this.photoImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(
+  //       (x) => x.TherapistImageTypeId == globalPhoto
+  //     )[0].TherapistImage;
+  //   } else {
+  //     if (this.props.currentImage.data.Data.TherapistIdentityImages.length > 0)
+  //       this.photoImg = this.props.currentImage.data.Data.TherapistIdentityImages.filter(
+  //         (x) => x.TherapistImageTypeId == globalPhoto
+  //       )[0].TherapistImage;
+  //   }
+  // };
   close = () => {
     this.props.toggle();
   };

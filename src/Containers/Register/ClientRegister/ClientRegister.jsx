@@ -6,31 +6,30 @@ import { withRouter } from "react-router";
 import fire from "../../../utils/config/fire";
 import { toast } from "../../../Components/Toast/Toast";
 import { userDetail } from ".././../../redux/actions/userList.action";
-import {
-  fetchCategoryName,
-  fetchValidateZip,
-} from ".././../../redux/actions/global.action";
+import { fetchGlobalCodes } from ".././../../redux/actions/global.action";
 
 class ClientRegister extends Component {
-  golbalID = 0;
+  getzipcode: any;
+  dropValcode: any;
   constructor(props) {
     super(props);
     this.state = {
+      tablename:"codes",
       fields: {
+        id: "",
         email: "",
         password: "",
         conPassword: "",
         firstName: "",
         lastName: "",
-
         accountTypeId: 2,
-        id: "",
         userVerified: "",
-        userTypeId: "client",
-        createdBy: "",
-        createdDate: "",
+        userTypeId:"clients",
+        modifiedBy: "",
+        modifiedDate: "",
         zipCode: "",
       },
+
       errors: {
         email: "",
         password: "",
@@ -40,6 +39,14 @@ class ClientRegister extends Component {
       },
     };
   }
+  componentWillMount = async () => {
+    var zipData = await this.props.fetchGlobalCodes(this.state.tablename)
+    if (zipData != false) {
+      this.dropValcode = zipData.data.data;
+     this.getzipcode = this.dropValcode[0].markets[0].zipCodes
+    }
+  }
+
 
   signupMalax = async (e) => {
     e.preventDefault();
@@ -59,7 +66,7 @@ class ClientRegister extends Component {
           console.log(u);
           var actionCodeSettings = {
             url: "https://mydemo-863e7.firebaseapp.com",
-
+            mode: "verifyEmail",
             handleCodeInApp: true,
           };
           fire
@@ -71,7 +78,7 @@ class ClientRegister extends Component {
               var verify = auth.currentUser.emailVerified;
               this.state.fields.userVerified = verify;
               var nameCreated = this.state.fields.firstName;
-              this.state.fields.createdBy = nameCreated;
+              this.state.fields.modifiedBy = nameCreated;
               var res = await this.props.userDetail(this.state.fields);
               if (res == true) {
                 this.props.history.push("/confirm-email");
@@ -170,22 +177,21 @@ class ClientRegister extends Component {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
-    // this.props.fetchValidateZip(this.state.zipCode)
   }
 
   //zip-code
   checkZipCode = async (e) => {
     e.preventDefault();
     var code = e.target.value;
-    var resCode = await this.props.fetchValidateZip(code);
-    if (resCode.data.status == 200) {
-      this.setState({ code: this.state.fields.zipCode });
-      this.state.fields.zipCode = code;
+    var zipStatus = this.getzipcode.filter(x => x == code);
+    if (zipStatus.length > 0) {
+      this.state.fields.zipCode = zipStatus.toString();
+      
+
     } else {
-      toast.error(
+       toast.error(
         "Malax is not yet available in your area. You can submit this form, and we will be happy to notify you when Malax is available in your ZIP code."
-      );
-    
+      ); 
     }
   };
 
@@ -201,6 +207,7 @@ class ClientRegister extends Component {
     const { submitting } = this.props;
     return (
       <div className="log-in-form">
+        
         <Form autoComplete="off">
           <div className="form-group">
             <label>Email</label>
@@ -347,8 +354,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     userDetail: (data, history) => dispatch(userDetail(data, history)),
-    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
-    fetchValidateZip: (data) => dispatch(fetchValidateZip(data)),
+    fetchGlobalCodes: (data) => dispatch(fetchGlobalCodes(data)),
   };
 };
 

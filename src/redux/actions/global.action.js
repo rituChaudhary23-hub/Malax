@@ -72,3 +72,29 @@ export function fetchValidateZip(data) {
     // });
   };
 }
+
+
+
+export function fetchGlobalCodes(data) {
+  return (dispatch, getState) => {
+    // dispatch(startLoading());
+    let state = getState();
+    return GlobalService.getGlobalCodes(data, {}).then(async (data) => {
+      if (data.data.status) {
+        dispatch(stopLoading());
+        // dispatch(globalZipCode(data));
+        return data;
+      } else {
+        toast.error(data.data.message);
+        return false;
+      }
+    });
+    // .catch((error) => {
+    //   if (error) {
+    //     toast.error(error(data.Data.Message));
+    //     // toast.error(error["data"]["Message"]);
+    //   }
+    //   dispatch(stopLoading());
+    // });
+  };
+}

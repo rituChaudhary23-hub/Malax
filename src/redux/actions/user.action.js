@@ -51,7 +51,7 @@ export function loginUser(data, value) {
     dispatch(startLoading());
     return UserService.login(data)
       .then(async (user) => {
-        if (user.data.Success) {
+        if (user.data.status) {
           dispatch(
             loginUserTempPersist({ token: user["data"]["Data"]["Token"] })
           );
@@ -84,5 +84,83 @@ export function loginUser(data, value) {
         }
         dispatch(stopLoading());
       });
+  };
+}
+//client-login
+
+export function fetchClientLogin(data) {
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return UserService.clientLogin(data, {})
+      .then(async (user) => {
+        if (user.data.status) {
+          dispatch(
+            loginUserTempPersist({ token: user["data"]["Data"]["Token"] })
+          );
+
+          sessionStorage.setItem("savedUser", user.data.Data.Token);
+
+          dispatch(stopLoading());
+
+          toast.success(user.data.Message);
+          dispatch(loginUserSuccess(user["data"]));
+
+          dispatch(loginUserPersist({ token: user["data"]["Token"] }));
+
+          dispatch(loginUserPersist({ token: user["data"]["Token"] }));
+
+          return true;
+        } else {
+          toast.error(user.data.Message);
+          dispatch(stopLoading());
+          return false;
+        }
+      })
+      .catch((error) => {
+        return false;
+     
+        if (error) {
+          // toast.error(error["data"]["Message"]);
+          // toast.error(data.Message)
+          toast.error(error.Message);
+        }
+        dispatch(stopLoading());
+      });
+  };
+}
+
+
+//therapist-login
+export function fetchTherapistLogin(data) {
+  return (dispatch, getState) => {
+    dispatch(startLoading());
+    let state = getState();
+    return UserService.therapistLogin(data, {})
+      .then(async (user) => {
+        if (user.data.status) {
+          dispatch(
+            loginUserTempPersist({ token: user["data"]["Data"]["Token"] })
+          );
+
+          sessionStorage.setItem("savedUser", user.data.Data.Token);
+
+          dispatch(stopLoading());
+
+          toast.success(user.data.Message);
+          dispatch(loginUserSuccess(user["data"]));
+
+          dispatch(loginUserPersist({ token: user["data"]["Token"] }));
+
+          dispatch(loginUserPersist({ token: user["data"]["Token"] }));
+
+          return true;
+        } else {
+          toast.error(user.data.Message);
+          dispatch(stopLoading());
+          return false;
+        }
+      })
+
   };
 }

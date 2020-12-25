@@ -24,7 +24,20 @@ const validateZip = (data) => {
   );
 };
 
+//globally-data
+const getGlobalCodes = (data) => {
+  var globalData = {
+    tablename: data
+  }
+  let code =  JSON.stringify(globalData)
+  return fetch(
+    "post",
+    `${API_HOST}/GetCodes?code=aF2XYacnPXqRddqPkLKyBIvPrMU2IfVQ2EMWU/KV2WzqJk8rCaQSqg==`,
+   code
+  );
+};
+
 export const GlobalService = {
   globalCategory,
-  validateZip,
+  validateZip,getGlobalCodes
 };

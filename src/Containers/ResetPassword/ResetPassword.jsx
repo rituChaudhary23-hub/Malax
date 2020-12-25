@@ -5,18 +5,22 @@ import { withRouter } from "react-router";
 import { Button, Form, Input } from "semantic-ui-react";
 import logo from "../../assets/images/logo.png";
 import signUp from "../../assets/images/signUp.png";
+import fire from "../../utils/config/fire";
 import { fetchResetPassword } from "../../redux/actions/userList.action";
 
 class ResetPassword extends Component {
+  actionCode = "";
+  continueUrl = "";
+  email = "";
+
   constructor(props) {
     super(props);
     this.state = {
       fields: {
-        password: "",
-        token: "",
+        newPassword: "",
       },
       errors: {
-        password: "",
+        newPassword: "",
         conPassword: "",
       },
     };
@@ -24,14 +28,26 @@ class ResetPassword extends Component {
   routeChange() {
     window.location.href = "/";
   }
+
   resetPassword = (e) => {
     e.preventDefault();
-    this.state.fields.token = new URLSearchParams(
-      this.props.location.search
-    ).get("Token");
+
+    var auth = fire.auth();
+    var _actionCode = window.location.search.split("&")[2].split("=")[1];
+    var _continueUrl = window.location.search.split("&")[3].split("=")[1];
+    var _pass = this.state.fields.newPassword;
+    var lang = "en";
     if (this.handleValidation()) {
-      this.props.fetchResetPassword(this.state.fields);
-      this.props.history.push("/");
+      var accountEmail;
+      auth.verifyPasswordResetCode(_actionCode).then(function (email) {
+        var accountEmail = email;
+        if (email) {
+          auth
+            .confirmPasswordReset(_actionCode, _pass)
+            .then(function (resp) {})
+            .catch(function (error) {});
+        }
+      });
     }
   };
 
@@ -50,22 +66,22 @@ class ResetPassword extends Component {
     let formIsValid = true;
 
     //Password
-    if (!fields["password"]) {
+    if (!fields["newPassword"]) {
       formIsValid = false;
-      errors["password"] = "Password is required.";
+      errors["newPassword"] = "Password is required.";
     }
 
     if (
-      typeof fields["password"] !== "undefined" &&
-      fields["password"] !== ""
+      typeof fields["newPassword"] !== "undefined" &&
+      fields["newPassword"] !== ""
     ) {
       if (
-        !fields["password"].match(
+        !fields["newPassword"].match(
           /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
         )
       ) {
         formIsValid = false;
-        errors["password"] =
+        errors["newPassword"] =
           "Password should have one uppercase letter one number and one special character,minimum 8 characters";
       }
     }
@@ -75,7 +91,7 @@ class ResetPassword extends Component {
       typeof fields["conPassword"] !== "undefined" &&
       fields["conPassword"] !== ""
     ) {
-      if (fields["conPassword"] !== fields["password"]) {
+      if (fields["conPassword"] !== fields["newPassword"]) {
         formIsValid = false;
         errors["conPassword"] = "Passwords don't match";
       }
@@ -93,7 +109,7 @@ class ResetPassword extends Component {
     this.setState({ fields });
   }
   render() {
-    const { handleSubmit, pristine, reset, submitting } = this.props;
+    const { submitting } = this.props;
     return (
       <section className="log-in">
         <div className="container">
@@ -116,15 +132,18 @@ class ResetPassword extends Component {
                             type="password"
                             placeholder="Password"
                             margin={"normal"}
-                            onChange={this.setFormValue.bind(this, "password")}
+                            onChange={this.setFormValue.bind(
+                              this,
+                              "newPassword"
+                            )}
                             onKeyUp={this.handleSignupKeyup.bind(
                               this,
-                              "password"
+                              "newPassword"
                             )}
                           />
 
                           <span style={{ color: "red" }}>
-                            {this.state.errors["password"]}
+                            {this.state.errors["newPassword"]}
                           </span>
                         </Form.Field>
                       </div>

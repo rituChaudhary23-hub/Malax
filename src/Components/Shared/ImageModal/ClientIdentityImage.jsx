@@ -26,12 +26,12 @@ class ClientIdentityImage extends Component {
       },
     };
   }
-  componentDidMount = async (data1) => {
-    var data = await this.props.fetchCategoryName(this.state.name);
-    if (data != false) {
-      this.dropVal = data.data.Data.globalCodeData;
-    }
-  };
+  // componentDidMount = async (data1) => {
+  //   var data = await this.props.fetchCategoryName(this.state.name);
+  //   if (data != false) {
+  //     this.dropVal = data.data.Data.globalCodeData;
+  //   }
+  // };
   close = () => {
     this.props.toggle();
   };

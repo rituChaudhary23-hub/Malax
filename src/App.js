@@ -8,6 +8,8 @@ import { PrivateRoute, PublicRoute } from "./Routes";
 import HomePage from "./Components/HomePage";
 import Login from "./Containers/Login/Login";
 import Register from "./Containers/Register/ClientRegister/Register";
+import ClientRegister from "./Containers/Register/ClientRegister/ClientRegister"
+import TheparistRegister from "./Containers/Register/TheparistRegister/TheparistRegister"
 import ForgotPassword from "./Containers/ForgotPassword/ForgotPassword";
 import ResetPassword from "./Containers/ResetPassword/ResetPassword";
 import ClientProfile from "./Containers/ClientProfile/ClientProfile";
@@ -18,7 +20,7 @@ import ServiceRequest from "./Containers/Service/ServiceRequest/ServiceRequest";
 import Profile from "./Containers/TheparistProfile/TheparistProfile";
 import UpdateTheparistProfile from "./Containers/TheparistProfile/UpdateTheparistProfile";
 import ConfirmEmail from "./Containers/Register/ConfirmEmail/ConfirmEmail";
-import TheparistRegister from "./Containers/Register/TheparistRegister/TheparistRegister";
+// import TheparistRegister from "./Containers/Register/TheparistRegister/TheparistRegister";
 import Payment from "./Containers/Service/Payment/Payment";
 
 //admin
@@ -38,6 +40,10 @@ class App extends Component {
             <Route component={ForgotPassword} path="/forgot-password" />
 
             <Route component={ResetPassword} path="/reset-password" />
+            
+            <Route component={ClientRegister} path="/client-register" />
+           
+            <Route component={TheparistRegister} path="/therapist-register" />
 
             <Route
               path="/client-profile"

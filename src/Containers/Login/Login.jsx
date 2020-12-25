@@ -1,17 +1,15 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { history } from "../../store/history";
 import signUp from "../../assets/images/signUp.png";
 import logo from "../../assets/images/logo.png";
-import { reduxForm, Field } from "redux-form";
-import { required, email } from "redux-form-validators";
-import { loginUser } from "../../redux/actions/user.action";
+import { email } from "redux-form-validators";
+import { fetchClientLogin,fetchTherapistLogin } from "../../redux/actions/user.action";
 import { connect } from "react-redux";
 import { fetchCategoryName } from "../../redux/actions/global.action";
 import fire from "../../utils/config/fire";
-import { Dropdown, Menu, Button, Form, Input } from "semantic-ui-react";
-import loading from "../../redux/reducers/loading.reducer";
+import { Button, Form, Input } from "semantic-ui-react";
 import { toast } from "../../Components/Toast/Toast";
+
 
 class Login extends Component {
   golbalID = 0;
@@ -22,6 +20,7 @@ class Login extends Component {
       name: "UserAccountTypes",
       CodeName: "Therapist ",
       CodeName: "Client",
+      id: "",
       fields: {
         email: "",
         password: "",
@@ -60,10 +59,46 @@ class Login extends Component {
   //   }
   //  // e.target.className.replace('active','')
   // };
+  
+  handleVerifyEmail(auth, actionCode, continueUrl, lang) {
+    fire
+      .auth()
+      .applyActionCode(actionCode)
+      .then(function (resp) {})
+      .catch(function (error) {});
+  }
+
+
+  componentWillMount() {
+    if (document.URL.indexOf("resetPassword") > 0) {
+      window.location.pathname = "reset-password";
+    }
+    else if (document.URL.indexOf("verifyEmail")) {
+      var app = fire;
+      var auth = app.auth();
+      if (auth.currentUser) {
+        this.email = auth.currentUser.email;
+        sessionStorage.setItem("userEmail", auth.currentUser.email);
+        sessionStorage.setItem("currentUser", auth.currentUser);
+      } else {
+        this.email = sessionStorage.getItem("userEmail");
+      }
+  
+      var mode = new URLSearchParams(window.location.search).get("mode");
+      var actionCode = new URLSearchParams(window.location.search).get("oobCode");
+      var continueUrl = new URLSearchParams(window.location.search).get(
+        "continueUrl"
+      );
+      var lang = new URLSearchParams(window.location.search).get("lang") || "en";
+      if (actionCode && mode)
+        this.handleVerifyEmail(auth, actionCode, continueUrl, lang);
+    }
+  }
 
   handleChanges = async (e) => {
     e.preventDefault();
-    let userEntity = e.target.outerText;
+    debugger
+    // let userEntity = e.target.outerText;
     fire
       .auth()
       .signInWithEmailAndPassword(
@@ -77,12 +112,20 @@ class Login extends Component {
 
           toast.error("Please verify your email first.");
           return;
-        } else if (userEntity == "LogIn As Client") {
-          this.props.history.push("/client-profile");
-        } else if (userEntity == "LogIn As Therapist") {
-          this.props.history.push("/theparist-profile");
-        } else {
-          this.props.history.push("/dashboard");
+        } else{
+          // if (userEntity == "LogIn As Client") {
+            var localId = u.user.uid;
+            this.state.id = localId;
+            this.props.fetchClientLogin(this.state.id)
+            this.props.history.push("/client-profile");
+          // } else if (userEntity == "LogIn As Therapist") {
+          //   var localId = u.user.uid;
+          //   this.state.id = localId;
+          //   this.props.fetchTherapistLogin(this.state.id)
+          //   this.props.history.push("/theparist-profile");
+          // } else {
+          //   this.props.history.push("/dashboard");
+          // }
         }
       })
       .catch((err) => {});
@@ -231,7 +274,7 @@ class Login extends Component {
                     </div>
                   </div>
                   <div className="sign-up-button sign-first">
-                    <Dropdown
+                    {/* <Dropdown
                       name="login"
                       type="submit"
                       // disabled={this.state.fields.email.length <= 5}
@@ -242,7 +285,10 @@ class Login extends Component {
                       onChange={this.handleChanges}
                       simple
                       item
-                    />
+                    /> */}
+                    <Button onClick={this.handleChanges}>
+                      Login
+                    </Button>
                   </div>
                 </Form>
               </div>
@@ -277,8 +323,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoginUser: (values, history) => dispatch(loginUser(values, history)),
+    fetchClientLogin: (values, history) => dispatch(fetchClientLogin(values, history)),
     fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+    fetchTherapistLogin: (data) => dispatch(fetchTherapistLogin(data)),
   };
 };
 

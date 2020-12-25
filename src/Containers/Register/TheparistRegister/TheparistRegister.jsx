@@ -1,35 +1,35 @@
 import React, { Component } from "react";
-import { Button, Form, Input, Tab, Label, Dropdown } from "semantic-ui-react";
+import { Button, Form, Input, Dropdown } from "semantic-ui-react";
 import { userDetail } from ".././../../redux/actions/userList.action";
 import { connect } from "react-redux";
 import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
-import { fetchCategoryName } from ".././../../redux/actions/global.action";
+import fire from "../../../utils/config/fire";
+import { fetchGlobalCodes } from ".././../../redux/actions/global.action";
 
 class TheparistRegister extends Component {
-  golbalID = 0;
   MarketOptions = [];
   dropvalMarket: any;
   constructor(props) {
     super(props);
     this.state = {
-      name: "UserAccountTypes",
-      marketName: {
-        name: "Market",
-      },
-      CodeName: "Therapist",
+      tablename: "codes",
       selectedMarket: "",
       fields: {
-        Email: "",
-        Password: "",
+        id: "",
+        email: "",
+        password: "",
         conPassword: "",
-        FirstName: "",
-        LastName: "",
-        ZipCodeId: "0",
-
-        MarketId: 0,
-        AccountTypeId: 0,
+        firstName: "",
+        lastName: "",
+        accountTypeId: 3,
+        userVerified: "",
+        userTypeId: "therapists",
+        modifiedBy: "",
+        modifiedDate: "",
+        marketType: "",
       },
+
       errors: {
         email: "",
         password: "",
@@ -40,51 +40,97 @@ class TheparistRegister extends Component {
     };
   }
 
-  componentDidMount = async () => {
-    var data = await this.props.fetchCategoryName(this.state.name);
-    let courseData;
-    if (this.props.categoryName) {
-      courseData = this.props.categoryName.filter(
-        (item) => item.CodeName == this.state.CodeName
-      )[0];
-      this.golbalID = courseData.GlobalCodeId;
-    }
+  // componentDidMount = async () => {
+  //   var data = await this.props.fetchCategoryName(this.state.name);
+  //   let courseData;
+  //   if (this.props.categoryName) {
+  //     courseData = this.props.categoryName.filter(
+  //       (item) => item.CodeName == this.state.CodeName
+  //     )[0];
+  //     this.golbalID = courseData.GlobalCodeId;
+  //   }
 
-    //market-globally
-    var _therapistMarket = await this.props.fetchCategoryName(
-      this.state.marketName.name
-    );
-    if (_therapistMarket != false) {
-      this.dropvalMarket = _therapistMarket.data.Data.globalCodeData;
-      this.dropvalMarket.forEach((element) => {
-        this.MarketOptions.push({
-          text: element.CodeName,
-          value: element.GlobalCodeId,
-        });
+  //   //market-globally
+  //   var _therapistMarket = await this.props.fetchCategoryName(
+  //     this.state.marketName.name
+  //   );
+  //   if (_therapistMarket != false) {
+  //     this.dropvalMarket = _therapistMarket.data.Data.globalCodeData;
+  //     this.dropvalMarket.forEach((element) => {
+  //       this.MarketOptions.push({
+  //         text: element.CodeName,
+  //         value: element.GlobalCodeId,
+  //       });
+  //     });
+  //   }
+  // };
+
+  componentWillMount = async () => {
+    var marketData = await this.props.fetchGlobalCodes(this.state.tablename);
+    if (marketData != false) {
+      this.dropvalMarket = marketData.data.data;
+      // this.MarketOptions = this.dropvalMarket[0].markets
+    }
+    this.dropvalMarket[0].markets.forEach((element) => {
+      this.MarketOptions.push({
+        value: element.name,
+        text: element.name,
       });
-    }
+    });
+    console.log("this.MarketOptions", this.MarketOptions);
   };
 
-  signupMalax = async (e, data) => {
+  signupMalax = async (e) => {
     e.preventDefault();
+    var app = fire;
+    var auth = app.auth();
+    var actionCode = "ABC123";
+    var continueUrl = "https://mydemo-863e7.firebaseapp.com/__/auth/action";
+    var lang = "en";
     if (this.handleValidation()) {
-      this.state.fields.AccountTypeId = this.golbalID;
-
-      var res = await this.props.userDetail(this.state.fields);
-      if (res == true) {
-        this.props.history.push("/confirm-email");
-      } else {
-      }
+      fire
+        .auth()
+        .createUserWithEmailAndPassword(
+          this.state.fields.email,
+          this.state.fields.password
+        )
+        .then(async (u) => {
+          console.log(u);
+          var actionCodeSettings = {
+            url: "https://mydemo-863e7.firebaseapp.com",
+            mode: "verifyEmail",
+            handleCodeInApp: true,
+          };
+          fire
+            .auth()
+            .currentUser.sendEmailVerification(actionCodeSettings)
+            .then(async (res) => {
+              var localId = u.user.uid;
+              this.state.fields.id = localId;
+              var verify = auth.currentUser.emailVerified;
+              this.state.fields.userVerified = verify;
+              var nameCreated = this.state.fields.firstName;
+              this.state.fields.modifiedBy = nameCreated;
+              var res = await this.props.userDetail(this.state.fields);
+              if (res == true) {
+                this.props.history.push("/confirm-email");
+              } else {
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {});
     }
   };
-
   handleValidation = () => {
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
 
     //Password
-    if (!fields["Password"]) {
+    if (!fields["password"]) {
       formIsValid = false;
       errors["password"] = "Password is required.";
     }
@@ -105,13 +151,13 @@ class TheparistRegister extends Component {
     }
 
     //last_name
-    if (!fields["LastName"]) {
+    if (!fields["lastName"]) {
       formIsValid = false;
       errors["lastName"] = "required*";
     }
 
     //first name
-    if (!fields["FirstName"]) {
+    if (!fields["firstName"]) {
       formIsValid = false;
       errors["firstName"] = "required*";
     }
@@ -121,7 +167,7 @@ class TheparistRegister extends Component {
       typeof fields["conPassword"] !== "undefined" &&
       fields["conPassword"] !== ""
     ) {
-      if (fields["conPassword"] !== fields["Password"]) {
+      if (fields["conPassword"] !== fields["password"]) {
         formIsValid = false;
         errors["conPassword"] = "Passwords don't match";
       }
@@ -131,7 +177,7 @@ class TheparistRegister extends Component {
     }
 
     //Email
-    if (!fields["Email"]) {
+    if (!fields["email"]) {
       formIsValid = false;
       errors["email"] = "Email is required";
     }
@@ -172,16 +218,12 @@ class TheparistRegister extends Component {
   }
 
   //markets-dropdown
-
   changeMarket = (e, { value }) => {
     var infoMarket = value;
     this.setState({
       selectedMarket: infoMarket,
     });
-    var globalMarketId = this.dropvalMarket.filter(
-      (y) => y.GlobalCodeId == infoMarket
-    )[0].GlobalCodeId;
-    this.state.fields.MarketId = globalMarketId;
+    this.state.fields.MarketId = infoMarket;
   };
 
   render() {
@@ -201,8 +243,8 @@ class TheparistRegister extends Component {
                 type="email"
                 placeholder="Email"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "Email")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "Email")}
+                onChange={this.setFormValue.bind(this, "email")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "email")}
                 value={this.state.fields.email}
               />{" "}
               <span style={{ color: "red" }}>{this.state.errors["email"]}</span>
@@ -219,8 +261,8 @@ class TheparistRegister extends Component {
                 type="password"
                 margin={"normal"}
                 placeholder="Password"
-                onChange={this.setFormValue.bind(this, "Password")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "Password")}
+                onChange={this.setFormValue.bind(this, "password")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "password")}
               />
 
               <span style={{ color: "red" }}>
@@ -255,8 +297,8 @@ class TheparistRegister extends Component {
                 name="name"
                 placeholder="First Name"
                 margin={"normal"}
-                onChange={this.setFormValue.bind(this, "FirstName")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "FirstName")}
+                onChange={this.setFormValue.bind(this, "firstName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "firstName")}
               />
               <span style={{ color: "red" }}>
                 {this.state.errors["firstName"]}
@@ -275,25 +317,27 @@ class TheparistRegister extends Component {
                 type="text"
                 margin={"normal"}
                 placeholder="Last Name"
-                onChange={this.setFormValue.bind(this, "LastName")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "LastName")}
+                onChange={this.setFormValue.bind(this, "lastName")}
+                onKeyUp={this.handleSignupKeyup.bind(this, "lastName")}
               />
               <span style={{ color: "red" }}>
                 {this.state.errors["lastName"]}
               </span>
             </Form.Field>
           </div>
-          <div className="form-group">
-            <label for="sel1">Select Market</label>
-            <Dropdown
-              className="form-control"
-              options={this.MarketOptions}
-              placeholder="Select Market"
-              selection
-              value={this.state.selectedMarket}
-              onChange={this.changeMarket}
-            />
-          </div>
+          {this.MarketOptions && (
+            <div className="form-group">
+              <label for="sel1">Select Market</label>
+              <Dropdown
+                className="form-control"
+                options={this.MarketOptions}
+                placeholder="Select Market"
+                selection
+                value={this.state.selectedMarket}
+                onChange={this.changeMarket}
+              />
+            </div>
+          )}
           <div className="form-group">
             <p>
               Malax is not yet available in your area. You can submit this form,
@@ -328,7 +372,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     userDetail: (data, history) => dispatch(userDetail(data, history)),
-    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
+    fetchGlobalCodes: (data) => dispatch(fetchGlobalCodes(data)),
   };
 };
 
