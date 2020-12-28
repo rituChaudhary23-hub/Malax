@@ -148,8 +148,8 @@ export function fetchUpdateEmail(data) {
     })
       .then(async (data) => {
         dispatch(stopLoading());
-        if (data.data.Success) {
-          dispatch(saveUserPhone(data.data));
+        if (data.data.status) {
+          // dispatch(saveUserPhone(data.data));
           toast.success(data["data"]["Message"]);
 
           return true;

@@ -12,25 +12,19 @@ const register = (data) => {
 };
 
 //login-api
-const login = (data) => {
-  debugger
-  return fetch("get", `${API_HOST}UserLogin?code=J0aMZYXyIHfKaaPTwBm8GHSMHEF/OPqqs6/pAnEjPg2Up9Oyu9D2Jw==`,data);
-};
+const login = (token) => {
+  var data1 = {
+    id: token
+  };
+  var res = JSON.stringify(data1);
+  
+    return fetch
+      ("post",`${API_HOST}/UserLogin?code=J0aMZYXyIHfKaaPTwBm8GHSMHEF/OPqqs6/pAnEjPg2Up9Oyu9D2Jw==`,res, { token })
+     
+  }
 
-const clientLogin = (data) => {
-  return fetch(
-    "post",
-    `${API_HOST}/AddClient?code=EAsz9nhN1Y3mUJxZX7j8v/YjNt2IiVXLysashe/13GkZTLlHm9sIcA==`,
-   data
-  );
-};
-const therapistLogin = (data) => {
-  return fetch(
-    "post",
-    `${API_HOST}/AddTherapist?code=lTTSKSHKNuxEx1SlcIYjaJy1Fujfq8QkgL7TN1V4UK6Ie2g020izfQ==`,
-   data
-  );
-};
+
+
 //forgot-password-service
 const forgotPassword = (data) => {
   return fetch("post", `${API_HOST}/AuthAPI/ForgotPassword`, data);
@@ -55,6 +49,4 @@ export const UserService = {
   resetPassword,
   login,
   resendEmail,
-  clientLogin,
-  therapistLogin
 };

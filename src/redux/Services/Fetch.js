@@ -90,7 +90,19 @@ function setMehod(method, path, body, options, params) {
       config.headers = {
         Authorization: options.jwt
       };
+    } else if(options.token) {
+      config.headers = {
+        token : options.token
+      }
     }
+    // else if (options.headers) {
+    //   config.headers = {
+    //     'Content-Type': 'application/json',
+    //     'token': options.headers.token,
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+    //   };
+    // }
   }
   params = params ? "?" + new URLSearchParams(params).toString() : "";
   if (method === "get" || method === "delete") {

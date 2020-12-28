@@ -96,11 +96,11 @@ class ForgotPassword extends Component {
 
     return (
       <section className="log-in">
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
             <div className="col-sm-6">
               <div className="login-div">
-                <div className="log-in-inner signUp sign-first">
+                <div className="log-in-inner signUp sign-first logWrapper">
                   <h3 class="text-center">Forgot Password</h3>
                   <p>
                     Enter your email. We'll send a link allowing you to reset
@@ -130,25 +130,26 @@ class ForgotPassword extends Component {
                       </div>
                       <br></br>
                     </div>
-                  </Form>
+                    <div className="text-center sign-up-button sign-first">
+                      <Button
+                        type="submit"
+                        disabled={this.state.fields.email.length <= 5}
+                        className="btn btn-primary register mr-4"
+                        onClick={this.forgotPassword}
+                      >
+                        Reset Password
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="btn btn-white back"
+                        onClick={this.routeChange}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </Form>                  
                 </div>
-                <div className="text-center sign-up-button sign-first">
-                  <Button
-                    type="submit"
-                    disabled={this.state.fields.email.length <= 5}
-                    className="btn btn-primary register mr-4"
-                    onClick={this.forgotPassword}
-                  >
-                    Reset Password
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="btn btn-white back"
-                    onClick={this.routeChange}
-                  >
-                    Cancel
-                  </Button>
-                </div>
+                
               </div>
             </div>
             <div className="col-sm-6">

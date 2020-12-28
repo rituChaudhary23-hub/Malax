@@ -10,9 +10,9 @@ const getUserEmail = (data) => {
 };
 
 //update-email-api
-const updateUserEmail = (data, options) => {
-  return fetch("put", `${API_HOST}/AuthAPI/UpdateUserEmail`,  data,
-  options);
+const updateUserEmail = (data) => {
+  debugger
+  return fetch("post", `${API_HOST}/UpdateClientEmail?code=vxbHztFVcIS9YA7heyOWaAEVzH25i6ancemtvt7JWxKvRbEpbSeQkA==`,  data);
 };
 
 //get user phone number

@@ -21,7 +21,10 @@
 		flex-direction: column;
 		height: 100%;
 		.log-in-inner {
-			padding: 70px 60px 0 60px;
+			padding: 0px 60px 0 60px;
+			&.logWrapper{
+				padding: 70px 60px 0 60px;
+			}
 				h3 {
 					padding:  0 0 10px;
 				}
@@ -98,6 +101,8 @@
 
 		.log-in-img {
 			position: relative;
+			height: 100vh;
+			overflow: hidden;
 				.log-in-img-overlay {
 				    position: absolute;
 			        top: 15%;

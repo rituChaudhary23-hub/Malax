@@ -27,22 +27,22 @@ class Consent extends Component {
     };
   }
 
-  componentDidMount = async (e, data1) => {
-    var data1 = this.props.user.Data.ClientId;
-    this.state.fields.clientId = data1;
-    // this.state.fields.consentFormStatus = e.target.checked;
+  // componentDidMount = async (e, data1) => {
+  //   var data1 = this.props.user.Data.ClientId;
+  //   this.state.fields.clientId = data1;
+  //   // this.state.fields.consentFormStatus = e.target.checked;
 
-    var res = await this.props.getConsentForm(data1);
+  //   var res = await this.props.getConsentForm(data1);
 
-    // this.props.saveConsent.data
-    //   ? this.props.saveConsent.data.Data.MCF
-    //   : consentFormStatus;
-    if (this.state.fields.consentFormStatus == true) {
-      this.state.fields.consentFormStatus = this.props.saveConsent.data.Data.MCF;
-      //  if(this.props.saveConsent.data.Data.MCF==true)
-      // document.getElementById("abc123").checked = true;
-    }
-  };
+  //   // this.props.saveConsent.data
+  //   //   ? this.props.saveConsent.data.Data.MCF
+  //   //   : consentFormStatus;
+  //   if (this.state.fields.consentFormStatus == true) {
+  //     this.state.fields.consentFormStatus = this.props.saveConsent.data.Data.MCF;
+  //     //  if(this.props.saveConsent.data.Data.MCF==true)
+  //     // document.getElementById("abc123").checked = true;
+  //   }
+  // };
 
   agreed = (e) => {
     // eslint-disable-next-line react/no-direct-mutation-state

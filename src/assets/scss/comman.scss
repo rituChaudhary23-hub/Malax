@@ -180,3 +180,46 @@ header {
 .form-check-inline .form-check-input {
   opacity: 0;
 }
+
+//register page
+
+.log-in-form{
+  .form-control{
+    input{
+      border: none !important;
+      background-color: #fff !important;
+        &:-internal-autofill-selected {
+          background-color: #fff !important;
+        }
+        &:-webkit-autofill {
+          box-shadow: none !important;
+          border-color: #fff !important;
+      }
+    }
+  }
+  .log-in-img {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+      .log-in-img-overlay {
+        position: absolute;
+        top: 15%;
+        left: 10%;
+        right: 10%;
+        text-align: center;
+        img {
+          max-width: 200px;
+          margin: 0 0 20px;
+      }
+      p{
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+.fixHeight {
+  height: 90vh;
+  overflow-y: auto;
+}

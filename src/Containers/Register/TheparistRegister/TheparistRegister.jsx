@@ -7,6 +7,10 @@ import { withRouter } from "react-router";
 import fire from "../../../utils/config/fire";
 import { fetchGlobalCodes } from ".././../../redux/actions/global.action";
 
+
+import logIn from "../../../assets/images/logIn.png";
+import logo from "../../../assets/images/logo.png";
+
 class TheparistRegister extends Component {
   MarketOptions = [];
   dropvalMarket: any;
@@ -231,132 +235,149 @@ class TheparistRegister extends Component {
 
     return (
       <div className="log-in-form">
-        <Form autoComplete="off">
-          <div className="form-group">
-            <label>Email</label>
-            <Form.Field>
-              <Input
-                className="form-control"
-                id="email"
-                fullWidth={true}
-                name="email"
-                type="email"
-                placeholder="Email"
-                margin={"normal"}
-                onChange={this.setFormValue.bind(this, "email")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "email")}
-                value={this.state.fields.email}
-              />{" "}
-              <span style={{ color: "red" }}>{this.state.errors["email"]}</span>
-            </Form.Field>{" "}
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <Form.Field>
-              <Input
-                className="form-control"
-                id="password"
-                fullWidth={true}
-                name="password"
-                type="password"
-                margin={"normal"}
-                placeholder="Password"
-                onChange={this.setFormValue.bind(this, "password")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "password")}
-              />
-
-              <span style={{ color: "red" }}>
-                {this.state.errors["password"]}
-              </span>
-            </Form.Field>
-          </div>
-          <div className="form-group">
-            <label>Password Confirmation</label>
-            <Form.Field>
-              <Input
-                className="form-control"
-                id="password"
-                type="password"
-                margin={"normal"}
-                placeholder="Confirm Password"
-                onChange={this.setFormValue.bind(this, "conPassword")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "conPassword")}
-              />
-              <span style={{ color: "red" }}>
-                {this.state.errors["conPassword"]}
-              </span>
-            </Form.Field>
-          </div>
-
-          <div className="form-group">
-            <label>First Name</label>
-            <Form.Field>
-              <Input
-                className="form-control"
-                id="name"
-                name="name"
-                placeholder="First Name"
-                margin={"normal"}
-                onChange={this.setFormValue.bind(this, "firstName")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "firstName")}
-              />
-              <span style={{ color: "red" }}>
-                {this.state.errors["firstName"]}
-              </span>
-            </Form.Field>
-          </div>
-
-          <div className="form-group">
-            <label>Last Name</label>
-            <Form.Field>
-              <Input
-                className="form-control"
-                id="name"
-                fullWidth={true}
-                name="name"
-                type="text"
-                margin={"normal"}
-                placeholder="Last Name"
-                onChange={this.setFormValue.bind(this, "lastName")}
-                onKeyUp={this.handleSignupKeyup.bind(this, "lastName")}
-              />
-              <span style={{ color: "red" }}>
-                {this.state.errors["lastName"]}
-              </span>
-            </Form.Field>
-          </div>
-          {this.MarketOptions && (
-            <div className="form-group">
-              <label for="sel1">Select Market</label>
-              <Dropdown
-                className="form-control"
-                options={this.MarketOptions}
-                placeholder="Select Market"
-                selection
-                value={this.state.selectedMarket}
-                onChange={this.changeMarket}
-              />
+        <div className="container-fluid noPad">
+          <div className="row">
+            <div className="col-md-6">
+              <div className="log-in-img ">
+                <img src={logIn} />
+                <div className="log-in-img-overlay">
+                  <img className="img2" src={logo} />
+                </div>
+              </div>
             </div>
-          )}
-          <div className="form-group">
-            <p>
-              Malax is not yet available in your area. You can submit this form,
-              and we will be happy to notify you when Malax is available in your
-              ZIP code.
-            </p>
+
+            <div className="col-md-6 mt-3">
+              <Form className="fixHeight" autoComplete="off">
+                <div className="form-group">
+                  <label>Email</label>
+                  <Form.Field>
+                    <Input
+                      className="form-control"
+                      id="email"
+                      fullWidth={true}
+                      name="email"
+                      type="email"
+                      placeholder="Email"
+                      margin={"normal"}
+                      onChange={this.setFormValue.bind(this, "email")}
+                      onKeyUp={this.handleSignupKeyup.bind(this, "email")}
+                      value={this.state.fields.email}
+                    />{" "}
+                    <span style={{ color: "red" }}>{this.state.errors["email"]}</span>
+                  </Form.Field>{" "}
+                </div>
+                <div className="form-group">
+                  <label>Password</label>
+                  <Form.Field>
+                    <Input
+                      className="form-control"
+                      id="password"
+                      fullWidth={true}
+                      name="password"
+                      type="password"
+                      margin={"normal"}
+                      placeholder="Password"
+                      onChange={this.setFormValue.bind(this, "password")}
+                      onKeyUp={this.handleSignupKeyup.bind(this, "password")}
+                    />
+
+                    <span style={{ color: "red" }}>
+                      {this.state.errors["password"]}
+                    </span>
+                  </Form.Field>
+                </div>
+                <div className="form-group">
+                  <label>Password Confirmation</label>
+                  <Form.Field>
+                    <Input
+                      className="form-control"
+                      id="password"
+                      type="password"
+                      margin={"normal"}
+                      placeholder="Confirm Password"
+                      onChange={this.setFormValue.bind(this, "conPassword")}
+                      onKeyUp={this.handleSignupKeyup.bind(this, "conPassword")}
+                    />
+                    <span style={{ color: "red" }}>
+                      {this.state.errors["conPassword"]}
+                    </span>
+                  </Form.Field>
+                </div>
+
+                <div className="form-group">
+                  <label>First Name</label>
+                  <Form.Field>
+                    <Input
+                      className="form-control"
+                      id="name"
+                      name="name"
+                      placeholder="First Name"
+                      margin={"normal"}
+                      onChange={this.setFormValue.bind(this, "firstName")}
+                      onKeyUp={this.handleSignupKeyup.bind(this, "firstName")}
+                    />
+                    <span style={{ color: "red" }}>
+                      {this.state.errors["firstName"]}
+                    </span>
+                  </Form.Field>
+                </div>
+
+                <div className="form-group">
+                  <label>Last Name</label>
+                  <Form.Field>
+                    <Input
+                      className="form-control"
+                      id="name"
+                      fullWidth={true}
+                      name="name"
+                      type="text"
+                      margin={"normal"}
+                      placeholder="Last Name"
+                      onChange={this.setFormValue.bind(this, "lastName")}
+                      onKeyUp={this.handleSignupKeyup.bind(this, "lastName")}
+                    />
+                    <span style={{ color: "red" }}>
+                      {this.state.errors["lastName"]}
+                    </span>
+                  </Form.Field>
+                </div>
+                {this.MarketOptions && (
+                  <div className="form-group">
+                    <label for="sel1">Select Market</label>
+                    <Dropdown
+                      className="form-control"
+                      options={this.MarketOptions}
+                      placeholder="Select Market"
+                      selection
+                      value={this.state.selectedMarket}
+                      onChange={this.changeMarket}
+                    />
+                  </div>
+                )}
+                <div className="form-group">
+                  <p>
+                    Malax is not yet available in your area. You can submit this form,
+                    and we will be happy to notify you when Malax is available in your
+                    ZIP code.
+                  </p>
+                </div>
+                <div className="text-center">
+                  {" "}
+                  <Button
+                    type="submit"
+                    disabled={submitting}
+                    className="btn btn-primary register"
+                    onClick={this.signupMalax}
+                  >
+                    Register
+                  </Button>
+                </div>
+              </Form>
+            </div>
+
           </div>
-          <div className="text-center">
-            {" "}
-            <Button
-              type="submit"
-              disabled={submitting}
-              className="btn btn-primary register"
-              onClick={this.signupMalax}
-            >
-              Register
-            </Button>
-          </div>
-        </Form>
+        </div>
+        
       </div>
     );
   }

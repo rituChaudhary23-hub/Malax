@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import signUp from "../../assets/images/signUp.png";
 import logo from "../../assets/images/logo.png";
 import { email } from "redux-form-validators";
-import { fetchClientLogin,fetchTherapistLogin } from "../../redux/actions/user.action";
+import {loginUser} from "../../redux/actions/user.action";
 import { connect } from "react-redux";
 import { fetchCategoryName } from "../../redux/actions/global.action";
 import fire from "../../utils/config/fire";
@@ -97,39 +97,35 @@ class Login extends Component {
 
   handleChanges = async (e) => {
     e.preventDefault();
-    debugger
-    // let userEntity = e.target.outerText;
-    fire
-      .auth()
-      .signInWithEmailAndPassword(
-        this.state.fields.email,
-        this.state.fields.password
-      )
-      .then((u) => {
-        console.log(u);
-        if (u.user.emailVerified == false) {
-          fire.auth().signOut();
-
-          toast.error("Please verify your email first.");
-          return;
-        } else{
-          // if (userEntity == "LogIn As Client") {
+    if (this.handleValidation()) {
+      fire
+        .auth()
+        .signInWithEmailAndPassword(
+          this.state.fields.email,
+          this.state.fields.password
+        )
+        .then(async (u) => {
+          console.log(u);
+          if (u.user.emailVerified == false) {
+            fire.auth().signOut();
+            toast.error("Please verify your email first.");
+            return;
+          } else {
             var localId = u.user.uid;
             this.state.id = localId;
-            this.props.fetchClientLogin(this.state.id)
-            this.props.history.push("/client-profile");
-          // } else if (userEntity == "LogIn As Therapist") {
-          //   var localId = u.user.uid;
-          //   this.state.id = localId;
-          //   this.props.fetchTherapistLogin(this.state.id)
-          //   this.props.history.push("/theparist-profile");
-          // } else {
-          //   this.props.history.push("/dashboard");
-          // }
-        }
-      })
-      .catch((err) => {});
-  };
+            var res = await this.props.loginUser(this.state.id);
+            if (res != false) {
+              if (res.toLowerCase() == "clients") {
+                this.props.history.push("/client-profile")
+              } else {
+                this.props.history.push("/theparist-profile")
+              }
+            }
+          }
+          
+        })
+        .catch((err) => { });
+    }};
 
   handleValidation = () => {
     let fields = this.state.fields;
@@ -212,12 +208,12 @@ class Login extends Component {
 
     return (
       <section className="log-in">
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
             <div className="col-sm-6">
               <div className="login-div">
                 <Form autoComplete="off">
-                  <div className="log-in-inner signUp sign-first">
+                  <div className="log-in-inner signUp sign-first logWrapper">
                     <h3 className="text-center">Log In</h3>
                     <p>
                       Please sign in to continue therapy with Malax. Need to
@@ -323,11 +319,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchClientLogin: (values, history) => dispatch(fetchClientLogin(values, history)),
-    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
-    fetchTherapistLogin: (data) => dispatch(fetchTherapistLogin(data)),
+    loginUser: (values, history) => dispatch(loginUser(values, history)),
   };
 };
 
-// export default  reduxForm({connect(mapStateToProps, mapDispatchToProps)})(Login);
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

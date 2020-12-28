@@ -17,7 +17,7 @@ import icon5 from "../../assets/images/icon5.png";
 import { fetchUserPhone } from "../../redux/actions/client.action";
 
 class ProfileMain extends Component {
-  phone;
+  email="any"
   constructor(props) {
     super(props);
     this.state = {
@@ -31,15 +31,15 @@ class ProfileMain extends Component {
     };
   }
 
-  componentDidMount =  (data) => {
-    data = {
-      userId: this.props.user.Data.UserId,
-    };
-    // var data1 = this.props.user.Data.ClientId;
-    // this.state.fields.clientId = data1;
-    this.props.fetchUserPhone(data);
-    // this.phone = sessionStorage.getItem("value");
-  };
+  // componentDidMount =  (data) => {
+  //   data = {
+  //     userId: this.props.user.Data.UserId,
+  //   };
+  //   // var data1 = this.props.user.Data.ClientId;
+  //   // this.state.fields.clientId = data1;
+  //   this.props.fetchUserPhone(data);
+  //   // this.phone = sessionStorage.getItem("value");
+  // };
 
   showModal = () => {
     this.setState({ modal1: true });
@@ -130,7 +130,8 @@ class ProfileMain extends Component {
                           </div>
                         </li>
                         <li>
-                          <p> {this.props.user.Data.Email}</p>
+                          {/* <p> {this.props.user.Data.Email}</p> */}
+                          <p>  this.email = sessionStorage.getItem("userEmail");</p>
                         </li>
                         <li>
                           <Button

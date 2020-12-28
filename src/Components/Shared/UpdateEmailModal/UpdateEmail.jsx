@@ -4,7 +4,7 @@ import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
 
 import { Button, Input, Form } from "semantic-ui-react";
-
+import fire from "../../../utils/config/fire"
 import { connect } from "react-redux";
 import { fetchUpdateEmail } from "../../../redux/actions/client.action";
 
@@ -13,18 +13,29 @@ class UpdateEmail extends Component {
     super(props);
     this.state = {
       fields: {
-        userId: 0,
-        fieldType: "e",
-        value: "",
+        id: "",
+        email:""
       },
     };
   }
 
   UpdateEmail = () => {
-    var data = this.props.user.Data.UserId;
-    this.state.fields.userId = data;
-    this.props.fetchUpdateEmail(this.state.fields);
-    this.props.toggle();
+    // var data = this.props.user.Data.UserId;
+    // this.state.fields.userId = data;
+    // this.props.fetchUpdateEmail(this.state.fields);
+    // var localId = u.user.uid;
+    // this.state.fields.id = localId;
+    // this.props.toggle();
+
+
+
+    fire.auth()
+    .signInWithEmailAndPassword('you@domain.com', 'correcthorsebatterystaple')
+    .then(function(userCredential) {
+      userCredential.user.updateEmail('newyou@domain.com')
+      
+      this.props.fetchUpdateEmail(this.state.fields);
+    })
   };
 
   setFormValue(field, e) {
@@ -64,7 +75,10 @@ class UpdateEmail extends Component {
                   </div>
                 </div>
                 <div className="col-lg-8 col-md-6 col-5 mb-4">
-                  <div className="modCon"> {this.props.user.Data.Email}</div>
+                  <div className="modCon">
+                    
+                    {/* {this.props.user.Data.Email} */}
+                  </div>
                 </div>
                 <div className="col-lg-4 col-md-6 col-6">
                   <div className="modCon">
@@ -86,7 +100,7 @@ class UpdateEmail extends Component {
             <Modal.Footer>
               <Button
                 type="submit"
-                disabled={this.state.fields.value.length <= 5}
+                // disabled={this.state.fields.value.length <= 5}
                 className="btn btn-primary register mr-4"
                 onClick={this.UpdateEmail}
               >
