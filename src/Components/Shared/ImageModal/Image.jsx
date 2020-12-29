@@ -3,35 +3,35 @@ import { Modal } from "react-bootstrap";
 import { fetchIdentityImage } from "../../../redux/actions/client.action";
 import { withRouter } from "react-router";
 import { fetchCategoryName } from "../../../redux/actions/global.action";
+import { API_HOST, API_KEY } from "../../../utils/config/constants/index";
 
 import { connect } from "react-redux";
 
 class Image extends Component {
   golbalID = 0;
   dropVal: any;
-  clientImage:any;
+  image: any;
+  clientId = "";
   constructor(props) {
     super(props);
     this.state = {
-      name: "ImageType",
       isFileValid: false,
       isFormSubmitted: false,
       fields: {
-        clientIdentityId: 0,
-        clientId: 0,
-        imagesType: "",
-        clientImage: "",
-        clientImageTypeId: 0,
-        actionBy: "",
+        id: 0,
+        imageType: "profile",
+        image: "",
       },
     };
   }
-  // componentDidMount = async (data1) => {
-  //   var data = await this.props.fetchCategoryName(this.state.name);
-  //   if (data != false) {
-  //     this.dropVal = data.data.Data.globalCodeData;
-  //   }
-  // };
+  componentDidMount = async (data1) => {
+    // var data = await this.props.fetchCategoryName(this.state.name);
+    // if (data != false) {
+    //   this.dropVal = data.data.Data.globalCodeData;
+    // }
+     this.clientId = this.props.userId;
+    this.state.fields.id =  this.clientId;
+  };
   close = () => {
     this.props.toggle();
   };
@@ -39,15 +39,53 @@ class Image extends Component {
     let size = 2000000;
     e.preventDefault();
     var reader = new FileReader();
+    debugger
     var file = e.target.files[0];
-var _sts = this;
-    reader.onload = function(upload) {
-          var base64 = upload.target.result.split(',')[1]
-     _sts.setState({
-      clientImage:base64
-     })
-    };
+    var _sts = this;
+    debugger
+    this.state.fields.image = file.name
+    console.log("image",this.state.fields.image)
     reader.readAsDataURL(file);
+    reader.onload = function (upload) {
+      debugger
+      //       var base64 = upload.target.result.split(',')[1]
+      //  _sts.setState({
+      //   image:base64
+      //  })
+  
+      // const files = e.target.files
+      const formData = new FormData()
+      formData.append('id',  this.clientId)
+      formData.append('imageType', 'profile')
+      formData.append('image', file[0])
+
+      // const addImage = (data) => {
+      //   var token = data.id;
+      //   debugger
+      //   return fetch("post", `${API_HOST}/UploadClientImage?code=${API_KEY}`, data,{
+      //     token,
+      //   });
+      // };;
+
+
+
+      const addImage = (data) => {
+        fetch(`${API_HOST}/UploadClientImage?code=${API_KEY}`, {
+          method: 'POST',
+          header: { 'token': data.id },
+          body: formData
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data)
+          })
+          .catch(error => {
+            console.error(error)
+          })
+    
+      }
+    };
+   
 
    
     if (
@@ -56,8 +94,8 @@ var _sts = this;
       e.target.files[0].type === "image/jpg"
     ) {
       if (e.target.files[0].size <= 1000000) {       
-        var data1 = e.target.files[0].type
-        this.state.fields.imagesType=data1
+        // var data1 = e.target.files[0].type
+        // this.state.fields.imageType=data1
         this.setState({ isFileValid: true });
       } else {
         alert("not suportes");
@@ -69,13 +107,13 @@ var _sts = this;
   
   uploadImage = async (e, data) => {
     e.preventDefault();
-    var InfoAs = e.target.outerText;
-    var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
-      .GlobalCodeId;
-    this.state.fields.clientImageTypeId = globalId;
-    var data1 = this.props.user.Data.ClientId;
-    this.state.fields.clientId = data1;
-    this.state.fields.clientImage=this.state.clientImage;
+    // var InfoAs = e.target.outerText;
+    // var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
+    //   .GlobalCodeId;
+    // this.state.fields.clientImageTypeId = globalId;
+    var clientId = this.props.userId;
+    this.state.fields.id = clientId;
+    this.state.fields.image=this.state.image;
     await this.setState({ isFormSubmitted: true });
 
     var res = await this.props.fetchIdentityImage(this.state.fields);
@@ -129,7 +167,7 @@ var _sts = this;
                   <img src={this.props.selectedEditdapps.image} />
                 )} */}
               </div>
-              <img src={"data:image/jpeg;base64,"+ this.state.fields.clientImage} />
+              <img src={"data:image/jpeg,"+ this.state.fields.image} />
             </div>
           </Modal.Body>
           <Modal.Footer>
@@ -160,7 +198,7 @@ var _sts = this;
 const mapStateToProps = (state) => {
   return {
     formVal: state.form,
-    user: state.user.user,
+    userId: state.persist.c_user.token,
     saveConsent: state.clientReducer.saveConsent,
   };
 };

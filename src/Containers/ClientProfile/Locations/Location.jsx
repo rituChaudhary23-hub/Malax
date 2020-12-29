@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Radio, Button } from "semantic-ui-react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import { toast } from "../../../Components/Toast/Toast";
 import {
   fetchClientLoc,
   getLocation,
@@ -11,50 +12,48 @@ export class Location extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clientId: 0,
       fields: {
-        clientLocationId: 0,
-        clientId: 0,
-        locationForMessage: "",
-        spaceAvailability: "",
-        presencePets: "",
-        actionBy: "",
+     id:"",
+        massageLocation: "",
+        spaceAvailable: "",
+        havePets: "",
       },
     };
   }
-  componentDidMount = async (data1) => {
-    var data1 = this.props.user.Data.ClientId;
-    this.state.clientId = data1;
-    this.props.getLocation(data1);
-  };
+  // componentDidMount = async (data1) => {
+  //   var data1 = this.props.user.Data.ClientId;
+  //   this.state.clientId = data1;
+  //   this.props.getLocation(data1);
+  // };
 
   updateLoc = (e) => {
     if (e.target.checked) {
       var data1 = e.target.value;
-      this.state.fields.locationForMessage = data1;
+      this.state.fields.massageLocation = data1;
     }
   };
 
   updateConfirm = (e) => {
     if (e.target.checked) {
       var space = e.target.value;
-      this.state.fields.spaceAvailability = space;
+      this.state.fields.spaceAvailable = space;
     }
   };
 
   updatePets = (e) => {
     if (e.target.checked) {
       var petsdata=e.target.value
-      this.state.fields.presencePets=petsdata;
+      this.state.fields.havePets=petsdata;
     }
   };
 
   updateLocation = async () => {
-    var data = this.props.user.Data.ClientId;
-    this.state.fields.clientId = data;
+    var clientId = this.props.userId;
+    this.state.fields.id = clientId;
 
     var res = await this.props.fetchClientLoc(this.state.fields);
     if (res == true) {
+      toast.success("Updated Succesfully");
     } else {
     }
   };
@@ -198,7 +197,7 @@ export class Location extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user.user,
+    userId: state.persist.c_user.token,
     saveMedicalData: state.clientReducer.saveMedicalData,
   };
 };

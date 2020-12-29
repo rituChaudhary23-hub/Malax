@@ -5,7 +5,7 @@ import { withRouter } from "react-router";
 import { Button } from "semantic-ui-react";
 import {
   fetchCategoryName,
-  fetchValidateZip,
+  // fetchValidateZip,
 } from ".././../../redux/actions/global.action";
 import { connect } from "react-redux";
 import { DateInput } from "semantic-ui-calendar-react";
@@ -47,13 +47,13 @@ export class Payment extends Component {
     };
   }
 
-  componentDidMount = async () => {
-    //zip-code-globally
-    var zipData = await this.props.fetchCategoryName(this.state.zip_code.name);
-    if (zipData != false) {
-      this.dropValcode = zipData.data.Data.globalCodeData;
-    }
-  };
+  // componentDidMount = async () => {
+  //   //zip-code-globally
+  //   var zipData = await this.props.fetchCategoryName(this.state.zip_code.name);
+  //   if (zipData != false) {
+  //     this.dropValcode = zipData.data.Data.globalCodeData;
+  //   }
+  // };
 
   //validation
   handleValidation = () => {
@@ -425,7 +425,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchTherapistPaymentInfo: (data) =>
       dispatch(fetchTherapistPaymentInfo(data)),
     fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
-    fetchValidateZip: (data) => dispatch(fetchValidateZip(data)),
+    // fetchValidateZip: (data) => dispatch(fetchValidateZip(data)),
   };
 };
 

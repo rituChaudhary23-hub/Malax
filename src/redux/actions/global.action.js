@@ -4,7 +4,8 @@ import { startLoading, stopLoading } from "./loading.action";
 
 export const actionTypes = {
   GLOBAL_CATEGORY_NAME: "GLOBAL_CATEGORY_NAME",
-  GLOBAL_ZIP_CODE: "GLOBAL_ZIP_CODE",
+  GLOBAL_CODES: "GLOBAL_CODES",
+  GLOBAL_DATA_CODES:"GLOBAL_DATA_CODES"
 };
 
 export function globalCategoryName(data) {
@@ -13,13 +14,19 @@ export function globalCategoryName(data) {
     data: data,
   };
 }
-export function globalZipCode(data) {
+export function globalCodes(data) {
   return {
-    type: actionTypes.GLOBAL_ZIP_CODE,
+    type: actionTypes.GLOBAL_CODES,
     data: data,
   };
 }
 
+export function globalDataCodes(data) {
+  return {
+    type: actionTypes.GLOBAL_DATA_CODES,
+    data: data,
+  };
+}
 //global-category
 export function fetchCategoryName(data) {
   return (dispatch, getState) => {
@@ -40,7 +47,7 @@ export function fetchCategoryName(data) {
       })
       .catch((error) => {
         if (error) {
-          toast.error(error(data.Data.Message));
+          // toast.error(error(data.Data.Message));
           // toast.error(error["data"]["Message"]);
         }
         dispatch(stopLoading());
@@ -48,18 +55,44 @@ export function fetchCategoryName(data) {
   };
 }
 
-//global-zip
-export function fetchValidateZip(data) {
+// //global-zip
+// export function fetchValidateZip(data) {
+//   return (dispatch, getState) => {
+//     // dispatch(startLoading());
+//     let state = getState();
+//     return GlobalService.validateZip(data, {}).then(async (data) => {
+//       if (data.data.status) {
+//         dispatch(stopLoading());
+//         dispatch(globalZipCode(data));
+//         return data;
+//       } else {
+//         toast.error(data.data.Message);
+//         return false;
+//       }
+//     });
+//     // .catch((error) => {
+//     //   if (error) {
+//     //     toast.error(error(data.Data.Message));
+//     //     // toast.error(error["data"]["Message"]);
+//     //   }
+//     //   dispatch(stopLoading());
+//     // });
+//   };
+// }
+
+
+
+export function fetchGlobalCodes(data) {
   return (dispatch, getState) => {
     // dispatch(startLoading());
     let state = getState();
-    return GlobalService.validateZip(data, {}).then(async (data) => {
+    return GlobalService.getGlobalCodes(data, {}).then(async (data) => {
       if (data.data.status) {
         dispatch(stopLoading());
-        dispatch(globalZipCode(data));
+         dispatch(globalCodes(data));
         return data;
       } else {
-        toast.error(data.data.Message);
+        toast.error(data.data.message);
         return false;
       }
     });
@@ -73,16 +106,15 @@ export function fetchValidateZip(data) {
   };
 }
 
-
-
-export function fetchGlobalCodes(data) {
+//get-client-info
+export function fetchClientData(data) {
   return (dispatch, getState) => {
     // dispatch(startLoading());
     let state = getState();
-    return GlobalService.getGlobalCodes(data, {}).then(async (data) => {
+    return GlobalService.getClientCodes(data, {}).then(async (data) => {
       if (data.data.status) {
         dispatch(stopLoading());
-        // dispatch(globalZipCode(data));
+         dispatch(globalDataCodes(data));
         return data;
       } else {
         toast.error(data.data.message);

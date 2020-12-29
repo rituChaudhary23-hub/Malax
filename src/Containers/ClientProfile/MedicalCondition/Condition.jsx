@@ -3,122 +3,163 @@ import { Form, TextArea, Button } from "semantic-ui-react";
 import { Field } from "redux-form";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { fetchCategoryName } from "../../../redux/actions/global.action";
 import {
   fetchUserMedicalCondition,
   getConditionInfo,
 } from "../../../redux/actions/client.action";
+import { fetchGlobalCodes } from ".././../../redux/actions/global.action";
 
 class Condition extends Component {
   dropVal: any;
   dropvalArea: any;
   _data: any;
   _areaData: any;
+  medicalConditions = [];
+  areasOfPain = [];
   constructor(props) {
     super(props);
     this.state = {
-      clientId: 0,
       myStatus: [],
       myAreaStatus: [],
-      name: "MedicalConditions",
       mycheckbox_data: [],
-      my_checkBox: false,
       areaCheckbox_data: [],
-      globalConditions: {
-        name: "MedicalConditionsAreas",
-      },
+      tablename: "codes",
       fields: {
-        clientMedicalConditionId: 0,
-        clientId: 0,
+        id: "",
         healthConcerns: "",
-        medicalConditionRequest: [],
-        actionBy: "",
+        medicalConditions: [],
+        areasOfPain: [],
       },
     };
   }
 
+  // componentWillMount = async () => {
+  //   //get-condition
+  //   var data1 = this.props.user.Data.ClientId;
+  //   this.state.clientId = data1;
+  //   var res = await this.props.getConditionInfo(data1);
+
+  //   //fields data
+  //   var data1 = this.props.user.Data.ClientId;
+  //   this.state.fields.clientId = data1;
+
+  //   var data = await this.props.fetchCategoryName(this.state.name);
+
+  //   if (data != false) {
+  //     this.dropVal = data.data.Data.globalCodeData;
+  //   }
+  //   this._data = [];
+  //   this.dropVal.forEach((element) => {
+  //     this._data.push({
+  //       checkBox: element.CodeName,
+  //       GlobalCodeId: element.GlobalCodeId,
+  //       status: false,
+  //     });
+  //   });
+  //   var data_check = this._data;
+  //   data_check.forEach((element) => {
+  //     this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses.forEach(
+  //       (ele) => {
+  //         if (ele.MedicalConditionId == element.GlobalCodeId) {
+  //           element.status = true;
+  //         }
+  //       }
+  //     );
+  //   });
+  //   this.setState({
+  //     mycheckbox_data: data_check,
+  //   });
+
+  //   //areas checkbox
+  //   var _areaCheck = await this.props.fetchCategoryName(this.state.globalConditions.name);
+  //   if (_areaCheck) {
+  //     this.dropvalArea = _areaCheck.data.Data.globalCodeData;
+  //   }
+  //   this._areaData = [];
+  //   this.dropvalArea.forEach((element) => {
+  //     this._areaData.push({
+  //       checkBox: element.CodeName,
+  //       GlobalCodeId: element.GlobalCodeId,
+  //       status: false,
+  //     });
+  //   });
+
+  //   var areaData_check = this._areaData;
+  //   areaData_check.forEach((element) => {
+  //     this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses.forEach(
+  //       (ele) => {
+  //         if (ele.MedicalConditionId == element.GlobalCodeId) {
+  //           element.status = true;
+  //         }
+  //       }
+  //     );
+  //   });
+
+  //   this.setState({
+  //     areaCheckbox_data: areaData_check,
+  //   });
+  // };
+
   componentWillMount = async () => {
-    //get-condition
-    var data1 = this.props.user.Data.ClientId;
-    this.state.clientId = data1;
-    var res = await this.props.getConditionInfo(data1);
-
-    //fields data
-    var data1 = this.props.user.Data.ClientId;
-    this.state.fields.clientId = data1;
-
-    var data = await this.props.fetchCategoryName(this.state.name);
-
-    if (data != false) {
-      this.dropVal = data.data.Data.globalCodeData;
-    }
-    this._data = [];
-    this.dropVal.forEach((element) => {
-      this._data.push({
-        checkBox: element.CodeName,
-        GlobalCodeId: element.GlobalCodeId,
-        status: false,
+    var medicalData = await this.props.fetchGlobalCodes(this.state.tablename);
+    if (medicalData != false) {
+      this.dropVal = medicalData.data.data[0].medicalConditions;
+      this._data = [];
+      const objectArray = Object.entries(this.dropVal);
+      objectArray.forEach((element) => {
+        this._data.push({
+          checkBox: element[1],
+          GlobalCodeId: element[1],
+          status: false,
+        });
       });
-    });
-    var data_check = this._data;
-    data_check.forEach((element) => {
-      this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses.forEach(
-        (ele) => {
-          if (ele.MedicalConditionId == element.GlobalCodeId) {
-            element.status = true;
-          }
-        }
-      );
-    });
-    this.setState({
-      mycheckbox_data: data_check,
-    });
-
-    //areas checkbox
-    var _areaCheck = await this.props.fetchCategoryName(this.state.globalConditions.name);
-    if (_areaCheck) {
-      this.dropvalArea = _areaCheck.data.Data.globalCodeData;
-    }
-    this._areaData = [];
-    this.dropvalArea.forEach((element) => {
-      this._areaData.push({
-        checkBox: element.CodeName,
-        GlobalCodeId: element.GlobalCodeId,
-        status: false,
+      var data_check = this._data;
+      this.setState({
+        mycheckbox_data: data_check,
       });
-    });
+    }
+    //areas-of-pain globally
+    if (medicalData != false) {
+      this.dropValArea = medicalData.data.data[0].areasOfPain;
+      this._areaData = [];
+      const objectArray = Object.entries(this.dropValArea);
+      objectArray.forEach((element) => {
+        this._areaData.push({
+          checkBox: element[1],
+          GlobalCodeId: element[1],
+          status: false,
+        });
+      });
+      var areaData_check = this._areaData;
+      this.setState({
+        areaCheckbox_data: areaData_check,
+      });
+    }
+  
 
-    var areaData_check = this._areaData;
-    areaData_check.forEach((element) => {
-      this.props.MedicalCondition.data.Data.ClientMedicalConditionResponses.forEach(
-        (ele) => {
-          if (ele.MedicalConditionId == element.GlobalCodeId) {
-            element.status = true;
-          }
-        }
-      );
-    });
-
-    this.setState({
-      areaCheckbox_data: areaData_check,
-    });
   };
-
+  componentDidMount = async (data1) => {
+   if (this.props.userData.data) {
+     debugger
+   }
+ };
   back() {
     window.location.href = "/update-client-profile";
   }
 
   saveCondition = () => {
-    this.state.fields.medicalConditionRequest = [];
+    // this.state.fields.medicalConditionRequest = [];
+    var clientId = this.props.userId;
+    this.state.fields.id = clientId;
     var inputElems = document.getElementsByTagName("input"),
       count = 0;
     for (var i = 0; i < inputElems.length; i++) {
       if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
         count++;
 
-        this.state.fields.medicalConditionRequest.push({
-          medicalConditionId: parseInt(inputElems[i].id),
-        });
+        // this.state.fields.medicalConditionRequest.push({
+        //   medicalConditionId: parseInt(inputElems[i].id),
+        // });
       }
     }
     this.props.fetchUserMedicalCondition(this.state.fields);
@@ -133,39 +174,45 @@ class Condition extends Component {
   //medical-condition
   medicalCondition = (e) => {
     this.state.mycheckbox_data.filter(
-      (x) => x.GlobalCodeId == parseInt(e.target.id)
+      (x) => x.GlobalCodeId.toUpperCase() == e.target.value.toUpperCase()
     )[0].status = e.target.checked;
     this.setState({ myStatus: this.state.mycheckbox_data });
     if (e.target.checked == true) {
-      this.state.fields.medicalConditionRequest.push({
-        medicalConditionId: parseInt(e.target.id),
-      });
+      this.medicalConditions.push(e.target.value);
+      console.log("_checkedData", this.medicalConditions);
+      this.state.fields.medicalConditions=this.medicalConditions
+    } else {
+      this.medicalConditions.pop(e.target.value);
     }
     if (e.target.checked == false) {
-      document.getElementById(e.target.id).removeAttribute("checked");
+      document.getElementById(e.target.value).removeAttribute("checked");
     } else {
-      document.getElementById(e.target.id).setAttribute("checked", "true");
+      document.getElementById(e.target.value).setAttribute("checked", "true");
     }
   };
 
   medicalAreaCondition = (e) => {
-    this._areaData.filter(
-      (x) => x.GlobalCodeId == parseInt(e.target.id)
+    // this._areaData.filter(
+    //   (x) => x.GlobalCodeId == parseInt(e.target.id)
+    // )[0].status = e.target.checked;
+    // this.setState({ myAreaStatus: this._areaData });
+    // if (e.target.checked == true) {
+    //   this.state.fields.medicalConditionRequest.push({
+    //     medicalConditionId: parseInt(e.target.id),
+    //   });
+    // }
+    this.state.areaCheckbox_data.filter(
+      (x) => x.GlobalCodeId.toUpperCase() == e.target.value.toUpperCase()
     )[0].status = e.target.checked;
-    this.setState({ myAreaStatus: this._areaData });
+    this.setState({ myAreaStatus: this.state.areaCheckbox_data });
     if (e.target.checked == true) {
-      this.state.fields.medicalConditionRequest.push({
-        medicalConditionId: parseInt(e.target.id),
-      });
-    }
-    if (e.target.checked == false) {
-      document.getElementById(e.target.id).removeAttribute("checked");
+      this.areasOfPain.push(e.target.value);
+      console.log("pain", this.areasOfPain);
+      this.state.fields.areasOfPain=this.areasOfPain
     } else {
-      document.getElementById(e.target.id).setAttribute("checked", "true");
+      this.areasOfPain.pop(e.target.value);
     }
   };
-
-  
 
   render() {
     const { submitting } = this.props;
@@ -208,7 +255,7 @@ class Condition extends Component {
                                         type="checkbox"
                                         name="list"
                                         id={item.GlobalCodeId}
-                                        value={item.checkBox}
+                                        value={item.GlobalCodeId}
                                         onChange={this.medicalCondition}
                                         checked={item.status}
                                       />
@@ -217,7 +264,7 @@ class Condition extends Component {
                                         className="form-check-label"
                                         for="chk_red"
                                       >
-                                        {item.checkBox}
+                                        {item.GlobalCodeId}
                                       </span>
                                     </label>
                                   </div>
@@ -248,7 +295,7 @@ class Condition extends Component {
                                         className="form-check-label"
                                         for="chk_red"
                                       >
-                                        {item.checkBox}
+                                        {item.GlobalCodeId}
                                       </span>
                                     </label>
                                   </div>
@@ -312,8 +359,9 @@ class Condition extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user.user,
+    userId: state.persist.c_user.token,
     MedicalCondition: state.clientReducer.saveCondition,
+    userData: state.globalReducer.clientData,
   };
 };
 
@@ -321,8 +369,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchUserMedicalCondition: (data) =>
       dispatch(fetchUserMedicalCondition(data)),
-    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
     getConditionInfo: (data) => dispatch(getConditionInfo(data)),
+    fetchGlobalCodes: (data) => dispatch(fetchGlobalCodes(data)),
   };
 };
 

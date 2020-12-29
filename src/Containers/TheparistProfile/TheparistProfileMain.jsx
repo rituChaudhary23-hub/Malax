@@ -33,12 +33,12 @@ class TheparistProfileMain extends Component {
       idImageModal: false,
     };
   }
-  componentDidMount = async(data) => {
-    data = {
-      UserId: this.props.user.Data.UserId,
-    };
-  var fethcPhone= await this.props.fetchUserPhone(data);
-  };
+  // componentDidMount = async(data) => {
+  //   data = {
+  //     UserId: this.props.user.Data.UserId,
+  //   };
+  // var fethcPhone= await this.props.fetchUserPhone(data);
+  // };
   showModal = () => {
     this.setState({ modal1: true });
   };
@@ -120,7 +120,7 @@ class TheparistProfileMain extends Component {
                           </div>
                         </li>
                         <li>
-                          <p> {this.props.user.Data.Email}</p>
+                        {this.props.user.data && this.props.user.data.resource.email}
                         </li>
                         <li>
                           <Button
@@ -307,7 +307,6 @@ class TheparistProfileMain extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    formVal: state.form,
     user: state.user.user,
     saveNumber: state.clientReducer.saveNumber,
   };

@@ -7,7 +7,7 @@ import { toast } from "../../../Components/Toast/Toast";
 
 import {
   fetchCategoryName,
-  fetchValidateZip,
+  // fetchValidateZip,
 } from ".././../../redux/actions/global.action";
 import { connect } from "react-redux";
 import { fetchPaymentDetails } from "../../../redux/actions/clientSchedule.action";
@@ -445,7 +445,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchPaymentDetails: (data) => dispatch(fetchPaymentDetails(data)),
     fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
-    fetchValidateZip: (data) => dispatch(fetchValidateZip(data)),
+    // fetchValidateZip: (data) => dispatch(fetchValidateZip(data)),
   };
 };
 

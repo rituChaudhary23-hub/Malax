@@ -1,27 +1,31 @@
 import { fetch } from "./Fetch";
-import { API_HOST } from "../../utils/config/constants/index";
+import { API_HOST ,API_KEY} from "../../utils/config/constants/index";
+
 
 const register = (data) => {
   return fetch(
     "post",
     //  "https://malax-dev-api.azurewebsites.net/api/AddUser?code=dh/etlYuGvc6ViHICY7NWwSFKkIhd1sPIzbgw2HmYzutJD3tjWLh0Q==",
 
-    `${API_HOST}/AddUser?code=dh/etlYuGvc6ViHICY7NWwSFKkIhd1sPIzbgw2HmYzutJD3tjWLh0Q==`,
+    `${API_HOST}/AddUser?code=${API_KEY}`,
     JSON.stringify(data)
   );
 };
 
 //login-api
 const login = (token) => {
-  var data1 = {
-    id: token
+  var tokenData = {
+    id: token,
   };
-  var res = JSON.stringify(data1);
-  
-    return fetch
-      ("post",`${API_HOST}/UserLogin?code=J0aMZYXyIHfKaaPTwBm8GHSMHEF/OPqqs6/pAnEjPg2Up9Oyu9D2Jw==`,res, { token })
-     
-  }
+  var res = JSON.stringify(tokenData);
+
+  return fetch(
+    "post",
+    `${API_HOST}/UserLogin?code=${API_KEY}`,
+    res,
+    { token }
+  );
+};
 
 
 

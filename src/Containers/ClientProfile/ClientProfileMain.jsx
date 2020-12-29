@@ -17,7 +17,6 @@ import icon5 from "../../assets/images/icon5.png";
 import { fetchUserPhone } from "../../redux/actions/client.action";
 
 class ProfileMain extends Component {
-  email="any"
   constructor(props) {
     super(props);
     this.state = {
@@ -40,6 +39,13 @@ class ProfileMain extends Component {
   //   this.props.fetchUserPhone(data);
   //   // this.phone = sessionStorage.getItem("value");
   // };
+
+
+  // {this.state.user.user.data.resource.email}
+  componentWillMount() {
+    var email = this.props.user.data && this.props.user.data.resource.email;
+    console.log("email")
+   }
 
   showModal = () => {
     this.setState({ modal1: true });
@@ -130,8 +136,10 @@ class ProfileMain extends Component {
                           </div>
                         </li>
                         <li>
-                          {/* <p> {this.props.user.Data.Email}</p> */}
-                          <p>  this.email = sessionStorage.getItem("userEmail");</p>
+                          <p>
+                        {this.props.user.data && this.props.user.data.resource.email}
+                           
+                          </p>
                         </li>
                         <li>
                           <Button
@@ -173,7 +181,7 @@ class ProfileMain extends Component {
                             <img src={icon3} />
                           </div>
                           <div className="thr-des">
-                            <h5>Therapist Profile</h5>
+                            <h5>Client Profile</h5>
                             <p>Setup your profile </p>
                           </div>
                         </li>
@@ -291,8 +299,8 @@ class ProfileMain extends Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log("user-data",state)
   return {
-    formVal: state.form,
     user: state.user.user,
     saveNumber: state.clientReducer.saveNumber,
   };

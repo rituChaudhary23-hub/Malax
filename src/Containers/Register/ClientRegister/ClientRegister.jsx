@@ -56,7 +56,7 @@ class ClientRegister extends Component {
     var app = fire;
     var auth = app.auth();
     var actionCode = "ABC123";
-    var continueUrl = "https://mydemo-863e7.firebaseapp.com/__/auth/action";
+    var continueUrl = "https://" + process.env.REACT_APP_FIREBASE_AUTHDOMAIN + "/__/auth/action";
     var lang = "en";
     if (this.handleValidation()) {
       fire
@@ -68,7 +68,7 @@ class ClientRegister extends Component {
         .then(async (u) => {
           console.log(u);
           var actionCodeSettings = {
-            url: "https://mydemo-863e7.firebaseapp.com",
+            url: "https://" + process.env.REACT_APP_FIREBASE_AUTHDOMAIN,
             mode: "verifyEmail",
             handleCodeInApp: true,
           };

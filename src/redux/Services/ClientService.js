@@ -1,23 +1,29 @@
 import { fetch } from "./Fetch";
-import { API_HOST } from "../../utils/config/constants/index";
+import { API_HOST, API_KEY } from "../../utils/config/constants/index";
 
 //resend-email
 const getUserEmail = (data) => {
   var data1 = {
     userId: data,
   };
-  return fetch("get", `${API_HOST}/AuthAPI/GetUserEmail?UserId=`+data1.userId);
+  return fetch(
+    "get",
+    `${API_HOST}/AuthAPI/GetUserEmail?UserId=` + data1.userId
+  );
 };
 
 //update-email-api
 const updateUserEmail = (data) => {
-  debugger
-  return fetch("post", `${API_HOST}/UpdateClientEmail?code=vxbHztFVcIS9YA7heyOWaAEVzH25i6ancemtvt7JWxKvRbEpbSeQkA==`,  data);
+  debugger;
+  return fetch("post", `${API_HOST}/UpdateClientEmail?code=${API_KEY}`, data);
 };
 
 //get user phone number
 const getUserPhone = (data) => {
-  return fetch("get", `${API_HOST}/AuthAPI/GetUserPhoneNumber?UserId=`+data.UserId);
+  return fetch(
+    "get",
+    `${API_HOST}/AuthAPI/GetUserPhoneNumber?UserId=` + data.UserId
+  );
 };
 
 //consent form
@@ -27,33 +33,43 @@ const ConsentFormApi = (data) => {
 
 //personal info
 
-const personalInfoApi = (data) => {
-  return fetch("post", `${API_HOST}/ClientAPI/AddClientPersonalInfo`, data);
+const personalInfoApi = (data,token) => {
+  var token = data.id;
+  return fetch("post", `${API_HOST}/UpdateClientPersonalInfo?code=${API_KEY}`, data,{
+    token,
+  });
 };
 
 //medical-history api
-const historyApi = (data) => {
-  return fetch("post", `${API_HOST}/ClientAPI/AddClientMedicalHistory`, data);
+const medicalHistoryApi = (data) => {
+  var token = data.id;
+  return fetch("post", `${API_HOST}/UpdateClientMedicalHistory?code=${API_KEY}`, data,{
+    token,
+  });
 };
+
 
 //medical-conditions-api
 const medicalConditionApi = (data) => {
+  var token = data.id;
   return fetch(
     "post",
-    `${API_HOST}/ClientAPI/AddClientMedicalConditions`,
-    data
-  );
-};
+    `${API_HOST}/UpdateClientMedicalConditions?code=${API_KEY}`, data,{
+      token,
+    });
+  };
+  
 
 //add-massage-preferences
 
 const addMassageApi = (data) => {
+  var token = data.id;
   return fetch(
     "post",
-    `${API_HOST}/ClientAPI/AddClientMassagePreferences`,
-    data
-  );
-};
+    `${API_HOST}/UpdateClientMassagePrefernces?code=${API_KEY}`, data,{
+      token,
+    });
+  };
 
 //get-medical-condition
 const getMedicalCondition = (data) => {
@@ -62,11 +78,11 @@ const getMedicalCondition = (data) => {
   };
   return fetch(
     "get",
-    `${API_HOST}/ClientAPI/GetClientMedicalConditions?ClientId=`+data1.clientId,
+    `${API_HOST}/ClientAPI/GetClientMedicalConditions?ClientId=` +
+      data1.clientId,
     data1
   );
 };
-
 
 //get-massage-pref
 const getMassageSelected = (data) => {
@@ -75,7 +91,8 @@ const getMassageSelected = (data) => {
   };
   return fetch(
     "get",
-    `${API_HOST}/ClientAPI/GetClientMassagePreferences?ClientId=`+data1.clientId
+    `${API_HOST}/ClientAPI/GetClientMassagePreferences?ClientId=` +
+      data1.clientId
   );
 };
 
@@ -84,7 +101,10 @@ const getUserInfo = (data) => {
   var data1 = {
     clientId: data,
   };
-  return fetch("get", `${API_HOST}/ClientAPI/GetClientPersonalInfo?ClientId=`+data1.clientId);
+  return fetch(
+    "get",
+    `${API_HOST}/ClientAPI/GetClientPersonalInfo?ClientId=` + data1.clientId
+  );
 };
 
 //get medical history
@@ -92,7 +112,10 @@ const getMedicalInfo = (data) => {
   var data1 = {
     clientId: data,
   };
-  return fetch("get", `${API_HOST}/ClientAPI/GetClientMedicalHistory?ClientId=`+data1.clientId);
+  return fetch(
+    "get",
+    `${API_HOST}/ClientAPI/GetClientMedicalHistory?ClientId=` + data1.clientId
+  );
 };
 
 //get consent form
@@ -100,26 +123,39 @@ const getConsentAgreement = (data) => {
   var data1 = {
     clientId: data,
   };
-  return fetch("get", `${API_HOST}/ClientAPI/GetClientConsentForms?ClientId=`+data1.clientId);
+  return fetch(
+    "get",
+    `${API_HOST}/ClientAPI/GetClientConsentForms?ClientId=` + data1.clientId
+  );
 };
 
 //client-loc
 const addClientLoc = (data) => {
-  return fetch("post", `${API_HOST}/ClientAPI/AddUpdateClientLocations`, data);
-};
+  var token = data.id;
+  return fetch("post", `${API_HOST}/UpdateClientLcations?code=${API_KEY}`, data,{
+    token,
+  });
+};;
+
 //get-loc
 const getClientLoc = (data) => {
   var data1 = {
     clientId: data,
   };
-  return fetch("get", `${API_HOST}/ClientAPI/GetClientLocations?ClientId=`+data1.clientId);
+  return fetch(
+    "get",
+    `${API_HOST}/ClientAPI/GetClientLocations?ClientId=` + data1.clientId
+  );
 };
 
 //upload-image
 const addImage = (data) => {
-  return fetch("post", `${API_HOST}/ClientAPI/AddClientIdentityImage`, data);
-};
-
+  var token = data.id;
+  debugger
+  return fetch("post", `${API_HOST}/UploadClientImage?code=${API_KEY}`, data,{
+    token,
+  });
+};;
 
 //get-uploaded-image
 const getClientImage = (data) => {
@@ -133,15 +169,15 @@ export const ClientService = {
   getConsentAgreement,
   getClientLoc,
   addClientLoc,
-  getClientImage, 
+  getClientImage,
   getUserInfo,
   updateUserEmail,
   getUserPhone,
   ConsentFormApi,
   medicalConditionApi,
-  historyApi,
+  medicalHistoryApi,
   getMedicalCondition,
   addMassageApi,
-  getMassageSelected, 
+  getMassageSelected,
   personalInfoApi,
 };

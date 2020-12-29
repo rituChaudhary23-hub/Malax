@@ -6,7 +6,7 @@ import { withRouter } from "react-router";
 import { fetchClientAppointment } from "../../../redux/actions/clientSchedule.action";
 import {
   fetchCategoryName,
-  fetchValidateZip,
+  // fetchValidateZip,
 } from "../../../redux/actions/global.action";
 import { connect } from "react-redux";
 import Header from "../../../Components/Shared/Header";
@@ -651,7 +651,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchClientAppointment: (data) => dispatch(fetchClientAppointment(data)),
     fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
-    fetchValidateZip: (data) => dispatch(fetchValidateZip(data)),
+    // fetchValidateZip: (data) => dispatch(fetchValidateZip(data)),
   };
 };
 

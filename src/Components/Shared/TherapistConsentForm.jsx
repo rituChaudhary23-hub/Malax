@@ -24,15 +24,15 @@ class TherapistConsentForm extends Component {
     };
   }
 
-  componentDidMount = async (e, data1) => {
-    var data1 = this.props.user.Data.TherapistId;
-    this.state.fields.therapistId = data1;
-    // var res = await this.props.getConsentForm(data1);
-    // if (this.state.fields.consentFormStatus==true) {
+  // componentDidMount = async (e, data1) => {
+  //   var data1 = this.props.user.Data.TherapistId;
+  //   this.state.fields.therapistId = data1;
+  //   // var res = await this.props.getConsentForm(data1);
+  //   // if (this.state.fields.consentFormStatus==true) {
 
-    //   this.state.fields.consentFormStatus = this.props.saveConsent.data.Data.MCF;
-    // }
-  };
+  //   //   this.state.fields.consentFormStatus = this.props.saveConsent.data.Data.MCF;
+  //   // }
+  // };
 
   agreed = (e) => {
     this.state.fields.consentFormStatus = e.target.checked;

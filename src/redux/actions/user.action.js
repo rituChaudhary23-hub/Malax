@@ -59,16 +59,12 @@ export function loginUser(data, value,history) {
           sessionStorage.setItem("savedUser", user.data.data.resource.id);
           dispatch(stopLoading());
 
-  //         if (user.data.data.resource.userTypeId.toLowerCase() == "clients") {
-  // history.push("/client-profile")
-  //         } else { 
-  //          history.push("/theparist-profile")
-  //         }
-
           toast.success(user.data.Message);
           dispatch(loginUserSuccess(user["data"]));
 
-          dispatch(loginUserPersist({ token:  user["data"]["data"]["resource"]["id"] }));
+          dispatch(loginUserPersist({
+            token: user["data"]["data"]["resource"]["id"]     
+          }));
 
           dispatch(loginUserPersist({ token:  user["data"]["data"]["resource"]["id"]  }));
 

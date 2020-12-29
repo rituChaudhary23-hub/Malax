@@ -4,7 +4,7 @@ import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
 
 import { Button, Input, Form } from "semantic-ui-react";
-import fire from "../../../utils/config/fire"
+import fire from "../../../utils/config/fire";
 import { connect } from "react-redux";
 import { fetchUpdateEmail } from "../../../redux/actions/client.action";
 
@@ -14,28 +14,51 @@ class UpdateEmail extends Component {
     this.state = {
       fields: {
         id: "",
-        email:""
+        email: "",
       },
     };
   }
 
   UpdateEmail = () => {
-    // var data = this.props.user.Data.UserId;
-    // this.state.fields.userId = data;
-    // this.props.fetchUpdateEmail(this.state.fields);
-    // var localId = u.user.uid;
-    // this.state.fields.id = localId;
-    // this.props.toggle();
+  //   //     fire
+  //   //       .auth()
+  //   //       .signInWithEmailAndPassword(sessionStorage.getItem("userEmail"), "current password")
+  //   //       .then(function (userCredential) {
+  //   //         userCredential.user.updateEmail(this.state.fields.email);
+  //   // debugger
+  //   //         this.state.fields.id = this.props.userId;
+  //   //         this.state.fields.email=sessionStorage.getItem("userEmail")
 
+  //   //         this.props.fetchUpdateEmail(this.state.fields);
+  //   //       });
+  //   //       this.props.toggle();
+  //   debugger
+  // //  fire.auth().then(function (userCredential) {
+  //   debugger
+  //   const _user = fire.auth().currentUser;
+  //   _user.updateEmail(this.state.fields.email).then(res => {
+  //     debugger
+  //   });
+  //   //  userCredential=sessionStorage.getItem("userEmail");
+  //   //  userCredential.user.updateEmail(this.state.fields.email);
+  //     debugger;
+  //  //   this.state.fields.id = this.props.userId;
+  //  //   this.state.fields.email = sessionStorage.getItem("userEmail");
 
-
-    fire.auth()
-    .signInWithEmailAndPassword('you@domain.com', 'correcthorsebatterystaple')
-    .then(function(userCredential) {
-      userCredential.user.updateEmail('newyou@domain.com')
-      
-      this.props.fetchUpdateEmail(this.state.fields);
-    })
+  //     this.props.fetchUpdateEmail(this.state.fields);
+  //  // });
+  //   this.props.toggle();
+    
+    debugger
+    var _email = this.props.currentEmail.data.resource.email
+    var _newemail = this.state.fields.value
+    
+  fire.auth()
+  .signInWithEmailAndPassword(_email, 'Ashu@1234')
+  .then(function(userCredential) {
+      userCredential.user.updateEmail(_newemail)
+  })
+    
   };
 
   setFormValue(field, e) {
@@ -76,8 +99,7 @@ class UpdateEmail extends Component {
                 </div>
                 <div className="col-lg-8 col-md-6 col-5 mb-4">
                   <div className="modCon">
-                    
-                    {/* {this.props.user.Data.Email} */}
+                  { this.props.currentEmail.data.resource.email}
                   </div>
                 </div>
                 <div className="col-lg-4 col-md-6 col-6">
@@ -95,12 +117,22 @@ class UpdateEmail extends Component {
                     type="email"
                   />
                 </div>
+                {/* <div className="col-lg-8 col-md-6 col-6">
+                  <input
+                    className="login-form-textfield form-control"
+                    id="password"
+                    fullWidth={true}
+                    onChange={this.setFormValue.bind(this, "value")}
+                    name="email"
+                    type="email"
+                  />
+                </div> */}
               </div>
             </Modal.Body>
             <Modal.Footer>
               <Button
                 type="submit"
-                // disabled={this.state.fields.value.length <= 5}
+                //  disabled={this.state.fields.email.length <= 5}
                 className="btn btn-primary register mr-4"
                 onClick={this.UpdateEmail}
               >
@@ -123,9 +155,11 @@ class UpdateEmail extends Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log("state", state);
+  debugger;
   return {
-    formVal: state.form,
-    user: state.user.user,
+   currentEmail:state.user.user,
+    userId: state.persist.c_user.token,
   };
 };
 

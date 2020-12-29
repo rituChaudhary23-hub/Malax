@@ -1,7 +1,9 @@
 import { actionTypes } from "../actions/global.action";
 
 const initialState = { 
-  categoryName:{},
+  categoryName: {},
+  globalName: {},
+  clientData:{}
 };
 
 const globalReducer = (state = initialState, action) => {
@@ -10,8 +12,23 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         categoryName: action.data,
-      };
+      };  case actionTypes.GLOBAL_CODES:
+      return {
+        ...state,
+        globalName: action.data,
 
+
+      };
+      case actionTypes.GLOBAL_DATA_CODES:
+        return {
+          ...state,
+          clientData: action.data,
+  
+  
+        };
+    
+      
+      
     default:
       return state;
   }

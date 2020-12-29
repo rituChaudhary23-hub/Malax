@@ -3,12 +3,8 @@ import { Button } from "semantic-ui-react";
 import { DateInput } from "semantic-ui-calendar-react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { fetchCategoryName } from "../../../redux/actions/global.action";
-
-import {
-  fetchUserInfo,
-  getUserInfo,
-} from "../../../redux/actions/client.action";
+import { fetchClientData } from "../../../redux/actions/global.action";
+import { fetchUserInfo } from "../../../redux/actions/client.action";
 
 import { Form, Input, Dropdown } from "semantic-ui-react-form-validator";
 
@@ -17,76 +13,56 @@ const currentYear = currentdate.getFullYear();
 const maxdate = new Date(currentdate.setYear(currentdate.getFullYear()));
 
 class PersonalInfo extends Component {
-  GenderOptions = [];
-  dropvalGender: any;
-
-  golbalID = 0;
-  dropVal: any;
   constructor(props) {
     super(props);
     this.state = {
-      name: "Gender",
-      genderValue: "",
-
       clientId: 0,
-      selectedGender:"",
       fields: {
-        clientPersonalInfoId: 0,
-        clientId: 0,
+        id: "",
         firstName: "",
         lastName: "",
-        birthDate: "",
-        genderId: "",
-        actionBy: "",
+        dob: "",
+        gender: "",
+        modifiedBy: "",
       },
 
       errors: {
         firstName: "",
         lastName: "",
-        birthDate: "",
-        genderId: "",
+        dob: "",
+        gender: "",
       },
       loading: false,
     };
   }
-  componentDidMount = async (data1) => {
-    // var data = await this.props.fetchCategoryName(this.state.name);
-    // if (data != false) {
-    //   this.dropVal = data.data.Data.globalCodeData;
-    // }
-  
+  componentWillMount = async () => {
+    var clientId = this.props.userId;
+    this.state.fields.id = clientId;
+    var _clientData = await this.props.fetchClientData(clientId);
+    console.log("_clientData");
+  };
 
-        //gender-globally
-        var _clientGender = await this.props.fetchCategoryName(
-          this.state.name
-        );
-        if (_clientGender != false) {
-          this.dropvalGender = _clientGender.data.Data.globalCodeData;
-          this.dropvalGender.forEach((element) => {
-            this.GenderOptions.push({
-              text: element.CodeName,
-              value: element.GlobalCodeId,
-            });
-          });
-        }
+  componentDidMount = async (data1) => {
+
      //get-selected-gender
-     var data1 = this.props.user.Data.ClientId;
-     this.state.fields.clientId = data1;
-    this.props.getUserInfo(data1);
-    if (this.props.saveData.data) {
-      this.setState({
-        selectedGender: this.props.saveData.data.Data.GenderId,
-      });
-      this.state.fields.genderId = this.props.saveData.data.Data.GenderId;
+    //  var data1 = this.props.user.Data.ClientId;
+    //  this.state.fields.clientId = data1;
+    // this.props.getUserInfo(data1);
+
+    // this.props.userData.data.data[0].firstName
+
+    if (this.props.userData.data) {
+      debugger
+      // this.setState({
+      //   firstName: this.props.userData.data.data[0].firstName,
+      // });
+      this.state.fields.firstName = this.props.userData.data.data[0].firstName;
+      this.state.fields.lastName = this.props.userData.data.data[0].lastName;
+      
       //    }
-  
-      // //if licnedeNumber is not updated
-      this.setState({
-        firstName: this.props.saveData.data.Data.FirstName,
-      });
-      this.state.fields.firstName = this.props.saveData.data.Data.FirstName;
     }
   };
+
   setFormValue(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
@@ -102,11 +78,11 @@ class PersonalInfo extends Component {
     if (this.state.hasOwnProperty(name)) {
       this.setState({ [name]: value });
     }
-    this.resetError("birthDate");
+    this.resetError("dob");
 
     this.setState((prevState) => {
       let fields = Object.assign({}, prevState.fields);
-      fields.birthDate = value;
+      fields.dob = value;
       return { fields: fields };
     });
   };
@@ -116,9 +92,9 @@ class PersonalInfo extends Component {
     let errors = this.state.errors;
     let formIsValid = true;
 
-    if (fields["birthDate"] === "") {
+    if (fields["dob"] === "") {
       formIsValid = false;
-      errors["birthDate"] = "Date of Birth can't be blank";
+      errors["dob"] = "Date of Birth can't be blank";
     }
 
     this.setState({ errors: errors });
@@ -138,28 +114,28 @@ class PersonalInfo extends Component {
     window.location.href = "/client-profile";
   };
 
-  handleChanges = (e, { value })=> {
-    // var InfoAs = e.target.outerText;
-    // var globalId = this.dropVal.filter((x) => x.CodeName == InfoAs)[0]
-    //   .GlobalCodeId;
-    // this.state.fields.genderId = globalId;
-    // this.setState({ genderValue: value });
-
-      var infoGender = value;
-    this.setState({
-      selectedGender: infoGender,
-    });
-    var globalGenderId = this.dropvalGender.filter(
-      (y) => y.GlobalCodeId == infoGender
-    )[0].GlobalCodeId;
-    this.state.fields.genderId = globalGenderId;
+  handleChanges = (e, { value }) => {
+    //   var infoGender = value;
+    // this.setState({
+    //   selectedGender: infoGender,
+    // });
+    // var globalGenderId = this.dropvalGender.filter(
+    //   (y) => y.GlobalCodeId == infoGender
+    // )[0].GlobalCodeId;
+    // this.state.fields.gender = globalGenderId;
+    console.log("e.target", e.target.outerText);
+    var selectedGender = e.target.outerText;
+    this.state.fields.gender = selectedGender;
+    value = this.state.fields.gender;
   };
-
 
   saveProfile = async (e, data) => {
     e.preventDefault();
-    var data1 = this.props.user.Data.ClientId;
-    this.state.fields.clientId = data1;
+
+    var clientId = this.props.userId;
+    this.state.fields.id = clientId;
+    var userName = this.state.fields.firstName;
+    this.state.fields.modifiedBy = userName;
     if (this.handleValidation()) {
       var res = await this.props.fetchUserInfo(this.state.fields);
       if (res == true) {
@@ -169,6 +145,12 @@ class PersonalInfo extends Component {
   };
 
   render() {
+    var GenderOptions = [
+      { key: 2, text: "Male", value: "Male" },
+      { key: 4, text: "Female", value: "Female" },
+    ];
+
+    console.log("userData", this.props.userData.data.data[0].firstName);
     const { submitting } = this.props;
 
     return (
@@ -214,11 +196,12 @@ class PersonalInfo extends Component {
                                     "firstName"
                                   )}
                                   // value={
-                                  //   this.props.saveData.data
-                                  //     ? this.props.saveData.data.Data.FirstName
+                                  //   this.props.userData.data
+                                  //     ? this.props.userData.data.data[0]
+                                  //         .firstName
                                   //     : this.state.fields.firstName
                                   // }
-                                  value={this.state.fields.firstName&&this.state.fields.firstName}
+                               value={this.state.fields.firstName&&this.state.fields.firstName}
                                   validators={[
                                     "required",
                                     "matchRegexp:^[a-zA-Z ]*$",
@@ -244,12 +227,16 @@ class PersonalInfo extends Component {
                                     this,
                                     "lastName"
                                   )}
-                                  // value={
-                                  //   this.props.saveData.data
-                                  //     ? this.props.saveData.data.Data.LastName
+                                  // value= {
+                                  //   this.props.userData.data
+                                  //     ? this.props.userData.data.data[0]
+                                  //         .lastName
                                   //     : this.state.fields.lastName
                                   // }
-                                  value={ this.state.fields.lastName&& this.state.fields.lastName}
+                                  value={
+                                    this.state.fields.lastName &&
+                                    this.state.fields.lastName
+                                  }
                                   validators={[
                                     "required",
                                     "matchRegexp:^[a-zA-Z ]*$",
@@ -265,15 +252,15 @@ class PersonalInfo extends Component {
                                   Gender{" "}
                                 </label>
 
-                              
                                 <Dropdown
                                   className="dropNav"
-                                  options={this.GenderOptions}
+                                  options={GenderOptions}
                                   selection
-                                  value={this.state.selectedGender}
+                                  // value={this.state.fields.gender}
+                                  
                                   onChange={this.handleChanges}
-                                  validators={["required"]}
-                                  errorMessages={["this field is required"]}
+                                  // validators={["required"]}
+                                  // errorMessages={["this field is required"]}
                                 />
                               </div>
                               <div className="form-group">
@@ -288,18 +275,17 @@ class PersonalInfo extends Component {
                                   closable="true"
                                   value={
                                     this.props.saveData.data
-                                      ? this.props.saveData.data.Data.BirthDate
-                                      : this.state.fields.birthDate
+                                      ? this.props.saveData.data.Data.dob
+                                      : this.state.fields.dob
                                   }
-                                  // value={this.state.fields.birthDate}
                                   dateFormat={"MM-DD-YYYY"}
                                   maxDate={maxdate}
                                   onChange={this.handleChangeDate}
                                 />
-                                {this.hasError("birthDate") && (
+                                {this.hasError("dob") && (
                                   <div className="ui pointing label">
                                     <div style={{ color: "red" }}>
-                                      {this.state.errors["birthDate"]}
+                                      {this.state.errors["dob"]}
                                     </div>
                                   </div>
                                 )}
@@ -346,7 +332,8 @@ class PersonalInfo extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user.user,
+    userId: state.persist.c_user.token,
+    userData: state.globalReducer.clientData,
     saveData: state.clientReducer.saveData,
   };
 };
@@ -354,8 +341,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchUserInfo: (data) => dispatch(fetchUserInfo(data)),
-    fetchCategoryName: (data) => dispatch(fetchCategoryName(data)),
-    getUserInfo: (data) => dispatch(getUserInfo(data)),
+    fetchClientData: (data) => dispatch(fetchClientData(data)),
   };
 };
 

@@ -79,7 +79,7 @@ class Login extends Component {
       if (auth.currentUser) {
         this.email = auth.currentUser.email;
         sessionStorage.setItem("userEmail", auth.currentUser.email);
-        sessionStorage.setItem("currentUser", auth.currentUser);
+        sessionStorage.setItem("currentUser",auth.currentUser);
       } else {
         this.email = sessionStorage.getItem("userEmail");
       }

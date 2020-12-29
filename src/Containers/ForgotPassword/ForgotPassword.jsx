@@ -29,7 +29,7 @@ class ForgotPassword extends Component {
     var auth = fire.auth();
 
     var actionCodeSettings = {
-      url: "https://mydemo-863e7.firebaseapp.com",
+      url: "https://" + process.env.REACT_APP_FIREBASE_AUTHDOMAIN,
       handleCodeInApp: true,
       mode: "resetPassword",
     };

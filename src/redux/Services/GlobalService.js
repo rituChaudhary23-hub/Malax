@@ -1,5 +1,5 @@
 import { fetch } from "./Fetch";
-import { API_HOST } from "../../utils/config/constants/index";
+import { API_HOST, API_KEY } from "../../utils/config/constants/index";
 
 //global-category
 const globalCategory = (data) => {
@@ -19,7 +19,7 @@ const validateZip = (data) => {
   };
   return fetch(
     "post",
-    `${API_HOST}/GetZipCode?code=eKxInUHXYWvgpDsNgc7Bqe0v3aq65aZFSZqWn2U7Ck0JevDniCUD5Q==`,
+    `${API_HOST}/GetZipCode?code=${API_KEY}`,
     JSON.stringify(zipData)
   );
 };
@@ -27,17 +27,26 @@ const validateZip = (data) => {
 //globally-data
 const getGlobalCodes = (data) => {
   var globalData = {
-    tablename: data
+    tablename: data,
+  };
+  let code = JSON.stringify(globalData);
+  return fetch("post", `${API_HOST}/GetCodes?code=${API_KEY}`, code);
+};
+
+//client-data
+const getClientCodes = (data) => {
+  var idData = {
+    id:data
   }
-  let code =  JSON.stringify(globalData)
-  return fetch(
-    "post",
-    `${API_HOST}/GetCodes?code=aF2XYacnPXqRddqPkLKyBIvPrMU2IfVQ2EMWU/KV2WzqJk8rCaQSqg==`,
-   code
-  );
+  var token = data;
+  return fetch("post", `${API_HOST}/GetClientItems?code=${API_KEY}`,idData, {
+    token,
+  });
 };
 
 export const GlobalService = {
   globalCategory,
-  validateZip,getGlobalCodes
+  validateZip,
+  getGlobalCodes,
+  getClientCodes,
 };

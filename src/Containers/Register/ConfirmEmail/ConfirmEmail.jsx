@@ -4,7 +4,7 @@ import logIn from "../../../assets/images/logIn.png";
 import logo from "../../../assets/images/logo.png";
 import { withRouter } from "react-router";
 import fire from "../../../utils/config/fire";
-import { toast } from "react-toastify";
+import { toast } from "../../../Components/Toast/Toast";
 
 export class ConfirmEmail extends Component {
   email = "abc";
@@ -50,16 +50,17 @@ export class ConfirmEmail extends Component {
   resendEmail = async (e) => {
     e.preventDefault();
     var actionCode = "ABC123";
-    var continueUrl = "https://mydemo-863e7.firebaseapp.com/__/auth/action";
+    var continueUrl = "https://" + process.env.REACT_APP_FIREBASE_AUTHDOMAIN + "/__/auth/action";
     var lang = "en";
 
     var actionCodeSettings = {
-      url: "https://mydemo-863e7.firebaseapp.com",
-
+      url: "https://" + process.env.REACT_APP_FIREBASE_AUTHDOMAIN,
       handleCodeInApp: true,
     };
 
     fire.auth().onAuthStateChanged(async function (user) {
+    
+
       var verify = await user.sendEmailVerification();
       toast.success("We sent a confirmation email.");
     });

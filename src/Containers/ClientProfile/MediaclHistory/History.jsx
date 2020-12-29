@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button } from "semantic-ui-react";
 import { DateInput } from "semantic-ui-calendar-react";
 import {
-  fetchUserHistory,
+  fetchUserMedicalHistory,
   getUserHistory,
 } from "../../../redux/actions/client.action";
 import { Form, Input, Dropdown } from "semantic-ui-react-form-validator";
@@ -13,27 +13,23 @@ class History extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clientId: 0,
       fields: {
-        medicalHistoryId: 0,
-        clientId: 0,
-        emergencyContactName: "",
-        emergencyPhoneNumber: "",
+        id: 0,
+        emerContName: "",
+        emerContPhnNumber: "",
         physicianContactName: "",
-        physicianPhoneNumber: "",
+        physicianContactPhone: "",
         hobbies: "",
         currentMedications: "",
         surgeries: "",
         dislocations: "",
         profession: "",
-
-        actionBy: "",
       },
       errors: {
-        emergencyContactName: "",
-        emergencyPhoneNumber: "",
+        emerContName: "",
+        emerContPhnNumber: "",
         physicianContactName: "",
-        physicianPhoneNumber: "",
+        physicianContactPhone: "",
         hobbies: "",
         currentMedications: "",
         surgeries: "",
@@ -44,11 +40,11 @@ class History extends Component {
     };
   }
 
-  componentDidMount = async (data1) => {
-    var data1 = this.props.user.Data.ClientId;
-    this.state.clientId = data1;
-    this.props.getUserHistory(data1);
-  };
+  // componentDidMount = async (data1) => {
+  //   var data1 = this.props.user.Data.ClientId;
+  //   this.state.clientId = data1;
+  //   this.props.getUserHistory(data1);
+  // };
 
   setFormValue(field, e) {
     let fields = this.state.fields;
@@ -60,23 +56,23 @@ class History extends Component {
     var regex = "^\\d+$";
     if (e.target.value.match(regex)) {
       if (e.target.value.length <= 10 && e.target.value != "") {
-        this.state.fields.physicianPhoneNumber = e.target.value;
-        this.setState({ physicianPhoneNumber: e.target.value });
+        this.state.fields.physicianContactPhone = e.target.value;
+        this.setState({ physicianContactPhone: e.target.value });
       } else if (e.target.value.length == 0) {
-        this.state.fields.physicianPhoneNumber = e.target.value;
-        this.setState({ physicianPhoneNumber: e.target.value });
+        this.state.fields.physicianContactPhone = e.target.value;
+        this.setState({ physicianContactPhone: e.target.value });
       }
     } else {
       if (
-        this.state.fields.physicianPhoneNumber &&
-        this.state.fields.physicianPhoneNumber.length > 0 &&
+        this.state.fields.physicianContactPhone &&
+        this.state.fields.physicianContactPhone.length > 0 &&
         e.target.value != ""
       ) {
         this.setState({
-          physicianPhoneNumber: this.state.fields.physicianPhoneNumber,
+          physicianContactPhone: this.state.fields.physicianContactPhone,
         });
       } else {
-        this.setState({ physicianPhoneNumber: "" });
+        this.setState({ physicianContactPhone: "" });
       }
     }
     // }
@@ -87,23 +83,23 @@ updateEmergencyNumber = (e) => {
   var regex = "^\\d+$";
   if (e.target.value.match(regex)) {
     if (e.target.value.length <= 10 && e.target.value != "") {
-      this.state.fields.emergencyPhoneNumber = e.target.value;
-      this.setState({ emergencyPhoneNumber: e.target.value });
+      this.state.fields.emerContPhnNumber = e.target.value;
+      this.setState({ emerContPhnNumber: e.target.value });
     } else if (e.target.value.length == 0) {
-      this.state.fields.emergencyPhoneNumber = e.target.value;
-      this.setState({ emergencyPhoneNumber: e.target.value });
+      this.state.fields.emerContPhnNumber = e.target.value;
+      this.setState({ emerContPhnNumber: e.target.value });
     }
   } else {
     if (
-      this.state.fields.emergencyPhoneNumber &&
-      this.state.fields.emergencyPhoneNumber.length > 0 &&
+      this.state.fields.emerContPhnNumber &&
+      this.state.fields.emerContPhnNumber.length > 0 &&
       e.target.value != ""
     ) {
       this.setState({
-        emergencyPhoneNumber: this.state.fields.emergencyPhoneNumber,
+        emerContPhnNumber: this.state.fields.emerContPhnNumber,
       });
     } else {
-      this.setState({ emergencyPhoneNumber: "" });
+      this.setState({ emerContPhnNumber: "" });
     }
   }
   // }
@@ -126,11 +122,11 @@ updateEmergencyNumber = (e) => {
   };
 
   saveMedicalHistory = async (e) => {
-    this.setState({ loading: true });
-    var data1 = this.props.user.Data.ClientId;
-    this.state.fields.clientId = data1;
+  this.setState({ loading: true });
+  var clientId = this.props.userId;
+    this.state.fields.id = clientId;
     if (this.handleValidation()) {
-      this.props.fetchUserHistory(this.state.fields);
+      this.props.fetchUserMedicalHistory(this.state.fields);
     }
     this.setState({ loading: false });
   };
@@ -203,17 +199,17 @@ updateEmergencyNumber = (e) => {
                                   type="name"
                                   onChange={this.setFormValue.bind(
                                     this,
-                                    "emergencyContactName"
+                                    "emerContName"
                                   )}
-                                  // value={
-                                  //   this.state.fields.emergencyContactName
-                                  // }
                                   value={
-                                    this.props.saveMedicalData.data
-                                      ? this.props.saveMedicalData.data.Data
-                                          .EmergencyContactName
-                                      : this.state.fields.emergencyContactName
+                                   this.state.fields.emerContName
                                   }
+                                  // value={
+                                  //   this.props.saveMedicalData.data
+                                  //     ? this.props.saveMedicalData.data.Data
+                                  //         .emerContName
+                                  //     : this.state.fields.emerContName
+                                  // }
                                   validators={[
                                     "required",
                                     "matchRegexp:^[a-zA-Z ]*$",
@@ -239,12 +235,13 @@ updateEmergencyNumber = (e) => {
                                   maxLength={10}
                              
                                   onChange={this.updateEmergencyNumber}
-                                  value={
-                                    this.props.saveMedicalData.data
-                                      ? this.props.saveMedicalData.data.Data
-                                          .EmergencyPhoneNumber
-                                      : this.state.fields.emergencyPhoneNumber
-                                  }
+                                  // value={
+                                  //   this.props.saveMedicalData.data
+                                  //     ? this.props.saveMedicalData.data.Data
+                                  //         .emerContPhnNumber
+                                  //     : this.state.fields.emerContPhnNumber
+                                  // }
+                                  value={this.state.fields.emerContPhnNumber}
                                   validators={["required"]}
                                   errorMessages={[
                                     "this field is required",
@@ -268,15 +265,15 @@ updateEmergencyNumber = (e) => {
                                     this,
                                     "physicianContactName"
                                   )}
-                                  // value={
-                                  //   this.state.fields.physicianContactName
-                                  // }
                                   value={
-                                    this.props.saveMedicalData.data
-                                      ? this.props.saveMedicalData.data.Data
-                                          .PhysicianContactName
-                                      : this.state.fields.physicianContactName
+                                    this.state.fields.physicianContactName
                                   }
+                                  // value={
+                                  //   this.props.saveMedicalData.data
+                                  //     ? this.props.saveMedicalData.data.Data
+                                  //         .physicianContactName
+                                  //     : this.state.fields.physicianContactName
+                                  // }
                                   validators={[
                                     "required",
                                     "matchRegexp:^[a-zA-Z ]*$",
@@ -300,17 +297,15 @@ updateEmergencyNumber = (e) => {
                                   fullwidth="true"
                                   type="text"
                                   maxLength={10}
-                                  // onChange={this.setFormValue.bind(
-                                  //   this,
-                                  //   "physicianPhoneNumber"
-                                  // )}
+                               value={this.state.fields.physicianContactPhone}
                                   onChange={this.updatePhone}
-                                  value={
-                                    this.props.saveMedicalData.data
-                                      ? this.props.saveMedicalData.data.Data
-                                          .PhysicianPhoneNumber
-                                      : this.state.fields.physicianPhoneNumber
-                                  }
+                                  // value={
+                                  //   this.props.saveMedicalData.data
+                                  //     ? this.props.saveMedicalData.data.Data
+                                  //         .physicianContactPhone
+                                  //     : this.state.fields.physicianContactPhone
+                                  // }
+                                  
                                   validators={["required"]}
                                   errorMessages={[
                                     "this field is required",
@@ -511,13 +506,15 @@ updateEmergencyNumber = (e) => {
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
+    userId: state.persist.c_user.token,
+
     saveMedicalData: state.clientReducer.saveMedicalData,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUserHistory: (data) => dispatch(fetchUserHistory(data)),
+    fetchUserMedicalHistory: (data) => dispatch(fetchUserMedicalHistory(data)),
     getUserHistory: (data) => dispatch(getUserHistory(data)),
   };
 };

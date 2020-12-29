@@ -313,12 +313,12 @@ export function getUserInfo(data) {
   };
 }
 //add-medical-history
-export function fetchUserHistory(data) {
+export function fetchUserMedicalHistory(data) {
   return (dispatch, getState) => {
     dispatch(startLoading());
 
     let state = getState();
-    return ClientService.historyApi(data, {
+    return ClientService.medicalHistoryApi(data, {
       jwt: state["persist"]["c_temp_user"]["token"],
     })
       .then(async (data) => {
@@ -427,7 +427,7 @@ export function fetchUserMassagePrefernce(data) {
       jwt: state["persist"]["c_temp_user"]["token"],
     }).then(async (data) => {
       dispatch(stopLoading());
-      if (data.data.Success) {
+      if (data.data.status) {
         toast.success(data["data"]["Message"]);
 
         return true;
@@ -508,7 +508,7 @@ export function fetchClientLoc(data) {
     })
       .then(async (data) => {
         dispatch(stopLoading());
-        if (data.data.Success) {
+        if (data.data.status) {
           toast.success(data["data"]["Message"]);
 
           return true;
